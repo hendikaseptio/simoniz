@@ -38,7 +38,7 @@ export const columns: ColumnDef<Agama>[] = [
         header: ({ column }) => <DataTableColumnHeader column={column} title="id" />,
     },
     {
-        accessorKey: 'nama',
+        accessorKey: 'name',
         header: ({ column }) => <DataTableColumnHeader column={column} title="nama" />,
     },
     {
@@ -53,10 +53,10 @@ export const columns: ColumnDef<Agama>[] = [
         enableHiding: false,
         header: () => "Kelola",
         cell: ({ row }) => {
-            const agama = row.original;
+            const tim = row.original;
             const [open, setOpen] = useState(false);
             const handleDelete = () => {
-                router.delete(`/admin/agama/${agama.id}`, {
+                router.delete(`/admin/tim/${tim.id}`, {
                     preserveScroll: true,
                     replace: true,
                     preserveState: false,
@@ -73,11 +73,11 @@ export const columns: ColumnDef<Agama>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(agama.id)}>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(tim.id)}>
                                 <Copy />
                                 Copy Agama ID
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(`/admin/agama/${agama.id}/edit`)}>
+                            <DropdownMenuItem onClick={() => router.visit(`/admin/tim/${tim.id}/edit`)}>
                                 <Pencil />
                                 Edit
                             </DropdownMenuItem>
@@ -93,7 +93,7 @@ export const columns: ColumnDef<Agama>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Data agama <strong>"{agama.nama}"</strong> akan dihapus secara permanen.
+                                    Data tim <strong>"{tim.name}"</strong> akan dihapus secara permanen.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

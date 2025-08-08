@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMiddleware
+class RoleAdmin
 {
     /**
      * Handle an incoming request.
@@ -15,12 +16,13 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $user = $request->user();
-
-        if (!$user || !in_array($user->role, $roles)) {
+        if (!Auth::check()) {
+            return redirect('login');
+        }
+        $user = Auth::user();
+        if (!$user->role == 'admin') {
             abort(403, 'Unauthorized');
         }
-
         return $next($request);
     }
 }

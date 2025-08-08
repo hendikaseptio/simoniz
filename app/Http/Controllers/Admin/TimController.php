@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
 class TimController extends Controller
@@ -14,13 +15,27 @@ class TimController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $timUsers = User::where('role', 'tim')->paginate(10);
+        $query = User::query();
 
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('sort') && $request->filled('direction')) {
+            $query->orderBy($request->sort, $request->direction);
+        }
+        $query->where('role', 'tim');
+        $baseQuery = clone $query;
+        $tim = $query->where('role','tim')->paginate(10)->withQueryString();
+        $jumlahTimAktif = (clone $baseQuery)->where('status', 'aktif')->count();
+        $jumlahTimNonAktif = (clone $baseQuery)->where('status', 'nonaktif')->count();
         return Inertia::render('admin/tim/index', [
-            'timUsers' => $timUsers,
-            'filters' => request()->all('search', 'page'),
+            'tim' => $tim,
+            'jumlahTimAktif' => $jumlahTimAktif,
+            'jumlahTimNonAktif' => $jumlahTimNonAktif,
+            'filter' => $request->only(['search', 'sort', 'direction']),
         ]);
     }
 
@@ -37,20 +52,19 @@ class TimController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
-            'status' => 'required|in:aktif,nonaktif',
+            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = new User();
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-        $user->password = Hash::make($validated['password']);
-        $user->role = 'tim';
-        $user->status = $validated['status'];
-        $user->save();
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'tim',
+            'status' => 'aktif',
+        ]);
 
         return redirect()->route('admin.tim.index')->with('success', 'User Tim berhasil dibuat');
     }
@@ -68,10 +82,9 @@ class TimController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::where('role', 'tim')->findOrFail($id);
-
+        $tim = User::where('role', 'tim')->findOrFail($id);
         return Inertia::render('admin/tim/edit', [
-            'user' => $user,
+            'tim' => $tim,
         ]);
     }
 

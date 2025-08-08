@@ -11,25 +11,28 @@ import { AlertCircleIcon, ArrowLeft, CircleOff, Send } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Data Agama',
-        href: '/admin/agama',
+        title: 'Data Tim',
+        href: '/admin/tim',
     },
     {
-        title: 'Tambah Data Agama',
-        href: '/admin/agama/create',
+        title: 'Tambah Data Tim',
+        href: '/admin/tim/create',
     },
 ];
 
 export default function Create() {
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
-            nama: '',
+            name: '',
+            email: '',
+            password: '',
+            password_confirmation: '',
         },
-        '/admin/agama',
+        '/admin/tim',
     );
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Data Agama" />
+            <Head title="Data Tim" />
             <div className="p-5 space-y-5">
                 {errors && Object.keys(errors).length > 0 && (
                     <Alert variant={'destructive'}>
@@ -46,20 +49,47 @@ export default function Create() {
                     </Alert>
                 )}
                 <Card>
-                    <CardHeader><CardTitle>Form Tambah Agama</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Form Tambah Tim</CardTitle></CardHeader>
                     <CardContent>
-                        <form action="#">
+                        <form action="#" className='space-y-3'>
                             <InputText
-                                name="nama"
-                                label="Nama Agama"
+                                name="name"
+                                label="Nama Tim"
                                 type="text"
-                                placeholder="Masukkan Nama Agama"
+                                placeholder="Masukkan Nama Tim"
                                 onChange={handleChange}
-                                value={values.nama}
+                                value={values.name}
                                 errors={errors}
                             ></InputText>
+                            <InputText
+                                name="email"
+                                label="Email"
+                                type="email"
+                                placeholder="Masukkan Email"
+                                onChange={handleChange}
+                                value={values.email}
+                                errors={errors}
+                            ></InputText>
+                            <InputText
+                                name="password"
+                                label="Password"
+                                type="password"
+                                placeholder="Masukkan Password"
+                                onChange={handleChange}
+                                value={values.password}
+                                errors={errors}
+                            ></InputText>
+                            <InputText
+                                name="password_confirmation"
+                                type="password"
+                                label="Password Confirmation"
+                                value={values.password_confirmation}
+                                onChange={handleChange}
+                                // disabled={processing}
+                                placeholder="Confirm password"
+                            />
                             <div className="flex justify-end mt-3 space-x-3">
-                                <Link href="/admin/agama">
+                                <Link href="/admin/tim">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />
                                         Batal
