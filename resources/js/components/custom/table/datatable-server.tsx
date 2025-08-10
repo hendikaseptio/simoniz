@@ -126,7 +126,6 @@ export function DataTableServer<TData, TValue>({ columns, initialData }: DataTab
         );
         setSearchInput('');
     };
-    console.log(initialData);
     return (
         <>
             <div className="my-3 flex w-full items-center space-x-2">

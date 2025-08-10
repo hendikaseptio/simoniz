@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ReklameController;
 use App\Http\Controllers\Admin\TimController;
 use App\Http\Middleware\RoleAdmin;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     Route::middleware(RoleAdmin::class)->prefix('admin')->name('admin.')->group(function () {
         Route::resource('tim', TimController::class);
+        Route::resource('reklame', ReklameController::class);
+        Route::post('reklame/import', [ReklameController::class, 'import'])->name('admin.reklame.import');
+
     });
 });
 

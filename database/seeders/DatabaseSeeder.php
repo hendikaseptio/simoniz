@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             KabidSeeder::class,
             AdminSeeder::class,
             TimSeeder::class,
+            DataReklameSeeder::class,
         ]);
         // User::factory(10)->create();
 
