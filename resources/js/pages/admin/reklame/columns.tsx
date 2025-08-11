@@ -56,10 +56,10 @@ export const columns: ColumnDef<Agama>[] = [
         cell: ({ row }) => {
             const val = row.getValue('monitoring');
             if (val === 'tidak') {
-                return <Badge variant="destructive">Belum</Badge>;
+                return <Badge variant="destructive">Tidak</Badge>;
             }
             if (val === 'iya') {
-                return <Badge variant="default">Sudah</Badge>;
+                return <Badge variant="default">Iya</Badge>;
             }
             if (val === 'kosong') {
                 return <Badge variant="secondary">Kosong</Badge>;
@@ -102,8 +102,8 @@ export const columns: ColumnDef<Agama>[] = [
         header: ({ column }) => <DataTableColumnHeader column={column} title="Jenis Reklame" />,
     },
     {
-        accessorKey: 'jumlah_sisi',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Sisi" />,
+        accessorKey: 'isi_konten',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Tema/Isi Konten" />,
     },
     {
         accessorKey: 'foto_reklame',

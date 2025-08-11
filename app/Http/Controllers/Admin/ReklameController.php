@@ -16,29 +16,55 @@ class ReklameController extends Controller
     public function index(Request $request)
     {
         $query = Reklame::query();
-
         if ($request->filled('search')) {
             $query->where('id_pendaftaran', 'like', '%' . $request->search . '%')
                 ->orWhere('nama_pemohon', 'like', '%' . $request->search . '%')
                 ->orWhere('nama_perusahaan', 'like', '%' . $request->search . '%')
-                ->orWhere('jenis_reklame', 'like', '%' . $request->search . '%');
+                ->orWhere('jenis_reklame', 'like', '%' . $request->search . '%')
+                ->orWhere('isi_konten', 'like', '%' . $request->search . '%');
         }
-        // Filter berdasarkan tanggal
         if ($request->filled('start_date')) {
             $query->whereDate('tgl_penetapan', '>=', Carbon::parse($request->start_date));
         }
-
         if ($request->filled('end_date')) {
-            $query->whereDate('tgl_penetapan', '<=', Carbon::parse($request->end_date));
+            $query->whereDate('tgl_selesai_penetapan', '<=', Carbon::parse($request->end_date));
         }
-
+        if ($request->filled('monitoring')) {
+            $query->orWhere('monitoring', 'like', '%' . $request->monitoring . '%');
+        }
+        if ($request->filled('jalan')) {
+            $query->orWhere('jalan', 'like', '%' . $request->jalan . '%');
+        }
+        if ($request->filled('isi_konten')) {
+            $query->orWhere('isi_konten', 'like', '%' . $request->isi_konten . '%');
+        }
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         }
+        $monitoringCounts = (clone $query)->selectRaw('
+            SUM(CASE WHEN monitoring = "iya" THEN 1 ELSE 0 END) as iya,
+            SUM(CASE WHEN monitoring = "tidak" THEN 1 ELSE 0 END) as tidak,
+            SUM(CASE WHEN monitoring = "kosong" OR monitoring = "" THEN 1 ELSE 0 END) as kosong
+        ')->first();
+        $perpanjanganCounts = (clone $query)->selectRaw('
+            SUM(CASE WHEN perpanjangan = "sudah" THEN 1 ELSE 0 END) as sudah,
+            SUM(CASE WHEN perpanjangan = "belum" THEN 1 ELSE 0 END) as belum,
+            SUM(CASE WHEN perpanjangan = "kosong" OR perpanjangan = "" THEN 1 ELSE 0 END) as kosong
+        ')->first();
         $reklame = $query->paginate(10)->withQueryString();
         return Inertia::render('admin/reklame/index', [
             'reklame' => $reklame,
-            'filter' => $request->only(['search', 'sort', 'direction', 'start_date', 'end_date']),
+            'monitoring' => [
+                'iya' => $monitoringCounts->iya,
+                'tidak' => $monitoringCounts->tidak,
+                'kosong' => $monitoringCounts->kosong,
+            ],
+            'perpanjangan' => [
+                'sudah' => $perpanjanganCounts->sudah,
+                'belum' => $perpanjanganCounts->belum,
+                'kosong' => $perpanjanganCounts->kosong,
+            ],
+            'filter' => $request->only(['search', 'sort', 'direction', 'start_date', 'end_date','monitoring','perpanjangan','jalan']),
         ]);
     }
     /**
