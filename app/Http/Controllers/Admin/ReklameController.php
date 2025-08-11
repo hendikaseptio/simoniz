@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Imports\ReklameImport;
 use App\Models\Reklame;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ReklameController extends Controller
 {
@@ -24,6 +23,14 @@ class ReklameController extends Controller
                 ->orWhere('nama_perusahaan', 'like', '%' . $request->search . '%')
                 ->orWhere('jenis_reklame', 'like', '%' . $request->search . '%');
         }
+        // Filter berdasarkan tanggal
+        if ($request->filled('start_date')) {
+            $query->whereDate('tgl_penetapan', '>=', Carbon::parse($request->start_date));
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('tgl_penetapan', '<=', Carbon::parse($request->end_date));
+        }
 
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
@@ -31,7 +38,7 @@ class ReklameController extends Controller
         $reklame = $query->paginate(10)->withQueryString();
         return Inertia::render('admin/reklame/index', [
             'reklame' => $reklame,
-            'filter' => $request->only(['search', 'sort', 'direction']),
+            'filter' => $request->only(['search', 'sort', 'direction', 'start_date', 'end_date']),
         ]);
     }
     /**
@@ -182,16 +189,5 @@ class ReklameController extends Controller
         $user->delete();
 
         return redirect()->route('admin.reklame.index')->with('success', 'Reklame Reklame berhasil dihapus');
-    }
-
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv',
-        ]);
-
-        Excel::import(new ReklameImport, $request->file('file'));
-
-        return redirect()->route('admin.reklame.index')->with('success', 'Data Reklame berhasil diimport.');
     }
 }

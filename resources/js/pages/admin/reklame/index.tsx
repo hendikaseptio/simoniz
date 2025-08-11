@@ -1,12 +1,13 @@
+import InputText from '@/components/custom/form/input-text';
 import { DataTableServer } from '@/components/custom/table/datatable-server';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/reklame/columns';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { CheckCircle2, CodeXml, Plus, UserCheck, Users, UserX } from 'lucide-react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { CheckCircle2, CodeXml, FileDown, Plus, UserCheck, Users, UserX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,7 +17,23 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { reklame, flash } = usePage().props;
+    const { reklame, filter, flash } = usePage().props;
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        get(route('admin.reklame.index')) // ganti sesuai route
+    }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setData(name, value)
+    }
+    const { data, setData, get } = useForm({
+        search: filter.search || '',
+        sort: filter.sort || '',
+        direction: filter.direction || '',
+        start_date: filter.start_date || '',
+        end_date: filter.end_date || '',
+    })
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Reklame" />
@@ -34,10 +51,10 @@ export default function Index() {
                             <div className="flex justify-between items-center">
                                 <div className="text-muted-foreground text-sm">Total Reklame</div>
                                 <div className="bg-secondary rounded-full p-2">
-                                    <Users className='text-primary size-4'/>
+                                    <Users className='text-primary size-4' />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{ reklame.total }</div>
+                            <div className="text-lg font-semibold">{reklame.total}</div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -45,7 +62,7 @@ export default function Index() {
                             <div className="flex justify-between items-center">
                                 <div className="text-muted-foreground text-sm">Reklame Aktif</div>
                                 <div className="bg-secondary rounded-full p-2">
-                                    <UserCheck className='text-primary size-4'/>
+                                    <UserCheck className='text-primary size-4' />
                                 </div>
                             </div>
                             <div className="text-lg font-semibold">{"coming soon"}</div>
@@ -56,7 +73,7 @@ export default function Index() {
                             <div className="flex justify-between items-center">
                                 <div className="text-muted-foreground text-sm">Reklame Non Aktif</div>
                                 <div className="bg-secondary rounded-full p-2">
-                                    <UserX className='text-primary size-4'/>
+                                    <UserX className='text-primary size-4' />
                                 </div>
                             </div>
                             <div className="text-lg font-semibold">{"comin soon"}</div>
@@ -74,7 +91,38 @@ export default function Index() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className='flex justify-end'>
+                <Card>
+                    <CardHeader><CardTitle>Filter</CardTitle></CardHeader>
+                    <CardContent>
+                        <form method="get" className='space-y-3'>
+                            <div className="grid grid-cols-2 gap-3">
+                                <InputText
+                                    type="date"
+                                    name="start_date"
+                                    value={data.start_date}
+                                    onChange={handleInputChange}
+                                />
+
+                                <InputText
+                                    type="date"
+                                    name="end_date"
+                                    value={data.end_date}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div className="text-end">
+                                <Button type='submit'>Filter</Button>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
+                <div className='flex justify-end gap-3'>
+                    <Link href="/admin/import">
+                        <Button>
+                            <FileDown />
+                            Import Excel
+                        </Button>
+                    </Link>
                     <Link href="/admin/reklame/create">
                         <Button>
                             <Plus />

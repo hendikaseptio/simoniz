@@ -28,7 +28,7 @@ return new class extends Migration
             $table->decimal('latitude', 10, 7)->nullable();
             $table->decimal('longitude', 10, 7)->nullable();
             $table->string('lokasi')->nullable();
-            $table->string('foto_reklame');
+            $table->string('foto_reklame')->nullable();
             $table->string('no_hp_pemohon');
             $table->string('jenis_reklame');
             $table->integer('jumlah_sisi');
