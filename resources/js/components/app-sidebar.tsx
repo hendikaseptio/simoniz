@@ -22,10 +22,10 @@ const mainNavItems: NavItem[] = [
         roles: ['admin'],
     },
     {
-        title: 'Tim Cek Lokasi',
-        href: '/tim',
+        title: 'Petugas',
+        href: '/petugas',
         icon: Users,
-        roles: ['admin', 'kabid'],
+        roles: ['admin'],
     },
     {
         title: 'Jadwal Monitoring',
@@ -41,7 +41,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Peta Lokasi',
-        href: '/map',
+        href: '/peta',
         icon: MapPin,
         roles: ['admin', 'kabid', 'tim'],
     },

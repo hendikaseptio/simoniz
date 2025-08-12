@@ -23,7 +23,7 @@ import {
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Copy, FolderOpen, MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { Copy, MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 export type Agama = {
@@ -35,15 +35,27 @@ export type Agama = {
 export const columns: ColumnDef<Agama>[] = [
     {
         accessorKey: 'id',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="id" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Id" />,
     },
     {
         accessorKey: 'name',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="nama" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Nama" />,
+    },
+    {
+        accessorKey: 'email',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
+    },
+    {
+        accessorKey: 'role',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Role" />,
+    },
+    {
+        accessorKey: 'status',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     },
     {
         accessorKey: 'created_at',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tanggal Buat" />,
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Tanggal Register" />,
         cell: ({ row }) => TanggalIndo(row.getValue('created_at')),
     },
     {

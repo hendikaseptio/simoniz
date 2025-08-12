@@ -67,23 +67,6 @@ export const columns: ColumnDef<Agama>[] = [
         },
     },
     {
-        accessorKey: 'perpanjangan',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Perpanjangan" />,
-        cell: ({ row }) => {
-            const val = row.getValue('perpanjangan');
-            if (val === 'belum') {
-                return <Badge variant="destructive">Belum</Badge>;
-            }
-            if (val === 'sudah') {
-                return <Badge variant="default">Sudah</Badge>;
-            }
-            if (val === 'kosong') {
-                return <Badge variant="secondary">Kosong</Badge>;
-            }
-            return <span className={val === 'sudah' ? 'text-green-600' : val === 'belum' ? 'text-yellow-600' : 'text-gray-500'}>{val}</span>;
-        },
-    },
-    {
         accessorKey: 'tgl_penetapan',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Tgl. Penetapan" />,
         cell: ({ row }) => TanggalIndo(row.getValue('tgl_penetapan')),
@@ -104,13 +87,6 @@ export const columns: ColumnDef<Agama>[] = [
     {
         accessorKey: 'isi_konten',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Tema/Isi Konten" />,
-    },
-    {
-        accessorKey: 'foto_reklame',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Foto" />,
-        cell: ({ row }) => {
-            return <img src={row.getValue('foto_reklame')} alt="foto reklame" className="h-10 rounded shadow" />;
-        },
     },
     {
         accessorKey: 'created_at',

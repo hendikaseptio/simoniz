@@ -14,7 +14,6 @@ class ImportController extends Controller
 {
     public function index()
     {
-        // dd("tes");
         $preview = session('reklame_preview', null);
 
         return Inertia::render('admin/import/index', [
@@ -46,7 +45,7 @@ class ImportController extends Controller
 
         return redirect()->route('admin.import');
     }
-    public function confirm(Request $request)
+    public function confirm()
     {
         $preview = session('reklame_preview');
 

@@ -12,28 +12,29 @@ import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Edit Data Tim',
-        href: '/admin/tim/edit',
+        title: 'Edit Data Petugas',
+        href: '/admin/petugas/edit',
     },
 ];
 
-export default function EditTim() {
-    const { tim, old } = usePage().props;
-    console.log(tim)
+export default function EditPetugas() {
+    const { petugas, old } = usePage().props;
+    console.log(petugas)
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
-            name: tim?.name || old?.name || '',
-            email: tim?.email || old?.email || '',
-            password: tim?.password || old?.password || '',
-            password_confirmation: tim?.password_confirmation || old?.password_confirmation || '',
-            status: tim?.status || old?.status || '',
+            name: petugas?.name || old?.name || '',
+            email: petugas?.email || old?.email || '',
+            password: petugas?.password || old?.password || '',
+            password_confirmation: petugas?.password_confirmation || old?.password_confirmation || '',
+            status: petugas?.status || old?.status || '',
+            role: petugas?.role || old?.role || '',
         },
-        `/admin/tim/${tim?.id}`,
+        `/admin/petugas/${petugas?.id}`,
         'put',
     );
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Data Tim" />
+            <Head title="Data Petugas" />
             <div className="p-5 space-y-5">
                 {errors && Object.keys(errors).length > 0 && (
                     <Alert variant={'destructive'}>
@@ -50,14 +51,14 @@ export default function EditTim() {
                     </Alert>
                 )}
                 <Card>
-                    <CardHeader><CardTitle>Form Edit Tim</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Form Edit Petugas</CardTitle></CardHeader>
                     <CardContent>
                         <form action="#" className='space-y-3'>
                             <InputText
                                 name="name"
-                                label="Nama Tim"
+                                label="Nama Petugas"
                                 type="text"
-                                placeholder="Masukkan Nama Tim"
+                                placeholder="Masukkan Nama Petugas"
                                 onChange={handleChange}
                                 value={values.name}
                                 errors={errors}
@@ -80,6 +81,15 @@ export default function EditTim() {
                                 errors={errors}
                             >
                             </InputSelect>
+                            <InputSelect 
+                                name="role"
+                                label="Role Petugas"
+                                options={[{label: "Admin", value: 'admin'}, {label: "Kabid", value: 'kabid'}, {label: "Tim", value: 'tim'}]}
+                                onChange={handleChange}
+                                value={values.role}
+                                errors={errors}
+                            >
+                            </InputSelect>
                             <InputText
                                 name="password"
                                 label="Password"
@@ -99,7 +109,7 @@ export default function EditTim() {
                                 placeholder="Confirm password"
                             />
                             <div className="flex justify-end mt-3 space-x-3">
-                                <Link href="/admin/tim">
+                                <Link href="/admin/petugas">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />
                                         Batal

@@ -3,24 +3,23 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { columns } from '@/pages/admin/tim/columns';
+import { columns } from '@/pages/admin/petugas/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { CheckCircle2, CodeXml, HeartHandshake, Plus, UserCheck, Users, UserX } from 'lucide-react';
+import { CheckCircle2, CodeXml, Plus, UserCheck, Users, UserX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Data Tim',
-        href: '/admin/tim',
+        title: 'Data Petugas',
+        href: '/admin/petugas',
     },
 ];
 
 export default function Index() {
-    const { tim, jumlahTimAktif, jumlahTimNonAktif, flash } = usePage().props;
-    console.log(tim);
+    const { petugas, jumlahPetugasAktif, jumlahPetugasNonAktif, flash } = usePage().props;
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Data Tim" />
+            <Head title="Data Petugas" />
             <div className="snap-x p-5 space-y-5">
                 {flash.success && (
                     <Alert className="border-teal-500 bg-teal-100 dark:bg-teal-950">
@@ -33,34 +32,34 @@ export default function Index() {
                     <Card>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Total Tim</div>
+                                <div className="text-muted-foreground text-sm">Total Petugas</div>
                                 <div className="bg-secondary rounded-full p-2">
                                     <Users className='text-primary size-4'/>
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{ tim.total }</div>
+                            <div className="text-lg font-semibold">{ petugas.total }</div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Tim Aktif</div>
+                                <div className="text-muted-foreground text-sm">Petugas Aktif</div>
                                 <div className="bg-secondary rounded-full p-2">
                                     <UserCheck className='text-primary size-4'/>
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{ jumlahTimAktif }</div>
+                            <div className="text-lg font-semibold">{ jumlahPetugasAktif }</div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Tim Non Aktif</div>
+                                <div className="text-muted-foreground text-sm">Petugas Non Aktif</div>
                                 <div className="bg-secondary rounded-full p-2">
                                     <UserX className='text-primary size-4'/>
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{ jumlahTimNonAktif }</div>
+                            <div className="text-lg font-semibold">{ jumlahPetugasNonAktif }</div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -76,14 +75,14 @@ export default function Index() {
                     </Card>
                 </div>
                 <div className='flex justify-end'>
-                    <Link href="/admin/tim/create">
+                    <Link href="/admin/petugas/create">
                         <Button>
                             <Plus />
                             Tambah Data{' '}
                         </Button>
                     </Link>
                 </div>
-                <DataTableServer columns={columns} initialData={tim} />
+                <DataTableServer columns={columns} initialData={petugas} />
             </div>
         </AppLayout>
     );

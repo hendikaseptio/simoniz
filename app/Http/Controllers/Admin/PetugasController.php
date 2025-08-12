@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
-class TimController extends Controller
+class PetugasController extends Controller
 {
 
     /**
@@ -20,21 +20,22 @@ class TimController extends Controller
         $query = User::query();
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
         }
 
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         }
-        $query->where('role', 'tim');
+        // $query->where('role', 'petugas');
         $baseQuery = clone $query;
-        $tim = $query->where('role','tim')->paginate(10)->withQueryString();
-        $jumlahTimAktif = (clone $baseQuery)->where('status', 'aktif')->count();
-        $jumlahTimNonAktif = (clone $baseQuery)->where('status', 'nonaktif')->count();
-        return Inertia::render('admin/tim/index', [
-            'tim' => $tim,
-            'jumlahTimAktif' => $jumlahTimAktif,
-            'jumlahTimNonAktif' => $jumlahTimNonAktif,
+        $petugas = $query->paginate(10)->withQueryString();
+        $jumlahPetugasAktif = (clone $baseQuery)->where('status', 'aktif')->count();
+        $jumlahPetugasNonAktif = (clone $baseQuery)->where('status', 'nonaktif')->count();
+        return Inertia::render('admin/petugas/index', [
+            'petugas' => $petugas,
+            'jumlahPetugasAktif' => $jumlahPetugasAktif,
+            'jumlahPetugasNonAktif' => $jumlahPetugasNonAktif,
             'filter' => $request->only(['search', 'sort', 'direction']),
         ]);
     }
@@ -44,7 +45,7 @@ class TimController extends Controller
      */
     public function create()
     {
-        return Inertia::render('admin/tim/create');
+        return Inertia::render('admin/petugas/create');
     }
 
     /**
@@ -56,17 +57,18 @@ class TimController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required|in:admin,kabid,tim',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'tim',
+            'role' =>  $request->role,
             'status' => 'aktif',
         ]);
 
-        return redirect()->route('admin.tim.index')->with('success', 'User Tim berhasil dibuat');
+        return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil dibuat');
     }
 
     /**
@@ -82,9 +84,9 @@ class TimController extends Controller
      */
     public function edit(string $id)
     {
-        $tim = User::where('role', 'tim')->findOrFail($id);
-        return Inertia::render('admin/tim/edit', [
-            'tim' => $tim,
+        $petugas = User::where('role', 'petugas')->findOrFail($id);
+        return Inertia::render('admin/petugas/edit', [
+            'petugas' => $petugas,
         ]);
     }
 
@@ -93,7 +95,7 @@ class TimController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::where('role', 'tim')->findOrFail($id);
+        $user = User::where('role', 'petugas')->findOrFail($id);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -110,7 +112,7 @@ class TimController extends Controller
         $user->status = $validated['status'];
         $user->save();
 
-        return redirect()->route('admin.tim.index')->with('success', 'User Tim berhasil diperbarui');
+        return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil diperbarui');
     }
 
     /**
@@ -118,9 +120,9 @@ class TimController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::where('role', 'tim')->findOrFail($id);
+        $user = User::where('role', 'petugas')->findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.tim.index')->with('success', 'User Tim berhasil dihapus');
+        return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil dihapus');
     }
 }

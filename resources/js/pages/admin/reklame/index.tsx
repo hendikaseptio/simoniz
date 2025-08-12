@@ -11,7 +11,7 @@ import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/reklame/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { CheckCircle2, CodeXml, FileCheck2, FileDown, ListFilter, Plus, Presentation, RotateCcw, Telescope, TrainFrontTunnel, TvMinimal, UserX } from 'lucide-react';
+import { CheckCircle2, FileDown, ListFilter, Plus, Presentation, RotateCcw, Telescope, TvMinimal } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { reklame, monitoring, perpanjangan, jenis_reklame, flash } = usePage().props;
+    const { reklame, monitoring, jenis_reklame, flash } = usePage().props;
     const { data, handleChange, submit, reset } = useFilterForm(
         {
             start_date: '',
@@ -138,25 +138,6 @@ export default function Index() {
                                 </Link>
                                 <Link className="m-1 inline-block" href={route('admin.reklame.index', { monitoring: 'kosong' })} preserveScroll>
                                     <Badge variant={'secondary'}>Kosong: {monitoring.kosong}</Badge>
-                                </Link>
-                            </div>
-                        </CardContent>
-                        <CardContent className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <div className="text-sm text-muted-foreground">Status Perpanjangan</div>
-                                <div className="rounded-full bg-secondary p-2">
-                                    <FileCheck2 className="size-4 text-primary" />
-                                </div>
-                            </div>
-                            <div className="flex-inline items-center text-sm">
-                                <Link className="m-1 inline-block" href={route('admin.reklame.index', { perpanjangan: 'sudah' })} preserveScroll>
-                                    <Badge>Sudah: {perpanjangan.sudah}</Badge>
-                                </Link>
-                                <Link className="m-1 inline-block" href={route('admin.reklame.index', { perpanjangan: 'belum' })} preserveScroll>
-                                    <Badge variant={'destructive'}>Belum: {perpanjangan.belum}</Badge>
-                                </Link>
-                                <Link className="m-1 inline-block" href={route('admin.reklame.index', { perpanjangan: 'kosong' })} preserveScroll>
-                                    <Badge variant={'secondary'}>Kosong: {perpanjangan.kosong}</Badge>
                                 </Link>
                             </div>
                         </CardContent>

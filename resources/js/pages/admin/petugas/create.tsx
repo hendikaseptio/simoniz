@@ -1,3 +1,4 @@
+import InputSelect from '@/components/custom/form/input-select';
 import InputText from '@/components/custom/form/input-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -11,12 +12,12 @@ import { AlertCircleIcon, ArrowLeft, CircleOff, Send } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Data Tim',
-        href: '/admin/tim',
+        title: 'Data Petugas',
+        href: '/admin/petugas',
     },
     {
-        title: 'Tambah Data Tim',
-        href: '/admin/tim/create',
+        title: 'Tambah Data Petugas',
+        href: '/admin/petugas/create',
     },
 ];
 
@@ -27,12 +28,13 @@ export default function Create() {
             email: '',
             password: '',
             password_confirmation: '',
+            role: '',
         },
-        '/admin/tim',
+        '/admin/petugas',
     );
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Data Tim" />
+            <Head title="Data Petugas" />
             <div className="p-5 space-y-5">
                 {errors && Object.keys(errors).length > 0 && (
                     <Alert variant={'destructive'}>
@@ -49,14 +51,14 @@ export default function Create() {
                     </Alert>
                 )}
                 <Card>
-                    <CardHeader><CardTitle>Form Tambah Tim</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Form Tambah Petugas</CardTitle></CardHeader>
                     <CardContent>
                         <form action="#" className='space-y-3'>
                             <InputText
                                 name="name"
-                                label="Nama Tim"
+                                label="Nama Petugas"
                                 type="text"
-                                placeholder="Masukkan Nama Tim"
+                                placeholder="Masukkan Nama Petugas"
                                 onChange={handleChange}
                                 value={values.name}
                                 errors={errors}
@@ -70,6 +72,15 @@ export default function Create() {
                                 value={values.email}
                                 errors={errors}
                             ></InputText>
+                            <InputSelect 
+                                name="role"
+                                label="Role Petugas"
+                                options={[{label: "Admin", value: 'admin'}, {label: "Kabid", value: 'kabid'}, {label: "Tim", value: 'tim'}]}
+                                onChange={handleChange}
+                                value={values.role}
+                                errors={errors}
+                            >
+                            </InputSelect>
                             <InputText
                                 name="password"
                                 label="Password"
@@ -89,7 +100,7 @@ export default function Create() {
                                 placeholder="Confirm password"
                             />
                             <div className="flex justify-end mt-3 space-x-3">
-                                <Link href="/admin/tim">
+                                <Link href="/admin/petugas">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />
                                         Batal
