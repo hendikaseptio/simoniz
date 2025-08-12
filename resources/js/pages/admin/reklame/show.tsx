@@ -1,3 +1,4 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
@@ -45,31 +46,57 @@ export default function ShowReklame() {
                     </CardHeader>
                     <CardContent>
                         <CardContent>
-                            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                <div className="space-y-3">
-                                    <DetailRow label="ID Pendaftaran">{reklame.id_pendaftaran}</DetailRow>
-                                    <DetailRow label="ID Pendaftaran Sebelumnya">{reklame.prev_id_pendaftaran}</DetailRow>
-                                    <DetailRow label="Nama Pemohon">{reklame.nama_pemohon}</DetailRow>
-                                    <DetailRow label="Alamat Pemohon">{reklame.alamat_pemohon}</DetailRow>
-                                    <DetailRow label="No HP Pemohon">{reklame.no_hp_pemohon}</DetailRow>
-                                    <DetailRow label="Nama Perusahaan">{reklame.nama_perusahaan}</DetailRow>
-                                    <DetailRow label="Alamat Perusahaan">{reklame.alamat_perusahaan}</DetailRow>
-                                    <DetailRow label="Jalan">{reklame.jalan}</DetailRow>
-                                    <DetailRow label="Isi Konten">{reklame.isi_konten}</DetailRow>
-                                </div>
-                                <div className="space-y-3">
-                                    <DetailRow label="Tanggal Penetapan">{reklame.tgl_penetapan}</DetailRow>
-                                    <DetailRow label="Tanggal Selesai Penetapan">{reklame.tgl_selesai_penetapan}</DetailRow>
-                                    <DetailRow label="Jenis Reklame">{reklame.jenis_reklame}</DetailRow>
-                                    <DetailRow label="Jumlah Sisi">{reklame.jumlah_sisi}</DetailRow>
-                                    <DetailRow label="Keterangan Lokasi">{reklame.keterangan_lokasi}</DetailRow>
-                                    <DetailRow label="Monitoring">{reklame.monitoring}</DetailRow>
-                                    <DetailRow label="Perpanjangan">{reklame.perpanjangan}</DetailRow>
-                            <DetailRow label="Lokasi">{reklame.lokasi}
-                                <Link href={reklame.lokasi}><Button><Route/> Dapatkan Rute</Button></Link>
-                            </DetailRow>
-                                </div>
-                            </div>
+                            <Accordion
+                                type="single"
+                                collapsible
+                                className="w-full"
+                                defaultValue="item-1"
+                            >
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>Informasi Perizinan</AccordionTrigger>
+                                    <AccordionContent className="flex flex-col gap-4 text-balance">
+                                        <div className="space-y-3">
+                                            <DetailRow label="ID Pendaftaran">{reklame.id_pendaftaran}</DetailRow>
+                                            <DetailRow label="ID Pendaftaran Sebelumnya">{reklame.prev_id_pendaftaran}</DetailRow>
+                                            <DetailRow label="Tanggal Penetapan">{reklame.tgl_penetapan}</DetailRow>
+                                            <DetailRow label="Tanggal Selesai Penetapan">{reklame.tgl_selesai_penetapan}</DetailRow>
+                                            <DetailRow label="Monitoring">{reklame.monitoring}</DetailRow>
+                                            <DetailRow label="Perpanjangan">{reklame.perpanjangan}</DetailRow>
+                                        </div>
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-2">
+                                    <AccordionTrigger>Informasi Pemohon dan Perusahaan</AccordionTrigger>
+                                    <AccordionContent className="flex flex-col gap-4 text-balance">
+                                        <DetailRow label="Nama Pemohon">{reklame.nama_pemohon}</DetailRow>
+                                        <DetailRow label="Alamat Pemohon">{reklame.alamat_pemohon}</DetailRow>
+                                        <DetailRow label="No HP Pemohon">{reklame.no_hp_pemohon}</DetailRow>
+                                        <DetailRow label="Nama Perusahaan">{reklame.nama_perusahaan}</DetailRow>
+                                        <DetailRow label="Alamat Perusahaan">{reklame.alamat_perusahaan}</DetailRow>
+                                    </AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-3">
+                                    <AccordionTrigger>Detail Reklame</AccordionTrigger>
+                                    <AccordionContent className="flex flex-col gap-4 text-balance">
+                                        <div className="grid grid-cols-2">
+                                            <div>
+
+                                            </div>
+                                            <div>
+                                                <DetailRow label="Jalan">{reklame.jalan}</DetailRow>
+                                                <DetailRow label="Isi Konten">{reklame.isi_konten}</DetailRow>
+                                                <DetailRow label="Jenis Reklame">{reklame.jenis_reklame}</DetailRow>
+                                                <DetailRow label="Jumlah Sisi">{reklame.jumlah_sisi}</DetailRow>
+                                                <DetailRow label="Keterangan Lokasi">{reklame.keterangan_lokasi}</DetailRow>
+                                                <DetailRow label="Lokasi">{reklame.lokasi}
+                                                    <Link href={reklame.lokasi}><Button><Route /> Dapatkan Rute</Button></Link>
+                                                </DetailRow>
+                                            </div>
+                                        </div>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+
                             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                                 <DetailRow label="Foto Reklame">
                                     <Link href={reklame.foto_reklame}>{reklame.foto_reklame}</Link>
@@ -118,6 +145,6 @@ export default function ShowReklame() {
                     </CardContent>
                 </Card>
             </div>
-        </AppLayout>
+        </AppLayout >
     );
 }

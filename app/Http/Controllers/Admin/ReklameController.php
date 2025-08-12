@@ -38,6 +38,9 @@ class ReklameController extends Controller
         if ($request->filled('isi_konten')) {
             $query->orWhere('isi_konten', 'like', '%' . $request->isi_konten . '%');
         }
+        if ($request->filled('jenis_reklame')) {
+            $query->orWhere('jenis_reklame', 'like', '%' . $request->jenis_reklame . '%');
+        }
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         }
@@ -50,6 +53,18 @@ class ReklameController extends Controller
             SUM(CASE WHEN perpanjangan = "sudah" THEN 1 ELSE 0 END) as sudah,
             SUM(CASE WHEN perpanjangan = "belum" THEN 1 ELSE 0 END) as belum,
             SUM(CASE WHEN perpanjangan = "kosong" OR perpanjangan = "" THEN 1 ELSE 0 END) as kosong
+        ')->first();
+        $jenis_reklameCounts = (clone $query)->selectRaw('
+            SUM(CASE WHEN jenis_reklame = "BANDO" THEN 1 ELSE 0 END) as BANDO,
+            SUM(CASE WHEN jenis_reklame = "BILLBOARD TANAH NEGARA" THEN 1 ELSE 0 END) as BILLBOARD_TANAH_NEGARA,
+            SUM(CASE WHEN jenis_reklame = "BILLBOARD TANAH SENDIRI" THEN 1 ELSE 0 END) as BILLBOARD_TANAH_SENDIRI,
+            SUM(CASE WHEN jenis_reklame = "BILLBOARD TANAH SENDIRI BERSINAR" THEN 1 ELSE 0 END) as BILLBOARD_TANAH_SENDIRI_BERSINAR,
+            SUM(CASE WHEN jenis_reklame = "BILLBOARD TANAH NEGARA BERSINAR / NBTN" THEN 1 ELSE 0 END) as BILLBOARD_TANAH_NEGARA_BERSINAR_NBTN,
+            SUM(CASE WHEN jenis_reklame = "NEON BOX TANAH NEGARA" THEN 1 ELSE 0 END) as NEON_BOX_TANAH_NEGARA,
+            SUM(CASE WHEN jenis_reklame = "NEON BOX TANAH SENDIRI" THEN 1 ELSE 0 END) as NEON_BOX_TANAH_SENDIRI,
+            SUM(CASE WHEN jenis_reklame = "NON KONSTRUKSI " THEN 1 ELSE 0 END) as NON_KONSTRUKSI,
+            SUM(CASE WHEN jenis_reklame = "Large Electronic Display (LED)" THEN 1 ELSE 0 END) as LED,
+            SUM(CASE WHEN jenis_reklame = "SS (SHOP SIGN)" THEN 1 ELSE 0 END) as SHOP_SIGN
         ')->first();
         $reklame = $query->paginate(10)->withQueryString();
         return Inertia::render('admin/reklame/index', [
@@ -64,7 +79,19 @@ class ReklameController extends Controller
                 'belum' => $perpanjanganCounts->belum,
                 'kosong' => $perpanjanganCounts->kosong,
             ],
-            'filter' => $request->only(['search', 'sort', 'direction', 'start_date', 'end_date','monitoring','perpanjangan','jalan']),
+            'jenis_reklame' => [
+                'BANDO' => $jenis_reklameCounts->BANDO,
+                'BILLBOARD_TANAH_NEGARA' => $jenis_reklameCounts->BILLBOARD_TANAH_NEGARA,
+                'BILLBOARD_TANAH_SENDIRI' => $jenis_reklameCounts->BILLBOARD_TANAH_SENDIRI,
+                'BILLBOARD_TANAH_SENDIRI_BERSINAR' => $jenis_reklameCounts->BILLBOARD_TANAH_SENDIRI_BERSINAR,
+                'BILLBOARD_TANAH_NEGARA_BERSINAR_NBTN' => $jenis_reklameCounts->BILLBOARD_TANAH_NEGARA_BERSINAR_NBTN,
+                'NEON_BOX_TANAH_NEGARA' => $jenis_reklameCounts->NEON_BOX_TANAH_NEGARA,
+                'NEON_BOX_TANAH_SENDIRI' => $jenis_reklameCounts->NEON_BOX_TANAH_SENDIRI,
+                'NON_KONSTRUKSI' => $jenis_reklameCounts->NON_KONSTRUKSI,
+                'LED' => $jenis_reklameCounts->LED,
+                'SHOP_SIGN' => $jenis_reklameCounts->SHOP_SIGN,
+            ],
+            'filter' => $request->only(['search', 'sort', 'direction', 'start_date', 'end_date', 'monitoring', 'perpanjangan', 'jalan','jenis_reklame']),
         ]);
     }
     /**

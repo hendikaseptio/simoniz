@@ -11,7 +11,7 @@ import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/reklame/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { CheckCircle2, CodeXml, FileCheck2, FileDown, ListFilter, Plus, Presentation, RotateCcw, Telescope, TrainFrontTunnel, UserX } from 'lucide-react';
+import { CheckCircle2, CodeXml, FileCheck2, FileDown, ListFilter, Plus, Presentation, RotateCcw, Telescope, TrainFrontTunnel, TvMinimal, UserX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { reklame, monitoring, perpanjangan, flash } = usePage().props;
+    const { reklame, monitoring, perpanjangan, jenis_reklame, flash } = usePage().props;
     const { data, handleChange, submit, reset } = useFilterForm(
         {
             start_date: '',
@@ -141,8 +141,6 @@ export default function Index() {
                                 </Link>
                             </div>
                         </CardContent>
-                    </Card>
-                    <Card>
                         <CardContent className="space-y-2">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm text-muted-foreground">Status Perpanjangan</div>
@@ -163,17 +161,30 @@ export default function Index() {
                             </div>
                         </CardContent>
                     </Card>
-                    <Card>
+                    <Card className='col-span-2'>
                         <CardContent className="space-y-2">
                             <div className="flex items-center justify-between">
                                 <div className="text-sm text-muted-foreground">Jenis Reklame</div>
                                 <div className="rounded-full bg-secondary p-2">
-                                    <CodeXml className="size-4 text-primary"></CodeXml>
+                                    <TvMinimal className="size-4 text-primary" />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">--</div>
+
+                            <div className="flex flex-wrap items-center text-sm">
+                                {Object.entries(jenis_reklame).map(([key, value]) => (
+                                    <Link
+                                        key={key}
+                                        className="m-1 inline-block"
+                                        href={route('admin.reklame.index', { jenis_reklame: key })}
+                                        preserveScroll
+                                    >
+                                        <Badge>{key.replaceAll('_', ' ')}: {value}</Badge>
+                                    </Link>
+                                ))}
+                            </div>
                         </CardContent>
                     </Card>
+
                 </div>
                 <Card>
                     <CardContent className="">
@@ -221,8 +232,8 @@ export default function Index() {
                                             />
                                         </div>
                                         <div className="text-end space-x-3">
-                                            <Button type="submit"><ListFilter/>Filter</Button>
-                                            <Button variant={'outline'} onClick={reset}><RotateCcw/> Reset</Button>
+                                            <Button type="submit"><ListFilter />Filter</Button>
+                                            <Button variant={'outline'} onClick={reset}><RotateCcw /> Reset</Button>
                                         </div>
                                     </form>
                                 </AccordionContent>

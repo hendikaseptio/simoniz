@@ -14,6 +14,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         title: 'Data Reklame',
         href: '/admin/reklame',
     },
+    {
+        title: 'Import Data Reklame',
+        href: '/admin/import',
+    },
 ];
 
 export default function Index() {
