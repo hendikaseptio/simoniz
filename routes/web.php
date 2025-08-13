@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ImportController;
+use App\Http\Controllers\Admin\JadwalController;
 use App\Http\Controllers\Admin\PetaController;
 use App\Http\Controllers\Admin\ReklameController;
 use App\Http\Controllers\Admin\PetugasController;
@@ -21,6 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('petugas', PetugasController::class);
         Route::resource('reklame', ReklameController::class);
         Route::resource('tim', TimController::class);
+        Route::resource('jadwal', JadwalController::class);
         // import 
         Route::get('import', [ImportController::class, 'index'])->name('import');
         Route::post('import/preview', [ImportController::class, 'preview'])->name('import.preview');
