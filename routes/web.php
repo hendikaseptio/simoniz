@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\PetaController;
 use App\Http\Controllers\Admin\ReklameController;
 use App\Http\Controllers\Admin\PetugasController;
+use App\Http\Controllers\Admin\TimController;
 use App\Http\Middleware\RoleAdmin;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,6 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(RoleAdmin::class)->prefix('admin')->name('admin.')->group(function () {
         Route::resource('petugas', PetugasController::class);
         Route::resource('reklame', ReklameController::class);
+        Route::resource('tim', TimController::class);
         // import 
         Route::get('import', [ImportController::class, 'index'])->name('import');
         Route::post('import/preview', [ImportController::class, 'preview'])->name('import.preview');

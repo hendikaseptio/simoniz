@@ -11,7 +11,7 @@ class PetaController extends Controller
 {
     public function index(Request $request)
     {
-        $reklame = Reklame::all();
+        $reklame = Reklame::whereNotNull('latitude')->whereNotNull('longitude')->get();
         return Inertia::render('admin/peta/index', [
             'reklame' => $reklame,
         ]);

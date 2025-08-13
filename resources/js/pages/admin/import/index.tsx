@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { CheckCircle2, Database } from 'lucide-react';
+import { CheckCircle2, Database, FileDown } from 'lucide-react';
 import { useState } from 'react';
 import Dropzone from 'react-dropzone';
 
@@ -58,7 +58,13 @@ export default function Index() {
                         </div>
                     )}
                 </Dropzone>
-
+                
+                    <div className='flex justify-between'>
+                        <p>Unduh contoh format Excel untuk diisi:</p>
+                        <Link href="/docs/Contoh%20file%20import.xlsx" download><Button variant={'secondary'}><FileDown/> Download Contoh file excel</Button></Link>
+                    </div>
+                
+                
 
                 {preview && (
                     <Card>
@@ -97,7 +103,7 @@ export default function Index() {
                                 </div>
 
                                 <Button onClick={handleImport}>
-                                    <Database/> Masukkan ke Database
+                                    <Database /> Masukkan ke Database
                                 </Button>
                             </div>
                         </CardContent>

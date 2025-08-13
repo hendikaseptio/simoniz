@@ -47,4 +47,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function timsSebagaiPetugas1()
+    {
+        return $this->hasMany(Tim::class, 'petugas1');
+    }
+
+    public function timsSebagaiPetugas2()
+    {
+        return $this->hasMany(Tim::class, 'petugas2');
+    }
 }
