@@ -24,11 +24,15 @@ class TimController extends Controller
                 $q->where('name', 'like', '%' . $request->search . '%');
             });
         }
-        if ($request->filled('tahun')) {
-            $query->orWhere('tahun', $request->tahun);
-        }
-        if ($request->filled('bulan')) {
-            $query->orWhere('bulan', $request->bulan);
+        if ($request->filled('tahun') && $request->filled('bulan')) {
+            $query->Where('tahun', $request->tahun)->Where('bulan', $request->bulan);
+        } else {
+            if ($request->filled('tahun')) {
+                $query->orWhere('tahun', $request->tahun);
+            }
+            if ($request->filled('bulan')) {
+                $query->orWhere('bulan', $request->bulan);
+            }
         }
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);

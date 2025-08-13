@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Tim;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class TimSeeder extends Seeder
 {
@@ -14,42 +13,44 @@ class TimSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [
-            ['name' => 'Beno Heritriono', 'firstname' => 'beno'],
-            ['name' => 'Arif Karyadi', 'firstname' => 'arif'],
-            ['name' => 'Sukirno', 'firstname' => 'sukirno'],
-            ['name' => 'Amat Muslich', 'firstname' => 'muslich'],
-            ['name' => 'Muhammad Muzni Kharis', 'firstname' => 'muzni'],
-            ['name' => 'Purnomo', 'firstname' => 'purnomo'],
-            ['name' => 'Noor Falaisifa', 'firstname' => 'sifa'],
-            ['name' => 'Ratih Prasastianila Muna', 'firstname' => 'ratih'],
-            ['name' => 'Abdul Kholis', 'firstname' => 'kholis'],
-            ['name' => 'Julio Odi Ardika', 'firstname' => 'julio'],
-            ['name' => 'Hendika Septio Afitdin', 'firstname' => 'hendika'],
-            ['name' => 'Achmad Adi Kusuma', 'firstname' => 'adi'],
-            ['name' => 'Yania Noviantika LS', 'firstname' => 'yania'],
-            ['name' => 'Muhammad Rifqil Anam', 'firstname' => 'rifqil'],
-            ['name' => 'Ermi Susanti', 'firstname' => 'ermi'],
-            ['name' => 'Moh. Dany Rozid Wafa', 'firstname' => 'dani'],
-            ['name' => 'Feyza Uki Syafana', 'firstname' => 'feyza'],
-            ['name' => 'Florecinta Tabah Al Karomah', 'firstname' => 'tata'],
-            ['name' => 'Wulan Suryani', 'firstname' => 'wulan'],
-            ['name' => 'Dessy Ratna Palupi', 'firstname' => 'dessy'],
-            ['name' => 'Rara Qorina', 'firstname' => 'rara'],
-            ['name' => 'Dwita Gladea', 'firstname' => 'dea'],
-            ['name' => 'Fajariawan Prabowo', 'firstname' => 'fajar'],
-            ['name' => 'Muhammad Faqih Iqbal', 'firstname' => 'faqih'],
-            ['name' => 'M. Yusril Al Fikri', 'firstname' => 'yusril'],
-            ['name' => 'Aqilatul Ulya', 'firstname' => 'ela'],
+        $bulanList = [
+            'maret', 'april', 'mei', 'juni', 'juli',
+            'agustus', 'september', 'oktober', 'november', 'desember',
         ];
 
-        foreach ($users as $user) {
-            User::create([
-                'name' => $user['name'],
-                'email' => $user['firstname'] . '@example.com',
-                'password' => Hash::make($user['firstname'] . '123!'),
-                'role' => 'tim',
-                'status' => 'aktif',
+        // Daftar ID user yang bisa jadi petugas (hindari id 1 dan 2)
+        $petugasIds = range(3, 28); // Sesuaikan jumlah user kamu
+
+        // Buat 10 record acak
+        for ($i = 0; $i < 10; $i++) {
+            $petugas1 = fake()->randomElement($petugasIds);
+            
+            // Petugas2 jangan sama dengan petugas1
+            do {
+                $petugas2 = fake()->randomElement($petugasIds);
+            } while ($petugas2 === $petugas1);
+
+            Tim::create([
+                'petugas1' => $petugas1,
+                'petugas2' => $petugas2,
+                'bulan' => $bulanList[$i % count($bulanList)],
+                'tahun' => '2025',
+                'created_at' => now(),
+            ]);
+        }
+        for ($i = 0; $i < 10; $i++) {
+            $petugas1 = fake()->randomElement($petugasIds);
+            
+            // Petugas2 jangan sama dengan petugas1
+            do {
+                $petugas2 = fake()->randomElement($petugasIds);
+            } while ($petugas2 === $petugas1);
+
+            Tim::create([
+                'petugas1' => $petugas1,
+                'petugas2' => $petugas2,
+                'bulan' => 'juli',
+                'tahun' => '2025',
                 'created_at' => now(),
             ]);
         }
