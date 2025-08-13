@@ -42,7 +42,6 @@ export const columns: ColumnDef<Agama>[] = [
         header: ({ column }) => <DataTableColumnHeader column={column} title="Petugas 1" />,
         cell: ({ row }) => {
             const petugas = row.original.petugas_satu;
-            console.log(row.original);
             return petugas?.name || '-';
         },
     },
@@ -51,7 +50,6 @@ export const columns: ColumnDef<Agama>[] = [
         header: ({ column }) => <DataTableColumnHeader column={column} title="Petugas 2" />,
         cell: ({ row }) => {
             const petugas = row.original.petugas_dua;
-            console.log(row.original);
             return petugas?.name || '-';
         },
     },

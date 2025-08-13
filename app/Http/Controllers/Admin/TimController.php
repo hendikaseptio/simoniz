@@ -24,13 +24,29 @@ class TimController extends Controller
                 $q->where('name', 'like', '%' . $request->search . '%');
             });
         }
-
+        if ($request->filled('tahun')) {
+            $query->orWhere('tahun', $request->tahun);
+        }
+        if ($request->filled('bulan')) {
+            $query->orWhere('bulan', $request->bulan);
+        }
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         }
+        $jumlahPerBulanTahun = (clone $query)->selectRaw('bulan, tahun, COUNT(*) as total')
+            ->groupBy('bulan', 'tahun')
+            ->orderBy('tahun', 'desc')
+            ->get();
+        $jumlahPerTahun = (clone $query)->selectRaw('tahun, COUNT(*) as total')
+        ->groupBy('tahun')
+        ->orderBy('tahun', 'desc')
+        ->get();
         $tim = $query->paginate(10)->withQueryString();
         return Inertia::render('admin/tim/index', [
             'tim' => $tim,
+            'jumlahPerBulanTahun' => $jumlahPerBulanTahun,
+            'jumlahPerTahun' => $jumlahPerTahun,
+            'filter' => $request->only(['search', 'sort', 'direction', 'bulan', 'tahun']),
         ]);
     }
 

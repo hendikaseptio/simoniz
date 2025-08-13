@@ -1,12 +1,17 @@
+import InputSelect from '@/components/custom/form/input-select';
+import InputText from '@/components/custom/form/input-text';
 import { DataTableServer } from '@/components/custom/table/datatable-server';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useFilterForm } from '@/hooks/userFormFilter';
 import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/tim/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { CheckCircle2, CodeXml, Plus, UserCheck, Users, UserX } from 'lucide-react';
+import { Calendar1, CalendarDays, CheckCircle2, CodeXml, ListFilter, Plus, RotateCcw, UserCheck, Users, UserX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -16,7 +21,30 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { tim, flash } = usePage().props
+    const { tim, jumlahPerBulanTahun, jumlahPerTahun, flash } = usePage().props
+    const { data, handleChange, submit, reset } = useFilterForm(
+        {
+            bulan: '',
+            tahun: '',
+        },
+        {
+            baseRoute: '/admin/tim',
+        },
+    );
+    const optionsBulan = [
+        { label: "Januari", value: "januari" },
+        { label: "Februari", value: "februari" },
+        { label: "Maret", value: "maret" },
+        { label: "April", value: "april" },
+        { label: "Mei", value: "mei" },
+        { label: "Juni", value: "juni" },
+        { label: "Juli", value: "juli" },
+        { label: "Agustus", value: "agustus" },
+        { label: "September", value: "september" },
+        { label: "Oktober", value: "oktober" },
+        { label: "November", value: "november" },
+        { label: "Desember", value: "desember" },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />
@@ -34,46 +62,98 @@ export default function Index() {
                             <div className="flex justify-between items-center">
                                 <div className="text-muted-foreground text-sm">Total Tim</div>
                                 <div className="bg-secondary rounded-full p-2">
-                                    <Users className='text-primary size-4'/>
+                                    <Users className='text-primary size-4' />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{ tim.total }</div>
+                            <div className="text-lg font-semibold">{tim.total}</div>
+                        </CardContent>
+                    </Card>
+                    <Card className='col-span-2'>
+                        <CardContent className='space-y-2'>
+                            <div className="flex justify-between items-center">
+                                <div className="text-muted-foreground text-sm">Kategori Tim Perbulan</div>
+                                <div className="bg-secondary rounded-full p-2">
+                                    <Calendar1 className='text-primary size-4' />
+                                </div>
+                            </div>
+                            <div className="text-lg font-semibold">
+                                {Object.entries(jumlahPerBulanTahun).map(([key, value]) => (
+                                    <Link
+                                        key={key}
+                                        className="m-1 inline-block"
+                                        href={route('admin.tim.index', { bulan: value.bulan, tahun: value.tahun })}
+                                        preserveScroll
+                                    >
+                                        <Badge>{value.bulan} {value.tahun}: {value.total}</Badge>
+                                    </Link>
+                                ))}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Tim Aktif</div>
+                                <div className="text-muted-foreground text-sm">Kategori Tim Pertahun</div>
                                 <div className="bg-secondary rounded-full p-2">
-                                    <UserCheck className='text-primary size-4'/>
+                                    <CalendarDays className='text-primary size-4' />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{ 0 }</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className='space-y-2'>
-                            <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Tim Non Aktif</div>
-                                <div className="bg-secondary rounded-full p-2">
-                                    <UserX className='text-primary size-4'/>
-                                </div>
+                            <div className="text-lg font-semibold">
+                                {Object.entries(jumlahPerTahun).map(([key, value]) => (
+                                    <Link
+                                        key={key}
+                                        className="m-1 inline-block"
+                                        href={route('admin.tim.index', { tahun: value.tahun })}
+                                        preserveScroll
+                                    >
+                                        <Badge>{value.tahun}: {value.total}</Badge>
+                                    </Link>
+                                ))}
                             </div>
-                            <div className="text-lg font-semibold">{ 0 }</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardContent className='space-y-2'>
-                            <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">coming soon</div>
-                                <div className="bg-secondary rounded-full p-2">
-                                    <CodeXml className='text-primary size-4'></CodeXml>
-                                </div>
-                            </div>
-                            <div className="text-lg font-semibold">--</div>
                         </CardContent>
                     </Card>
                 </div>
+                <Card>
+                    <CardContent className="">
+                        <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
+                            <AccordionItem value="item-1">
+                                <AccordionTrigger className="py-0">Filter lanjutan</AccordionTrigger>
+                                <AccordionContent className="flex flex-col gap-4 py-4 text-balance">
+                                    <form
+                                        method="get"
+                                        className="space-y-3"
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            submit();
+                                        }}
+                                    >
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <InputSelect
+                                                label={'Bulan'}
+                                                name={'bulan'}
+                                                options={optionsBulan}
+                                                value={data.bulan}
+                                                onChange={handleChange}
+                                            ></InputSelect>
+                                            <InputText
+                                                label="Tahun"
+                                                type="number"
+                                                name="tahun"
+                                                placeholder={'Masukkan Periode Tahun'}
+                                                value={data.tahun}
+                                                onChange={handleChange}
+                                            ></InputText>
+                                        </div>
+                                        <div className="text-end space-x-3">
+                                            <Button type="submit"><ListFilter />Filter</Button>
+                                            <Button variant={'outline'} onClick={reset}><RotateCcw /> Reset</Button>
+                                        </div>
+                                    </form>
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </CardContent>
+                </Card>
                 <div className='flex justify-end'>
                     <Link href="/admin/tim/create">
                         <Button>
