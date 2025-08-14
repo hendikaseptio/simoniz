@@ -8,9 +8,9 @@ class Monitoring extends Model
 {
     protected $table = "monitoring";
     protected $fillable = [
+        'reklame_id',
         'tim_id',
         'tanggal',
-        'id_pendaftaran',
         'tim_st',
         'cek_lapangan',
         'status',
@@ -27,7 +27,7 @@ class Monitoring extends Model
 
     public function reklame()
     {
-        return $this->belongsTo(Reklame::class, 'id_pendaftaran');
+        return $this->belongsTo(Reklame::class, 'id');
     }
     public function getTimStIdsAttribute()
     {

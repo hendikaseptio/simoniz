@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('petugas2')->constrained('users')->onDelete('cascade');
             $table->string('bulan');
             $table->integer('tahun');
+            $table->enum('status',['aktif','nonaktif']);
             $table->timestamps();
         });
     }

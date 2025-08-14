@@ -32,4 +32,8 @@ class Reklame extends Model
         'jumlah_sisi',
         'keterangan_lokasi',
     ];
+    public function Monitoring()
+    {
+        return $this->hasMany(Monitoring::class, 'reklame_id');
+    }
 }

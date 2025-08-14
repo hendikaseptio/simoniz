@@ -79,7 +79,7 @@ const InputSelect = ({ label, name, value, onChange, options = [], errors = {} }
                 options={options}
                 value={selectedValue}
                 onChange={handleChange}
-                classNamePrefix="react-select"
+                classNamePrefix="react-select z-index[99]"
                 placeholder={`Pilih ${label}`}
                 isClearable
                 styles={getCustomStyles(!!error)}

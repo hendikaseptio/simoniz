@@ -11,7 +11,8 @@ class Tim extends Model
         'petugas1',
         'petugas2',
         'bulan',
-        'tahun'
+        'tahun',
+        'status'
     ];
     public function petugasSatu()
     {

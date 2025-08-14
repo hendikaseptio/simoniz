@@ -30,6 +30,7 @@ export default function EditTim() {
             petugas2: tim?.petugas2 || '',
             bulan: tim?.bulan || '',
             tahun: tim?.tahun?.toString() || '',
+            status: tim?.status || '',
         },
         `/admin/tim/${tim?.id}`,
         'put',
@@ -122,6 +123,17 @@ export default function EditTim() {
                                     errors={errors}
                                 ></InputSelect>
                             </div>
+                            <InputSelect
+                                name="status"
+                                label="Status Tim"
+                                options={[
+                                    { label: "Aktif", value: "aktif" },
+                                    { label: "Non aktif", value: "nonaktif" }]}
+                                onChange={handleChange}
+                                value={values.status}
+                                errors={errors}
+                            ></InputSelect>
+
                             <div className="flex justify-end mt-3 space-x-3">
                                 <Link href="/admin/tim">
                                     <Button variant={'ghost'}>

@@ -9,32 +9,73 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 
 import { Head, Link, usePage } from '@inertiajs/react';
-import { log } from 'console';
 import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Data Tim',
-        href: '/admin/tim/',
+        title: 'Data Jadwal',
+        href: '/admin/jadwal',
     },
     {
-        title: 'Edit Data Tim',
-        href: '/admin/tim/edit',
+        title: 'Tambah Data Jadwal',
+        href: '/admin/jadwal/create',
     },
 ];
 
-export default function EditTim() {
-    const { jadwal, tim, user, reklame } = usePage().props;
+export default function Create() {
+    const { user, tim } = usePage().props
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
-            reklame_id: jadwal?.reklame_id || '',
-            tim_id: jadwal?.tim_id || '',
-            tim_st: jadwal?.tim_st || '',
-            tanggal: jadwal?.tanggal || '',
+            tim_id: '',
+            tanggal: '',
+            id_pendaftaran: '',
+            tim_st: '',
         },
-        `/admin/jadwal/${jadwal?.id}`,
-        'put',
+        '/admin/jadwal',
     );
+    const [filteredTimOptions, setFilteredTimOptions] = useState([]);
+    const [filteredTimStOptions, setFilteredTimStOptions] = useState([]);
+    const namaBulanKeIndex = {
+        januari: 0,
+        februari: 1,
+        maret: 2,
+        april: 3,
+        mei: 4,
+        juni: 5,
+        juli: 6,
+        agustus: 7,
+        september: 8,
+        oktober: 9,
+        november: 10,
+        desember: 11,
+    };
+    useEffect(() => {
+        if (!values.tanggal) return;
+
+        // Simulasi filter: misalnya hanya tampilkan tim yg dibuat sebelum tanggal dipilih
+        const filteredTim = tim
+            .filter((t: any) => {
+                const bulanIndex = namaBulanKeIndex[t.bulan?.toLowerCase()];
+                if (bulanIndex === undefined || !t.tahun) return false;
+                console.log(bulanIndex)
+                const timDate = new Date(parseInt(t.tahun), bulanIndex, 1);
+                return timDate <= tanggal;
+            })
+            .map((t: any) => ({
+                label: `Tim ${t.id}`,
+                value: t.id,
+            }));
+
+        // Tim ST: misalnya tampilkan semua user (atau bisa juga difilter)
+        const filteredTimSt = user.map((u: any) => ({
+            label: u.name,
+            value: u.id,
+        }));
+
+        setFilteredTimOptions(filteredTim);
+        setFilteredTimStOptions(filteredTimSt);
+    }, [values.tanggal]);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />
@@ -54,27 +95,13 @@ export default function EditTim() {
                     </Alert>
                 )}
                 <Card>
-                    <CardHeader><CardTitle>Form Edit Tim</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Form Tambah Jadwal</CardTitle></CardHeader>
                     <CardContent>
                         <form action="#" className='space-y-3'>
                             <InputSelect
-                                name="reklame_id"
-                                label="ID Pendafataran Izin"
-                                options={reklame.map((u: any) => ({
-                                    label: `${u.id_pendaftaran} - ${u.nama_perusahaan} (${u.jenis_reklame}/${u.isi_konten})`,
-                                    value: u.id,
-                                }))}
-                                onChange={handleChange}
-                                value={values.reklame_id}
-                                errors={errors}
-                            />
-                            <InputSelect
                                 name="tim_id"
                                 label="Tim Jalan"
-                                options={tim.map((u: any) => ({
-                                    label: `${u.petugas_satu.name} & ${u.petugas_dua.name} (${u.bulan}-${u.tahun})`,
-                                    value: u.id,
-                                }))}
+                                options={filteredTimOptions}
                                 onChange={handleChange}
                                 value={values.tim_id}
                                 errors={errors}
@@ -82,23 +109,28 @@ export default function EditTim() {
                             <InputMultiSelect
                                 name="tim_st"
                                 label="Tim SK (contoh: 1,3,4)"
-                                options={user.map((u: any) => ({
-                                    label: u.name,
-                                    value: u.id,
-                                }))
-                                }
+                                options={filteredTimStOptions}
                                 onChange={handleChange}
                                 value={values.tim_st}
                                 errors={errors}
                             />
-                            <InputText
-                                name="tanggal"
-                                label="Tanggal"
-                                type="date"
-                                onChange={handleChange}
-                                value={values.tanggal}
-                                errors={errors}
-                            />
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                                <InputText
+                                    name="tanggal"
+                                    label="Tanggal"
+                                    type="date"
+                                    onChange={handleChange}
+                                    value={values.tanggal}
+                                    errors={errors}
+                                />
+                                <InputText
+                                    name="id_pendaftaran"
+                                    label="ID Pendaftaran"
+                                    onChange={handleChange}
+                                    value={values.id_pendaftaran}
+                                    errors={errors}
+                                />
+                            </div>
                             <div className="flex justify-end mt-3 space-x-3">
                                 <Link href="/admin/tim">
                                     <Button variant={'ghost'}>

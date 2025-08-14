@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\dashboardController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\JadwalController;
+use App\Http\Controllers\Admin\MonitoringController;
 use App\Http\Controllers\Admin\PetaController;
 use App\Http\Controllers\Admin\ReklameController;
 use App\Http\Controllers\Admin\PetugasController;
@@ -9,6 +11,7 @@ use App\Http\Controllers\Admin\TimController;
 use App\Http\Middleware\RoleAdmin;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -23,7 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('reklame', ReklameController::class);
         Route::resource('tim', TimController::class);
         Route::resource('jadwal', JadwalController::class);
+        Route::resource('monitoring', MonitoringController::class);
         // import 
+        Route::get('dashboard', [dashboardController::class, 'index'])->name('index');
         Route::get('import', [ImportController::class, 'index'])->name('import');
         Route::post('import/preview', [ImportController::class, 'preview'])->name('import.preview');
         Route::post('import/confirm', [ImportController::class, 'confirm'])->name('import.confirm');

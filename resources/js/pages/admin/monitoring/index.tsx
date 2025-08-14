@@ -8,32 +8,32 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useFilterForm } from '@/hooks/userFormFilter';
 import AppLayout from '@/layouts/app-layout';
-import { columns } from '@/pages/admin/jadwal/columns';
+import { columns } from '@/pages/admin/monitoring/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Calendar1, CalendarDays, CheckCircle2, CodeXml, FileCheck, ListFilter, Plus, Printer, RotateCcw, UserCheck, Users, UserX } from 'lucide-react';
+import { Calendar1, CalendarDays, CheckCircle2, CodeXml, ListFilter, Plus, RotateCcw, UserCheck, Users, UserX } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Data Jadwal',
-        href: '/admin/jadwal',
+        title: 'Data Monitoring',
+        href: '/admin/monitoring',
     },
 ];
 
 export default function Index() {
-    const { jadwal, tim, jumlahJadwalAktif, jumlahJadwalTidakAktif, flash } = usePage().props
+    const { monitoring, tim, flash } = usePage().props
     const { data, handleChange, submit, reset } = useFilterForm(
         {
             tim_id: '',
             tanggal: '',
         },
         {
-            baseRoute: '/admin/jadwal',
+            baseRoute: '/admin/monitoring',
         },
     );
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Data Jadwal" />
+            <Head title="Data Monitoring" />
             <div className="snap-x p-5 space-y-5">
                 {flash.success && (
                     <Alert className="border-teal-500 bg-teal-100 dark:bg-teal-950">
@@ -46,35 +46,35 @@ export default function Index() {
                     <Card>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Total Jadwal</div>
+                                <div className="text-muted-foreground text-sm">Total Monitoring</div>
                                 <div className="bg-secondary rounded-full p-2">
-                                    <CalendarDays className='text-primary size-4' />
+                                    <Users className='text-primary size-4' />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{jadwal.total}</div>
+                            <div className="text-lg font-semibold">{'0'}</div>
                         </CardContent>
                     </Card>
                     <Card className='col-span-2'>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Total Jadwal Aktif</div>
+                                <div className="text-muted-foreground text-sm">Kategori Monitoring Perbulan</div>
                                 <div className="bg-secondary rounded-full p-2">
                                     <Calendar1 className='text-primary size-4' />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{jumlahJadwalAktif}
+                            <div className="text-lg font-semibold">
                             </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Total Jadwal Selesai</div>
+                                <div className="text-muted-foreground text-sm">Kategori Monitoring Pertahun</div>
                                 <div className="bg-secondary rounded-full p-2">
                                     <CalendarDays className='text-primary size-4' />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{jumlahJadwalTidakAktif}
+                            <div className="text-lg font-semibold">
                             </div>
                         </CardContent>
                     </Card>
@@ -118,27 +118,7 @@ export default function Index() {
 
                     </CardContent>
                 </Card>
-                <div className='flex justify-end gap-3'>
-                    <Link href="#">
-                        <Button variant={'secondary'}>
-                            <FileCheck />
-                            Ajukan approval
-                        </Button>
-                    </Link>
-                    <Link href="#">
-                        <Button variant={'secondary'}>
-                            <Printer />
-                            Cetak BAP
-                        </Button>
-                    </Link>
-                    <Link href="/admin/jadwal/create">
-                        <Button>
-                            <Plus />
-                            Tambah Data{' '}
-                        </Button>
-                    </Link>
-                </div>
-                <DataTableServer columns={columns} initialData={jadwal} />
+                <DataTableServer columns={columns} initialData={monitoring} />
             </div>
         </AppLayout>
     );

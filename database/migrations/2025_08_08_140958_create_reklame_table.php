@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('reklame', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_pendaftaran');
+            $table->unsignedBigInteger('id_pendaftaran')->index();
             $table->unsignedBigInteger('prev_id_pendaftaran')->nullable();
             $table->enum('monitoring',['iya','tidak','kosong']);
             $table->enum('perpanjangan',['sudah','belum','kosong']);

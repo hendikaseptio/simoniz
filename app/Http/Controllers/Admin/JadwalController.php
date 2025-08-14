@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Monitoring;
+use App\Models\Reklame;
 use App\Models\Tim;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,11 +17,11 @@ class JadwalController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Monitoring::query()->with(['petugasSatu', 'petugasDua']);
+        $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame']);
 
         if ($request->filled('search')) {
             $query->where('tim_st', 'like', '%' . $request->search . '%')
-                  ->orWhere('id_pendaftaran', $request->search);
+                ->orWhere('reklame_id', $request->search);
         }
 
         if ($request->filled('sort') && $request->filled('direction')) {
@@ -28,12 +29,22 @@ class JadwalController extends Controller
         } else {
             $query->orderBy('created_at', 'desc');
         }
-
-        $jadwal = $query->paginate(10)->withQueryString();
-
+        if ($request->filled('tim_id')) {
+            $query->where('tim_id', $request->tim_id);
+        }
+        $jumlahJadwalAktif = (clone $query)->where('cek_lapangan', 'belum')->count();
+        $jumlahJadwalTidakAktif = (clone $query)->where('cek_lapangan', 'sudah')->count();
+        $jadwal = $query->paginate(10)->through(function ($item) {
+            $item->tim_st_names_string = $item->tim_st_names_string;
+            return $item;
+        })->withQueryString();
+        $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
         return Inertia::render('admin/jadwal/index', [
             'jadwal' => $jadwal,
-            'filters' => $request->only(['search', 'sort', 'direction']),
+            'tim' => $tim,
+            'jumlahJadwalAktif' => $jumlahJadwalAktif,
+            'jumlahJadwalTidakAktif' => $jumlahJadwalTidakAktif,
+            'filters' => $request->only(['search', 'sort', 'direction','tim_id']),
         ]);
     }
 
@@ -42,11 +53,13 @@ class JadwalController extends Controller
      */
     public function create()
     {
-        $tim = Tim::with(['petugasSatu', 'petugasDua'])->get();
-        $user = User::all();
+        $reklame = Reklame::where('monitoring', 'iya')->get();
+        $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
+        $user = User::where('role', 'tim')->get();
         return Inertia::render('admin/jadwal/create', [
             'tim' => $tim,
-            'user' => $user
+            'user' => $user,
+            'reklame' => $reklame
         ]);
     }
 
@@ -55,14 +68,19 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'petugas1' => ['required', 'exists:users,id', 'different:petugas2'],
-            'petugas2' => ['required', 'exists:users,id'],
-            'bulan'    => ['required'],
-            'tahun'    => ['required'],
+        $request->validate([
+            'reklame_id' => ['required'],
+            'tim_st' => ['required'],
+            'tim_id' => ['required'],
+            'tanggal' => ['required', 'date'],
         ]);
-        Monitoring::create($validated);
-        return redirect()->route('admin.monitoring.index')->with('success', 'Monitoring berhasil dibuat');
+        Monitoring::create([
+            'reklame_id' => $request->reklame_id,
+            'tim_st' => implode(",", $request->tim_st),
+            'tim_id' => $request->tim_id,
+            'tanggal' => $request->tanggal,
+        ]);
+        return redirect()->route('admin.jadwal.index')->with('success', 'Jadwal berhasil dibuat');
     }
 
     /**
@@ -78,11 +96,15 @@ class JadwalController extends Controller
      */
     public function edit(string $id)
     {
-        $monitoring = Monitoring::findOrFail($id);
-        $user = User::where('status', 'aktif')->get();
+        $jadwal = Monitoring::findOrFail($id);
+        $reklame = Reklame::where('monitoring', 'iya')->get();
+        $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
+        $user = User::where('role', 'tim')->get();
         return Inertia::render('admin/jadwal/edit', [
             'user' => $user,
-            'monitoring' => $monitoring
+            'jadwal' => $jadwal,
+            'tim' => $tim,
+            'reklame' => $reklame,
         ]);
     }
 
@@ -91,15 +113,21 @@ class JadwalController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $monitoring = Monitoring::findOrFail($id);
-        $validated = $request->validate([
-            'petugas1' => ['required', 'exists:users,id', 'different:petugas2'],
-            'petugas2' => ['required', 'exists:users,id'],
-            'bulan'    => ['required'],
-            'tahun'    => ['required'],
+        $jadwal = Monitoring::findOrFail($id);
+        $request->validate([
+            'reklame_id' => ['required'],
+            'tim_st' => ['required'],
+            'tim_id' => ['required'],
+            'tanggal' => ['required', 'date'],
         ]);
-        $monitoring->update($validated);
-        return redirect()->route('admin.monitoring.index')->with('success', 'Monitoring berhasil diperbarui');
+        $data = [
+            'reklame_id' => $request->reklame_id,
+            'tim_st' => implode(",", $request->tim_st),
+            'tim_id' => $request->tim_id,
+            'tanggal' => $request->tanggal,
+        ];
+        $jadwal->update($data);
+        return redirect()->route('admin.jadwal.index')->with('success', 'Jadwal berhasil diperbarui');
     }
 
     /**
@@ -107,8 +135,8 @@ class JadwalController extends Controller
      */
     public function destroy(string $id)
     {
-        $monitoring = Monitoring::findOrFail($id);
-        $monitoring->delete();
-        return redirect()->route('admin.monitoring.index')->with('success', 'Reklame Reklame berhasil dihapus');
+        $jadwal = Monitoring::findOrFail($id);
+        $jadwal->delete();
+        return redirect()->route('admin.jadwal.index')->with('success', 'Reklame Reklame berhasil dihapus');
     }
 }

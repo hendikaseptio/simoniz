@@ -70,13 +70,19 @@ class TimController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'petugas1' => ['required', 'exists:users,id', 'different:petugas2'],
             'petugas2' => ['required', 'exists:users,id'],
             'bulan'    => ['required'],
             'tahun'    => ['required'],
         ]);
-        Tim::create($validated);
+        Tim::create([
+            'petugas1'  => $request->petugas1, 
+            'petugas2'  => $request->petugas2, 
+            'bulan'     => $request->bulan, 
+            'tahun'     => $request->tahun, 
+            'status'    => 'aktif',
+        ]);
         return redirect()->route('admin.tim.index')->with('success', 'Tim berhasil dibuat');
     }
 
@@ -112,6 +118,7 @@ class TimController extends Controller
             'petugas2' => ['required', 'exists:users,id'],
             'bulan'    => ['required'],
             'tahun'    => ['required'],
+            'status'   => ['required'],
         ]);
         $tim->update($validated);
         return redirect()->route('admin.tim.index')->with('success', 'Tim berhasil diperbarui');

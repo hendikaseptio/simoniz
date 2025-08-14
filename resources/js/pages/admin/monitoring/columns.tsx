@@ -28,8 +28,7 @@ import { useState } from 'react';
 
 export type Jadwal = {
     id: string;
-    id_pendaftaran: string;
-    tim_id: string,
+    nama: string;
     created_at: string;
 };
 
@@ -63,10 +62,8 @@ export const columns: ColumnDef<Jadwal>[] = [
         },
     },
     {
-        accessorKey: 'tim_st',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tim SK" />,
-        // karena ini gabungan string (misal "1,3,4"), tampilkan langsung
-        cell: ({ row }) => row.original.tim_st_names_string || '-',
+        accessorKey: 'cek_lapangan',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Cek Lapangan" />,
     },
     {
         accessorKey: 'created_at',
@@ -80,10 +77,10 @@ export const columns: ColumnDef<Jadwal>[] = [
         enableHiding: false,
         header: () => "Kelola",
         cell: ({ row }) => {
-            const jadwal = row.original;
+            const monitoring = row.original;
             const [open, setOpen] = useState(false);
             const handleDelete = () => {
-                router.delete(`/admin/jadwal/${jadwal.id}`, {
+                router.delete(`/admin/monitoring/${monitoring.id}`, {
                     preserveScroll: true,
                     replace: true,
                     preserveState: false,
@@ -100,11 +97,11 @@ export const columns: ColumnDef<Jadwal>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(jadwal.id)}>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(monitoring.id)}>
                                 <Copy />
                                 Copy Tim ID
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(`/admin/jadwal/${jadwal.id}/edit`)}>
+                            <DropdownMenuItem onClick={() => router.visit(`/admin/monitoring/${monitoring.id}/edit`)}>
                                 <Pencil />
                                 Edit
                             </DropdownMenuItem>
@@ -120,7 +117,7 @@ export const columns: ColumnDef<Jadwal>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Data jadwal <strong>""</strong> akan dihapus secara permanen.
+                                    Data jadwal akan dihapus secara permanen.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

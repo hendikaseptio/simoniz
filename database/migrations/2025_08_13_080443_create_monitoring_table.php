@@ -13,26 +13,25 @@ return new class extends Migration
     {
         Schema::create('monitoring', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('reklame_id'); // relasi ke reklame
             $table->unsignedBigInteger('tim_id'); // relasi ke tim
-            $table->date('tanggal');
-            $table->unsignedBigInteger('id_pendaftaran'); // relasi ke reklame
-
             $table->string('tim_st'); // simpan ID user gabungan seperti "1,3,4"
+            $table->date('tanggal');
 
-            $table->enum('cek_lapangan', ['sudah', 'belum'])->nullable();
+            $table->enum('cek_lapangan', ['sudah', 'belum'])->default('belum');
             $table->enum('status', ['berlaku', 'tidak berlaku'])->nullable();
             $table->enum('keberadaan_reklame', ['ada', 'tidak ada'])->nullable();
             $table->enum('kelayakan_kontruksi', ['layak', 'tidak layak', '-'])->nullable();
             $table->enum('kesesuaian', ['sesuai', 'tidak sesuai', '-'])->nullable();
 
             $table->text('catatan')->nullable();
-            $table->enum('tl', ['ya', 'tidak']);
+            $table->enum('tl', ['ya', 'tidak'])->nullable();
 
             $table->timestamps();
 
             // Foreign keys
             $table->foreign('tim_id')->references('id')->on('tim')->onDelete('cascade');
-            $table->foreign('id_pendaftaran')->references('id')->on('reklame')->onDelete('cascade');
+            $table->foreign('reklame_id')->references('id')->on('reklame')->onDelete('cascade');
         });
     }
 

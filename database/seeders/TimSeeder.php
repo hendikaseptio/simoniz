@@ -34,7 +34,8 @@ class TimSeeder extends Seeder
                 'petugas1' => $petugas1,
                 'petugas2' => $petugas2,
                 'bulan' => $bulanList[$i % count($bulanList)],
-                'tahun' => '2025',
+                'tahun' => '2024',
+                'status' => 'nonaktif',
                 'created_at' => now(),
             ]);
         }
@@ -51,6 +52,7 @@ class TimSeeder extends Seeder
                 'petugas2' => $petugas2,
                 'bulan' => 'juli',
                 'tahun' => '2025',
+                'status' => 'aktif',
                 'created_at' => now(),
             ]);
         }
