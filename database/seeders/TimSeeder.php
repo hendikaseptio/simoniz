@@ -22,6 +22,23 @@ class TimSeeder extends Seeder
         $petugasIds = range(3, 28); // Sesuaikan jumlah user kamu
 
         // Buat 10 record acak
+        // for ($i = 0; $i < 10; $i++) {
+        //     $petugas1 = fake()->randomElement($petugasIds);
+            
+        //     // Petugas2 jangan sama dengan petugas1
+        //     do {
+        //         $petugas2 = fake()->randomElement($petugasIds);
+        //     } while ($petugas2 === $petugas1);
+
+        //     Tim::create([
+        //         'petugas1' => $petugas1,
+        //         'petugas2' => $petugas2,
+        //         'bulan' => $bulanList[$i % count($bulanList)],
+        //         'tahun' => '2024',
+        //         'status' => 'nonaktif',
+        //         'created_at' => now(),
+        //     ]);
+        // }
         for ($i = 0; $i < 10; $i++) {
             $petugas1 = fake()->randomElement($petugasIds);
             
@@ -33,24 +50,7 @@ class TimSeeder extends Seeder
             Tim::create([
                 'petugas1' => $petugas1,
                 'petugas2' => $petugas2,
-                'bulan' => $bulanList[$i % count($bulanList)],
-                'tahun' => '2024',
-                'status' => 'nonaktif',
-                'created_at' => now(),
-            ]);
-        }
-        for ($i = 0; $i < 10; $i++) {
-            $petugas1 = fake()->randomElement($petugasIds);
-            
-            // Petugas2 jangan sama dengan petugas1
-            do {
-                $petugas2 = fake()->randomElement($petugasIds);
-            } while ($petugas2 === $petugas1);
-
-            Tim::create([
-                'petugas1' => $petugas1,
-                'petugas2' => $petugas2,
-                'bulan' => 'juli',
+                'bulan' => 'agustus',
                 'tahun' => '2025',
                 'status' => 'aktif',
                 'created_at' => now(),

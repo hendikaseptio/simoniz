@@ -23,10 +23,11 @@ return new class extends Migration
             $table->enum('keberadaan_reklame', ['ada', 'tidak ada'])->nullable();
             $table->enum('kelayakan_kontruksi', ['layak', 'tidak layak', '-'])->nullable();
             $table->enum('kesesuaian', ['sesuai', 'tidak sesuai', '-'])->nullable();
-
             $table->text('catatan')->nullable();
             $table->enum('tl', ['ya', 'tidak'])->nullable();
-
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->text('foto')->nullable();
             $table->timestamps();
 
             // Foreign keys
