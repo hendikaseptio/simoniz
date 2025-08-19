@@ -1,17 +1,17 @@
 import InputSelect from '@/components/custom/form/input-select';
 import InputText from '@/components/custom/form/input-text';
 import { DataTableServer } from '@/components/custom/table/datatable-server';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
 import { useFilterForm } from '@/hooks/userFormFilter';
 import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/monitoring/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Calendar1, CalendarDays, CheckCircle2, CodeXml, ListFilter, Plus, RotateCcw, UserCheck, Users, UserX } from 'lucide-react';
+import { Calendar1, CalendarDays, CheckCircle2, File, ListFilter, RotateCcw, Users } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { monitoring, tim, flash } = usePage().props
+    const { monitoring, tim, progresBulanIni, cekLapangan, sudahDicek, belumDicek, flash } = usePage().props;
     const { data, handleChange, submit, reset } = useFilterForm(
         {
             tim_id: '',
@@ -34,7 +34,7 @@ export default function Index() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Monitoring" />
-            <div className="snap-x p-5 space-y-5">
+            <div className="snap-x space-y-5 p-5">
                 {flash.success && (
                     <Alert className="border-teal-500 bg-teal-100 dark:bg-teal-950">
                         <CheckCircle2 className="h-4 w-4" />
@@ -42,45 +42,61 @@ export default function Index() {
                         <AlertDescription>{flash.success}</AlertDescription>
                     </Alert>
                 )}
-                <div className='grid grid-cols-2 md:grid-cols-4 gap-5 mb-5'>
+                <div className="mb-5 grid grid-cols-2 gap-5 md:grid-cols-4">
                     <Card>
-                        <CardContent className='space-y-2'>
-                            <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Total Monitoring</div>
-                                <div className="bg-secondary rounded-full p-2">
-                                    <Users className='text-primary size-4' />
+                        <CardContent className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-muted-foreground">Total Monitoring</div>
+                                <div className="rounded-full bg-secondary p-2">
+                                    <Users className="size-4 text-primary" />
                                 </div>
                             </div>
-                            <div className="text-lg font-semibold">{'0'}</div>
+                            <div className="text-lg font-semibold">{monitoring.total}</div>
                         </CardContent>
                     </Card>
-                    <Card className='col-span-2'>
-                        <CardContent className='space-y-2'>
-                            <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Kategori Monitoring Perbulan</div>
-                                <div className="bg-secondary rounded-full p-2">
-                                    <Calendar1 className='text-primary size-4' />
+                    <Card className="col-span-2">
+                        <CardContent className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-muted-foreground">Progress Monitoring</div>
+                                <div className="rounded-full bg-secondary p-2">
+                                    <Calendar1 className="size-4 text-primary" />
                                 </div>
                             </div>
                             <div className="text-lg font-semibold">
+                                Selesai {cekLapangan.sudah} dari {monitoring.total} Monitoring
+                                <Progress value={(cekLapangan.sudah * 100) / monitoring.total} className="" />
                             </div>
                         </CardContent>
                     </Card>
                     <Card>
-                        <CardContent className='space-y-2'>
-                            <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Kategori Monitoring Pertahun</div>
-                                <div className="bg-secondary rounded-full p-2">
-                                    <CalendarDays className='text-primary size-4' />
+                        <CardContent className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-muted-foreground">Status Monitoring</div>
+                                <div className="rounded-full bg-secondary p-2">
+                                    <CalendarDays className="size-4 text-primary" />
                                 </div>
                             </div>
                             <div className="text-lg font-semibold">
+                                {Object.entries(cekLapangan).map(([key, value]) => (
+                                    <Link
+                                        key={key}
+                                        className="m-1 inline-block"
+                                        href={route('admin.monitoring.index', { cek_lapangan: key })}
+                                        preserveScroll
+                                    >
+                                        <Badge>
+                                            {key.replaceAll('_', ' ')}: {value}
+                                        </Badge>
+                                    </Link>
+                                ))}
                             </div>
                         </CardContent>
                     </Card>
                 </div>
                 <Card>
-                    <CardHeader><CardTitle>Filter lanjutan</CardTitle></CardHeader>
+                    <CardHeader>
+                        <CardTitle>Filter lanjutan</CardTitle>
+                    </CardHeader>
                     <CardContent className="">
                         <form
                             method="get"
@@ -90,7 +106,7 @@ export default function Index() {
                                 submit();
                             }}
                         >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                                 <InputSelect
                                     label={'Tim Jalan'}
                                     name={'tim_id'}
@@ -110,12 +126,20 @@ export default function Index() {
                                     onChange={handleChange}
                                 ></InputText>
                             </div>
-                            <div className="text-end space-x-3">
-                                <Button type="submit"><ListFilter />Filter</Button>
-                                <Button variant={'outline'} onClick={reset}><RotateCcw /> Reset</Button>
+                            <div className="space-x-3 text-end">
+                                <Button>
+                                    <File></File>
+                                    Cetak BAP
+                                </Button>
+                                <Button type="submit">
+                                    <ListFilter />
+                                    Filter
+                                </Button>
+                                <Button variant={'outline'} onClick={reset}>
+                                    <RotateCcw /> Reset
+                                </Button>
                             </div>
                         </form>
-
                     </CardContent>
                 </Card>
                 <DataTableServer columns={columns} initialData={monitoring} />

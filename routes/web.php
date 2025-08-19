@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\dashboardController;
+use App\Http\Controllers\Admin\DokumenController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\JadwalController;
 use App\Http\Controllers\Admin\MonitoringController;
@@ -35,6 +36,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('import/confirm', [ImportController::class, 'confirm'])->name('import.confirm');
 
         Route::get('peta', [PetaController::class, 'index'])->name('peta');
+        Route::post('generate-surat-tugas-batch', [DokumenController::class, 'generateSuratTugasBatch']);
+        Route::post('generate-berita-acara-batch', [DokumenController::class, 'generateBeritaAcaraBatch']);
     });
 });
 

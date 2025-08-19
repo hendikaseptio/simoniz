@@ -1,3 +1,5 @@
+import InputFile from '@/components/custom/form/input-file';
+import InputPeta from '@/components/custom/form/input-peta';
 import InputSelect from '@/components/custom/form/input-select';
 import InputTextarea from '@/components/custom/form/input-textarea';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -20,6 +22,15 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/admin/monitoring/edit',
     },
 ];
+type EditTim = {
+    cek_lapangan: string;
+    status: string;
+    keberadaan_reklame: string;
+    kelayakan_kontruksi: string;
+    kesesuaian: string;
+    catatan: string;
+    tl: string;
+};
 
 export default function EditTim() {
     const { monitoring, tim, user } = usePage().props;
@@ -32,15 +43,39 @@ export default function EditTim() {
             kesesuaian: monitoring?.kesesuaian || '',
             catatan: monitoring?.catatan || '',
             tl: monitoring?.tl || '',
+            latitude: monitoring?.latitude || '',
+            longitude: monitoring?.longitude || '',
+            foto: monitoring?.foto || '',
         },
         `/admin/monitoring/${monitoring?.id}`,
         'put',
     );
+    function handleAmbilLokasi() {
+        if (!navigator.geolocation) {
+            alert('Geolocation tidak didukung di browser ini');
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                // Update nilai latitude & longitude di form state
+                setValues({
+                    ...values,
+                    latitude: position.coords.latitude.toString(),
+                    longitude: position.coords.longitude.toString(),
+                });
+            },
+            (error) => {
+                alert('Gagal mengambil lokasi: ' + error.message);
+            },
+            { enableHighAccuracy: true, timeout: 10000 },
+        );
+    }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit Data Monitoring" />
-            <div className="p-5 space-y-5">
+            <div className="space-y-5 p-5">
                 {errors && Object.keys(errors).length > 0 && (
                     <Alert variant={'destructive'}>
                         <AlertCircleIcon />
@@ -56,10 +91,12 @@ export default function EditTim() {
                     </Alert>
                 )}
                 <Card>
-                    <CardHeader><CardTitle>Form Edit Tim</CardTitle></CardHeader>
+                    <CardHeader>
+                        <CardTitle>Form Edit Tim</CardTitle>
+                    </CardHeader>
                     <CardContent>
-                        <form action="#" className='space-y-3'>
-                            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                        <form action="#" className="space-y-3">
+                            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                                 <InputSelect
                                     name="cek_lapangan"
                                     label="Cek Lapangan"
@@ -146,8 +183,23 @@ export default function EditTim() {
                                     value={values.tl}
                                     errors={errors}
                                 ></InputSelect>
+                                <InputPeta values={values} onChange={handleChange} errors={errors} />
+                                <div className="mt-2">
+                                    <button type="button" onClick={handleAmbilLokasi} className="btn btn-primary">
+                                        Ambil Lokasi Saya
+                                    </button>
+                                </div>
+                                <InputFile
+                                    name={'foto'}
+                                    label={'Foto'}
+                                    onChange={handleChange}
+                                    errors={errors}
+                                    accept={'image/*'}
+                                    initialFile={monitoring?.foto || null}
+                                    multiple={false}
+                                ></InputFile>
                             </div>
-                            <div className="flex justify-end mt-3 space-x-3">
+                            <div className="mt-3 flex justify-end space-x-3">
                                 <Link href="/admin/tim">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />

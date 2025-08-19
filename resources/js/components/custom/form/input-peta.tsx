@@ -1,8 +1,11 @@
 import { Label } from '@/components/ui/label';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import InputText from './input-text';
+import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
+import { Locate } from 'lucide-react';
 
 const markerIcon = new L.Icon({
     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
@@ -20,6 +23,19 @@ const MapClickHandler = ({ setCoordinates }) => {
     });
     return null;
 };
+const MapAutoCenter = ({ lat, lng }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        if (lat && lng) {
+            map.setView([lat, lng], map.getZoom(), {
+                animate: true,
+            });
+        }
+    }, [lat, lng, map]);
+
+    return null;
+};
 
 const InputPeta = ({ values, onChange, errors }) => {
     const latitude = parseFloat(values.latitude) || -6.888;
@@ -29,6 +45,23 @@ const InputPeta = ({ values, onChange, errors }) => {
         onChange({ target: { name: 'latitude', value: lat } });
         onChange({ target: { name: 'longitude', value: lng } });
     };
+    function handleAmbilLokasi() {
+        if (!navigator.geolocation) {
+            alert('Geolocation tidak didukung di browser ini');
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                // Update nilai latitude & longitude di form state
+                setCoordinates (position.coords.latitude.toString(), position.coords.longitude.toString());
+            },
+            (error) => {
+                alert('Gagal mengambil lokasi: ' + error.message);
+            },
+            { enableHighAccuracy: true, timeout: 10000 },
+        );
+    }
 
     return (
         <div className="space-y-4">
@@ -37,6 +70,7 @@ const InputPeta = ({ values, onChange, errors }) => {
                 <MapContainer  center={[latitude, longitude]} zoom={13} scrollWheelZoom={true} className='h-72 w-full rounded-md shadow'>
                     <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <MapClickHandler setCoordinates={setCoordinates} />
+                    <MapAutoCenter lat={latitude} lng={longitude} />
                     <Marker position={[latitude, longitude]} icon={markerIcon} />
                 </MapContainer>
                 <p className="mt-2 text-sm text-muted-foreground">Klik pada peta untuk memilih titik koordinat.</p>
@@ -68,6 +102,7 @@ const InputPeta = ({ values, onChange, errors }) => {
                     max={180}
                 />
             </div>
+            <Button className='w-full' type='button' variant={'secondary'} onClick={handleAmbilLokasi}><Locate/> Ambil Lokasi Saya</Button>
         </div>
     );
 };
