@@ -65,10 +65,10 @@ export const columns: ColumnDef<Agama>[] = [
         enableHiding: false,
         header: () => "Kelola",
         cell: ({ row }) => {
-            const tim = row.original;
+            const petugas = row.original;
             const [open, setOpen] = useState(false);
             const handleDelete = () => {
-                router.delete(`/admin/tim/${tim.id}`, {
+                router.delete(`/admin/petugas/${petugas.id}`, {
                     preserveScroll: true,
                     replace: true,
                     preserveState: false,
@@ -85,11 +85,11 @@ export const columns: ColumnDef<Agama>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(tim.id)}>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(petugas.id)}>
                                 <Copy />
-                                Copy Agama ID
+                                Copy Petugas ID
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(`/admin/tim/${tim.id}/edit`)}>
+                            <DropdownMenuItem onClick={() => router.visit(`/admin/petugas/${petugas.id}/edit`)}>
                                 <Pencil />
                                 Edit
                             </DropdownMenuItem>
@@ -105,7 +105,7 @@ export const columns: ColumnDef<Agama>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Data tim <strong>"{tim.name}"</strong> akan dihapus secara permanen.
+                                    Data petugas <strong>"{petugas.name}"</strong> akan dihapus secara permanen.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

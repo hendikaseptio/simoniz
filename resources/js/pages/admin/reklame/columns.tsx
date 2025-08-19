@@ -144,7 +144,7 @@ export const columns: ColumnDef<Agama>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Data reklame <strong>"{reklame.name}"</strong> akan dihapus secara permanen.
+                                    Data reklame akan dihapus secara permanen.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
