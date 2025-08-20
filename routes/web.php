@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('peta', [PetaController::class, 'index'])->name('peta');
         Route::post('generate-surat-tugas-batch', [DokumenController::class, 'generateSuratTugasBatch']);
         Route::post('generate-berita-acara-batch', [DokumenController::class, 'generateBeritaAcaraBatch']);
+        Route::get('dokumen/request-approval', [DokumenController::class, 'requestApproval']);
     });
 });
 

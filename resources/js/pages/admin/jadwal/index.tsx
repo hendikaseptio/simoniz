@@ -30,16 +30,16 @@ export default function Index() {
             baseRoute: '/admin/jadwal',
         },
     );
-    const jadwalIds =  jadwal?.data?.map((j: any) => j.id) || [];
+    const jadwal_id =  jadwal?.data?.map((j: any) => j.id) || [];
     
     const handleGenerateBatch = () => {
-        if (jadwalIds.length === 0) {
+        if (jadwal_id.length === 0) {
             alert('Tidak ada data jadwal untuk digenerate.');
             return;
         }
         router.post(
             `/admin/generate-surat-tugas-batch/`,
-            { jadwalIds },
+            { jadwal_id },
             {
                 preserveScroll: true,
                 replace: true,
@@ -141,7 +141,7 @@ export default function Index() {
                 <div className="flex justify-end gap-3">
                     <Button
                         onClick={handleGenerateBatch}
-                        className="inline-flex items-center gap-2 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+                        
                     >
                         <Printer size={16} />
                         Generate Batch Surat Tugas
