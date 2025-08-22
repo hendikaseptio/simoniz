@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Calendar, ClipboardList, FileText, Folder, LayoutGrid, MapPin, Users, UserSearch } from 'lucide-react';
+import { BookOpen, Calendar, ClipboardList, FileText, Folder, LayoutGrid, MapPin, ScrollText, Users, UserSearch } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -49,6 +49,12 @@ const mainNavItems: NavItem[] = [
         title: 'Peta Lokasi',
         href: '/peta',
         icon: MapPin,
+        roles: ['admin', 'kabid', 'tim'],
+    },
+    {
+        title: 'Dokumen',
+        href: '/dokumen',
+        icon: ScrollText,
         roles: ['admin', 'kabid', 'tim'],
     },
 ];

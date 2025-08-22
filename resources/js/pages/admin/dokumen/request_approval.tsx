@@ -26,10 +26,7 @@ export default function RequestApproval() {
             <Head title="Data Tim" />
             <div className="p-5 space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <iframe
-                        className='md:col-span-2 w-full h-screen border rounded-lg shadow'
-                        src={dokumen}
-                    />
+                    <iframe className='md:col-span-2 w-full h-screen border rounded-lg shadow' src={dokumen} />
                     <div>
                         <Card>
                             <CardContent>
@@ -41,7 +38,6 @@ export default function RequestApproval() {
                                     <div className="font-medium">Status</div>
                                     <div> <span className='mr-3'>:</span> <Badge><BadgeCheck></BadgeCheck> Disetujui</Badge></div>
                                 </div>
-
                                 <Button className='w-full mt-5'>Kirim Permintaan Approval</Button>
                             </CardContent>
                         </Card>

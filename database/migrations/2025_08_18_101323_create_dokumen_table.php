@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->enum('type', ['surat_tugas','berita_acara']);
             $table->text('path');
-            $table->enum('status',['draft','archive','approved','rejected'])->default('draft');
+            $table->enum('status',['draft','archived','approved','rejected'])->default('draft');
             $table->timestamps();
         });
     }

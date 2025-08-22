@@ -52,16 +52,34 @@ class DokumenController extends Controller
     {
         $data = Monitoring::whereIn('id', $request->jadwal_id)->get();
         $tahun = Carbon::parse($data->first()->tanggal)->year;
-        try {
-            $pdf = Pdf::loadView('pdf.surat_tugas', compact('data', 'tahun'));
+        $bulan = Carbon::parse($data->first()->tanggal)->month;
+        $path = 'dokumen/surat_tugas_'.$bulan.'_'.$tahun.'.pdf';
+        $dokumen = Dokumen::where('path', $path)->first();
+        if ($dokumen->status) {
+            if ($dokumen->status == "draft" || $dokumen->status == "rejected") {
+                $this->generatePdf($path, 'surat_tugas', $data, $tahun);
+            }
+            $dokumen->updated_at = now();
+            $dokumen->save();
+        } else {
+            $this->generatePdf($path, 'surat_tugas', $data, $tahun);
+            Dokumen::create([
+                'nama' => 'Surat Tugas '.$bulan.' '.$tahun,
+                'type' => 'surat_tugas',
+                'path' => $path,
+                'status' => 'draft',
+            ]);
+        }
+        return redirect('admin/dokumen/request-approval')->with('success', 'Batch Surat Tugas berhasil dibuat.');
+    }
 
-            $filename = 'surat_tugas_' . date('Y-m-d') . '.pdf';
-            $path = 'dokumen/' . $filename;
-            // Buat folder dokumen jika belum ada
+    function generatePdf($path, $type, $data, $tahun)
+    {
+        try {
+            $pdf = Pdf::loadView('pdf.'.$type, compact('data', 'tahun'));
             if (!Storage::exists('public/dokumen')) {
                 Storage::disk('public')->makeDirectory('dokumen');
             }
-
             if (Storage::disk('public')->put($path, $pdf->output())) {
                 Log::info("PDF berhasil disimpan di: " . storage_path('app/public/' . $path));
             } else {
@@ -69,19 +87,8 @@ class DokumenController extends Controller
             }
         } catch (\Throwable $e) {
             Log::error('Gagal generate PDF: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat membuat PDF.',
-                'detail' => $e->getMessage(),
-            ], 500);
+            return redirect()->back()->with('error', 'Gagal generate PDF: ' . $e->getMessage());
         }
-        Dokumen::create([
-            'nama' => $filename,
-            'type' => 'surat_tugas',
-            'path' => $path,
-            'status' => 'draft',
-        ]);
-        return redirect('admin/dokumen/request-approval')->with('success', 'Batch Surat Tugas berhasil dibuat.');
     }
 
     public function generateBeritaAcaraBatch(Request $request)
