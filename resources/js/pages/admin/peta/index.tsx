@@ -58,6 +58,7 @@ export default function Index() {
                                 </div>
                             </Popup>
                         </Marker>
+                        
                     ))}
                 </MapContainer>
             </div>

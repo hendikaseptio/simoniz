@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Approval;
 use App\Models\Dokumen;
 use App\Models\Monitoring;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -32,20 +33,28 @@ class DokumenController extends Controller
         ]);
     }
 
-    public function requestApproval()
+    public function requestApproval($id)
     {
-        $filename = 'dokumen/surat_tugas_2025-08-20.pdf';
-
-        // Cek apakah file ada di storage (default: disk 'public')
-        if (Storage::disk('public')->exists($filename)) {
-            $dokumen = asset("storage/{$filename}");
-        } else {
-            $dokumen = null;
-        }
+        $dokumen = Dokumen::findOrFail($id)->first();
+        $approval = Approval::where('dokumen_id', $id)->latest()->first();
 
         return Inertia::render('admin/dokumen/request_approval', [
-            'dokumen' => $dokumen
+            'dokumen' => $dokumen,
+            'approval' => $approval
         ]);
+    }
+
+    public function sendApproval($id)
+    {
+        $approval = Approval::where('dokumen_id', $id)->latest()->first();
+        if ($approval && ($approval->status == '' || $approval->status == 'setuju')) {
+            return redirect()->back()->with('error', 'Dokumen sudah diajukan untuk approval.');
+        }
+        Approval::create([
+            'dokumen_id' => $id,
+        ]);
+
+        return redirect()->back()->with('success', 'Dokumen berhasil diajukan untuk approval.');
     }
 
     public function generateSuratTugasBatch(Request $request)
@@ -53,9 +62,9 @@ class DokumenController extends Controller
         $data = Monitoring::whereIn('id', $request->jadwal_id)->get();
         $tahun = Carbon::parse($data->first()->tanggal)->year;
         $bulan = Carbon::parse($data->first()->tanggal)->month;
-        $path = 'dokumen/surat_tugas_'.$bulan.'_'.$tahun.'.pdf';
+        $path = 'dokumen/surat_tugas_' . $bulan . '_' . $tahun . '.pdf';
         $dokumen = Dokumen::where('path', $path)->first();
-        if ($dokumen->status) {
+        if ($dokumen) {
             if ($dokumen->status == "draft" || $dokumen->status == "rejected") {
                 $this->generatePdf($path, 'surat_tugas', $data, $tahun);
             }
@@ -63,20 +72,20 @@ class DokumenController extends Controller
             $dokumen->save();
         } else {
             $this->generatePdf($path, 'surat_tugas', $data, $tahun);
-            Dokumen::create([
-                'nama' => 'Surat Tugas '.$bulan.' '.$tahun,
+            $dokumen = Dokumen::create([
+                'nama' => 'Surat Tugas ' . $bulan . ' ' . $tahun,
                 'type' => 'surat_tugas',
                 'path' => $path,
                 'status' => 'draft',
             ]);
         }
-        return redirect('admin/dokumen/request-approval')->with('success', 'Batch Surat Tugas berhasil dibuat.');
+        return redirect()->route('admin.dokumen.requestApproval', $dokumen->id);
     }
 
     function generatePdf($path, $type, $data, $tahun)
     {
         try {
-            $pdf = Pdf::loadView('pdf.'.$type, compact('data', 'tahun'));
+            $pdf = Pdf::loadView('pdf.' . $type, compact('data', 'tahun'));
             if (!Storage::exists('public/dokumen')) {
                 Storage::disk('public')->makeDirectory('dokumen');
             }

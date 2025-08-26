@@ -153,7 +153,7 @@ use Carbon\Carbon;
             <td style="width: 50%;">
                 <div class="center" style="line-height: 1;">
                     <p>Pekalongan, {{ Carbon::now()->translatedFormat('d F Y') }}</p>
-                    <p><strong>KEPALA DINAS PENANAMAN MODAL DAN<br>
+                    <p><strong>Plt. Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
                     <p><u>ARIF KARYADI, S. Sos.</u><br>
@@ -228,7 +228,7 @@ use Carbon\Carbon;
             <td style="width: 50%;">
                 <div class="center" style="line-height: 1;">
                     <p>Pekalongan, {{ Carbon::now()->translatedFormat('d F Y') }}</p>
-                    <p><strong>KEPALA DINAS PENANAMAN MODAL DAN<br>
+                    <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
                     <p><u>ARIF KARYADI, S. Sos.</u><br>

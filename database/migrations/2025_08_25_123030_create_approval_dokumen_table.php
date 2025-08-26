@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dokumen', function (Blueprint $table) {
+        Schema::create('approval_dokumen', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
-            $table->enum('type', ['surat_tugas','berita_acara']);
-            $table->text('path');
-            $table->enum('status',['draft','arsip'])->default('draft');
+            $table->foreignId('dokumen_id')->constrained('dokumen')->onDelete('cascade');
+            $table->date('tanggal_approval')->nullable();
+            $table->enum('status', ['setuju','tidak setuju'])->nullable();
+            $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dokumen');
+        Schema::dropIfExists('approval_dokumen');
     }
 };
