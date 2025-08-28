@@ -20,7 +20,7 @@ class RoleAdmin
             return redirect('login');
         }
         $user = Auth::user();
-        if (!$user->role == 'admin') {
+        if ($user->role !== 'admin') {
             abort(403, 'Unauthorized');
         }
         return $next($request);

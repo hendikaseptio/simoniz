@@ -84,7 +84,7 @@ class PetugasController extends Controller
      */
     public function edit(string $id)
     {
-        $petugas = User::where('role', 'petugas')->findOrFail($id);
+        $petugas = User::findOrFail($id);
         return Inertia::render('admin/petugas/edit', [
             'petugas' => $petugas,
         ]);
@@ -95,7 +95,7 @@ class PetugasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::where('role', 'petugas')->findOrFail($id);
+        $user = User::findOrFail($id);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -120,7 +120,7 @@ class PetugasController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::where('role', 'petugas')->findOrFail($id);
+        $user = User::findOrFail($id);
         $user->delete();
 
         return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil dihapus');

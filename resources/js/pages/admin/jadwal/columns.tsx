@@ -63,12 +63,6 @@ export const columns: ColumnDef<Jadwal>[] = [
         },
     },
     {
-        accessorKey: 'tim_st',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tim SK" />,
-        // karena ini gabungan string (misal "1,3,4"), tampilkan langsung
-        cell: ({ row }) => row.original.tim_st_names_string || '-',
-    },
-    {
         accessorKey: 'created_at',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Tanggal Dibuat" />,
         cell: ({ row }) => TanggalIndo(row.getValue('created_at')),

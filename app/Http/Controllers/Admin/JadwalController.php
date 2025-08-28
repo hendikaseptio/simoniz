@@ -7,6 +7,7 @@ use App\Models\Monitoring;
 use App\Models\Reklame;
 use App\Models\Tim;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,7 +22,10 @@ class JadwalController extends Controller
 
         if ($request->filled('search')) {
             $query->where('tim_st', 'like', '%' . $request->search . '%')
-                ->orWhere('reklame_id', $request->search);
+                ->orWhere('reklame_id', $request->search)
+                ->orWhereHas('reklame', function ($qr) use ($request) {
+                    $qr->where('id_pendaftaran', 'like', '%' . $request->search . '%');
+                });
         }
 
         if ($request->filled('sort') && $request->filled('direction')) {
@@ -44,20 +48,33 @@ class JadwalController extends Controller
             'tim' => $tim,
             'jumlahJadwalAktif' => $jumlahJadwalAktif,
             'jumlahJadwalTidakAktif' => $jumlahJadwalTidakAktif,
-            'filters' => $request->only(['search', 'sort', 'direction','tim_id']),
+            'filters' => $request->only(['search', 'sort', 'direction', 'tim_id']),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        Carbon::setLocale('id');
+        $tanggal = $request->tanggal;
+        // $tanggal = "2025-08-15";
+        $carbonDate = Carbon::parse($tanggal);
+
+        $timQuery = Tim::with(['petugasSatu', 'petugasDua'])->where('bulan', 'desember');
+
+        if ($tanggal) {
+            $carbonDate = Carbon::parse($tanggal);
+            $timQuery->where('bulan', $carbonDate->translatedFormat('F'))
+            ->where('tahun', $carbonDate->format('Y'));
+            // dd($timQuery->toSql());
+        }
         $reklame = Reklame::where('monitoring', 'iya')->get();
         $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
         $user = User::where('role', 'tim')->get();
         return Inertia::render('admin/jadwal/create', [
-            'tim' => $tim,
+            'tim' => $timQuery->get(),
             'user' => $user,
             'reklame' => $reklame
         ]);
@@ -70,13 +87,11 @@ class JadwalController extends Controller
     {
         $request->validate([
             'reklame_id' => ['required'],
-            'tim_st' => ['required'],
             'tim_id' => ['required'],
             'tanggal' => ['required', 'date'],
         ]);
         Monitoring::create([
             'reklame_id' => $request->reklame_id,
-            'tim_st' => implode(",", $request->tim_st),
             'tim_id' => $request->tim_id,
             'tanggal' => $request->tanggal,
         ]);
@@ -116,13 +131,11 @@ class JadwalController extends Controller
         $jadwal = Monitoring::findOrFail($id);
         $request->validate([
             'reklame_id' => ['required'],
-            'tim_st' => ['required'],
             'tim_id' => ['required'],
             'tanggal' => ['required', 'date'],
         ]);
         $data = [
             'reklame_id' => $request->reklame_id,
-            'tim_st' => implode(",", $request->tim_st),
             'tim_id' => $request->tim_id,
             'tanggal' => $request->tanggal,
         ];

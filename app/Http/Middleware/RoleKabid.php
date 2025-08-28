@@ -20,7 +20,7 @@ class RoleKabid
             return redirect('login');
         }
         $user = Auth::user();
-        if (!$user->role == 'kabid') {
+        if ($user->role !== 'kabid') {
             abort(403, 'Unauthorized');
         }
         return $next($request);

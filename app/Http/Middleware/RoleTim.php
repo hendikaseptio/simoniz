@@ -20,7 +20,7 @@ class RoleTim
             return redirect('login');
         }
         $user = Auth::user();
-        if (!$user->role == 'tim') {
+        if ($user->role !== 'tim') {
             abort(403, 'Unauthorized');
         }
         return $next($request);

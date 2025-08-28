@@ -14,8 +14,6 @@ class MonitoringSeeder extends Seeder
         $timIds = range(1, 10); // array tim id untuk random tim_id
 
         for ($i = 0; $i < 10; $i++) {
-            $timStIds = collect($userIds)->random(rand(2, 3))->toArray();
-            sort($timStIds);
             $timId = fake()->randomElement($timIds);  // pakai variabel baru untuk random tim_id
             $reklameId = fake()->randomElement($reklameIds);
             $tanggal = Carbon::create(2025, 8, rand(1, 31))->toDateString();
@@ -23,7 +21,6 @@ class MonitoringSeeder extends Seeder
             Monitoring::create([
                 'reklame_id' => $reklameId,
                 'tim_id' => $timId,
-                'tim_st' => implode(',', $timStIds),
                 'tanggal' => $tanggal,
                 'cek_lapangan' => fake()->randomElement(['belum', 'sudah']),
                 'status' => fake()->randomElement(['berlaku', 'tidak berlaku']),
