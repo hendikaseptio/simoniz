@@ -9,8 +9,10 @@ use App\Http\Controllers\Admin\PetaController;
 use App\Http\Controllers\Admin\ReklameController;
 use App\Http\Controllers\Admin\PetugasController;
 use App\Http\Controllers\Admin\TimController;
+use App\Http\Controllers\Tim\MonitoringController as TimMonitoringController;
 use App\Http\Middleware\RoleAdmin;
 use App\Http\Middleware\RoleKabid;
+use App\Http\Middleware\RoleTim;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -51,6 +53,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('approval', [KabidApprovalController::class, 'index'])->name('approval.index');
         Route::get('approval/{id}/edit', [KabidApprovalController::class, 'edit'])->name('approval.edit');
         Route::put('approval/{id}', [KabidApprovalController::class, 'update'])->name('approval.update');
+    });
+
+    Route::middleware(RoleTim::class)->prefix('tim')->name('tim.')->group(function () {
+        Route::get('monitoring', [TimMonitoringController::class, 'index'])->name('monitoring.index');
+        Route::get('monitoring/{id}/edit', [TimMonitoringController::class, 'edit'])->name('monitoring.edit');
+        Route::put('monitoring/{id}', [TimMonitoringController::class, 'update'])->name('monitoring.update');
     });
 });
 
