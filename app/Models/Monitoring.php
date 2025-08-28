@@ -11,7 +11,6 @@ class Monitoring extends Model
         'reklame_id',
         'tim_id',
         'tanggal',
-        'tim_st',
         'cek_lapangan',
         'status',
         'keberadaan_reklame',

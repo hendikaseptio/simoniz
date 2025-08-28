@@ -12,6 +12,7 @@ export default function useFormHandler<T extends Record<string, any>>(
     const [processing, setProcessing] = useState(false);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+        console.log('event:', e.target.name, e.target.value);
         const key = e.target.id || e.target.name;
         let value: any;
 
@@ -20,7 +21,7 @@ export default function useFormHandler<T extends Record<string, any>>(
         } else if (e.target.type === 'checkbox') {
             value = e.target.checked;
         } else if (e.target.type === 'radio') {
-            value = e.target.checked;
+            value = e.target.value;
         } else {
             value = e.target.value;
         }

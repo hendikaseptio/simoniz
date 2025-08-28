@@ -1,4 +1,3 @@
-import InputMultiSelect from '@/components/custom/form/input-multi-select';
 import InputSelect from '@/components/custom/form/input-select';
 import InputText from '@/components/custom/form/input-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -7,10 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useFormHandler from '@/hooks/useFormHandler';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-
 import { Head, Link, usePage } from '@inertiajs/react';
 import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -24,13 +21,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Create() {
-    const { user, tim, reklame } = usePage().props
+    const { tim, reklame } = usePage().props
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
             tim_id: '',
             tanggal: '',
             reklame_id: '',
-            tim_st: '',
         },
         '/admin/jadwal',
     );
@@ -76,18 +72,6 @@ export default function Create() {
                                 }))}
                                 onChange={handleChange}
                                 value={values.tim_id}
-                                errors={errors}
-                            />
-                            <InputMultiSelect
-                                name="tim_st"
-                                label="Tim SK (contoh: 1,3,4)"
-                                options={user.map((u: any) => ({
-                                    label: u.name,
-                                    value: u.id,
-                                }))
-                                }
-                                onChange={handleChange}
-                                value={values.tim_st}
                                 errors={errors}
                             />
                             <InputText

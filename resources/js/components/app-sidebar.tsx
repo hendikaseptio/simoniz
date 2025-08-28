@@ -34,6 +34,12 @@ const mainNavItems: NavItem[] = [
         roles: ['admin'],
     },
     {
+        title: 'Approval Dokumen',
+        href: '/approval',
+        icon: ScrollText,
+        roles: ['kabid'],
+    },
+    {
         title: 'Jadwal Monitoring',
         href: '/jadwal',
         icon: Calendar,
@@ -55,7 +61,7 @@ const mainNavItems: NavItem[] = [
         title: 'Dokumen',
         href: '/dokumen',
         icon: ScrollText,
-        roles: ['admin', 'kabid', 'tim'],
+        roles: ['admin', 'tim'],
     },
 ];
 

@@ -27,9 +27,10 @@ class DokumenController extends Controller
     public function show($id)
     {
         $dokumen = Dokumen::findOrFail($id);
-
+        $approval = Approval::where('dokumen_id', $id)->latest()->first();
         return Inertia::render('admin/dokumen/show', [
-            'dokumen' => $dokumen
+            'dokumen' => $dokumen,
+            'approval' => $approval
         ]);
     }
 

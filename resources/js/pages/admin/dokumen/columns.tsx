@@ -24,7 +24,7 @@ import {
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Archive, Copy, FileCheck2, FileX2, MoreHorizontal, Pencil, PencilLine, Signature, Trash } from 'lucide-react';
+import { Archive, Copy, FileCheck2, FileX2, FolderOpen, MoreHorizontal, Pencil, PencilLine, Signature, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 export type DOkumen = {
@@ -106,9 +106,9 @@ export const columns: ColumnDef<DOkumen>[] = [
                                 <Copy />
                                 Copy Tim ID
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(`/admin/dokumen/${dokumen.id}/edit`)}>
-                                <Pencil />
-                                Edit
+                            <DropdownMenuItem onClick={() => router.visit(`/admin/dokumen/${dokumen.id}/show`)}>
+                                <FolderOpen />
+                                Detail
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => setOpen(true)}>

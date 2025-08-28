@@ -10,9 +10,12 @@ use App\Http\Controllers\Admin\ReklameController;
 use App\Http\Controllers\Admin\PetugasController;
 use App\Http\Controllers\Admin\TimController;
 use App\Http\Middleware\RoleAdmin;
+use App\Http\Middleware\RoleKabid;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+
+use App\Http\Controllers\Kabid\ApprovalController as KabidApprovalController;
 
 Route::get('/', function () {
     // return Inertia::render('welcome');
@@ -40,7 +43,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('generate-berita-acara-batch', [DokumenController::class, 'generateBeritaAcaraBatch']);
         Route::get('dokumen/request-approval/{id}', [DokumenController::class, 'requestApproval'])->name('dokumen.requestApproval');
         Route::get('dokumen/{id}/sendApproval', [DokumenController::class, 'sendApproval'])->name('dokumen.sendApproval');
-        Route::get('dokumen', [DokumenController::class, 'index']);
+        Route::get('dokumen/{id}/show', [DokumenController::class, 'show'])->name('dokumen.show');
+        Route::get('dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
+    });
+
+    Route::middleware(RoleKabid::class)->prefix('kabid')->name('kabid.')->group(function () {
+        Route::get('approval', [KabidApprovalController::class, 'index'])->name('approval.index');
+        Route::get('approval/{id}/edit', [KabidApprovalController::class, 'edit'])->name('approval.edit');
+        Route::put('approval/{id}', [KabidApprovalController::class, 'update'])->name('approval.update');
     });
 });
 

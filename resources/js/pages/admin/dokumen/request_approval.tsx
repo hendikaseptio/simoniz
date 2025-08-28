@@ -21,6 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function RequestApproval() {
     const { dokumen, approval, flash } = usePage().props;
+    console.log(approval);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />
@@ -53,7 +54,7 @@ export default function RequestApproval() {
                                             </div>
                                             <div className="font-medium">Tanggal Approval</div>
                                             <div>
-                                                <span className="mr-3">:</span> <b>{TanggalIndo(approval.tanggal_approve)}</b>
+                                                <span className="mr-3">:</span> <b>{TanggalIndo(approval.tanggal_approval)}</b>
                                             </div>
                                             <div className="font-medium">Status</div>
                                             <div>
@@ -75,7 +76,7 @@ export default function RequestApproval() {
                                             </div>
                                             <div className="font-medium">Catatan</div>
                                             <div>
-                                                <span className="mr-3">:</span> <b>{TanggalIndo(approval.catatan)}</b>
+                                                <span className="mr-3">:</span> <b>{approval.catatan}</b>
                                             </div>
                                         </div>
                                         {approval.status == 'tidak setuju' && (

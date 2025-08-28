@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('reklame_id'); // relasi ke reklame
             $table->unsignedBigInteger('tim_id'); // relasi ke tim
-            $table->string('tim_st'); // simpan ID user gabungan seperti "1,3,4"
             $table->date('tanggal');
 
             $table->enum('cek_lapangan', ['sudah', 'belum'])->default('belum');

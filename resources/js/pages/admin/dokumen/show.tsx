@@ -1,12 +1,11 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { TanggalIndo } from '@/utils/dateFormat';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { CheckCheck, CheckCircle2, Loader, Send, TriangleAlert, X } from 'lucide-react';
+import { Head, usePage } from '@inertiajs/react';
+import { CheckCheck, CheckCircle2, Loader, TriangleAlert, X } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -14,13 +13,14 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/admin/dokumen',
     },
     {
-        title: 'Permintaan Approval Dokumen',
-        href: '/admin/dokumen/create',
+        title: 'Detail Dokumen',
+        href: '/admin/dokumen/show',
     },
 ];
 
 export default function RequestApproval() {
     const { dokumen, approval, flash } = usePage().props;
+    console.log(approval);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />
@@ -53,7 +53,7 @@ export default function RequestApproval() {
                                             </div>
                                             <div className="font-medium">Tanggal Approval</div>
                                             <div>
-                                                <span className="mr-3">:</span> <b>{TanggalIndo(approval.tanggal_approve)}</b>
+                                                <span className="mr-3">:</span> <b>{TanggalIndo(approval.tanggal_approval)}</b>
                                             </div>
                                             <div className="font-medium">Status</div>
                                             <div>
@@ -75,31 +75,18 @@ export default function RequestApproval() {
                                             </div>
                                             <div className="font-medium">Catatan</div>
                                             <div>
-                                                <span className="mr-3">:</span> <b>{TanggalIndo(approval.catatan)}</b>
+                                                <span className="mr-3">:</span> <b>{approval.catatan}</b>
                                             </div>
                                         </div>
-                                        {approval.status == 'tidak setuju' && (
-                                            <div className='mt-3'>
-                                                <Link href={`/admin/dokumen/${dokumen.id}/sendApproval`}>
-                                                    <Button className="w-full">
-                                                        <Send /> Kirim Permintaan Approval
-                                                    </Button>
-                                                </Link>
-                                            </div>
-                                        )}
+
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
                                         <Alert>
                                             <TriangleAlert />
                                             <AlertTitle>Dokumen Belum Diajukan Approval</AlertTitle>
-                                            <AlertDescription>Klik tombol dibawah ini untuk mengajukan approval</AlertDescription>
+                                            <AlertDescription>Ajukan approval di menu jadwal monitoring ! </AlertDescription>
                                         </Alert>
-                                        <Link href={`/admin/dokumen/${dokumen.id}/sendApproval`}>
-                                            <Button className="w-full">
-                                                <Send /> Kirim Permintaan Approval
-                                            </Button>
-                                        </Link>
                                     </div>
                                 )}
                             </CardContent>
