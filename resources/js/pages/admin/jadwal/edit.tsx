@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useFormHandler from '@/hooks/useFormHandler';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function EditTim() {
-    const { jadwal, tim, user, reklame } = usePage().props;
+    const { jadwal, tim, reklame } = usePage().props;
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
             reklame_id: jadwal?.reklame_id || '',
@@ -31,6 +31,19 @@ export default function EditTim() {
         `/admin/jadwal/${jadwal?.id}`,
         'put',
     );
+    const handleTanggalChange = (e) => {
+        const val = e.target.value;
+        handleChange(e);
+        router.get(
+            route('admin.jadwal.edit', jadwal?.id),
+            { tanggal: val },
+            {
+                preserveScroll: true,
+                preserveState: true,
+                replace: true,
+            },
+        );
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />
@@ -64,6 +77,14 @@ export default function EditTim() {
                                 value={values.reklame_id}
                                 errors={errors}
                             />
+                            <InputText
+                                name="tanggal"
+                                label="Tanggal"
+                                type="date"
+                                onChange={handleTanggalChange}
+                                value={values.tanggal}
+                                errors={errors}
+                            />
                             <InputSelect
                                 name="tim_id"
                                 label="Tim Jalan"
@@ -73,14 +94,6 @@ export default function EditTim() {
                                 }))}
                                 onChange={handleChange}
                                 value={values.tim_id}
-                                errors={errors}
-                            />
-                            <InputText
-                                name="tanggal"
-                                label="Tanggal"
-                                type="date"
-                                onChange={handleChange}
-                                value={values.tanggal}
                                 errors={errors}
                             />
                             <div className="flex justify-end mt-3 space-x-3">

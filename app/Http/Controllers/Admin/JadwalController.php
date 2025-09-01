@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Monitoring;
 use App\Models\Reklame;
 use App\Models\Tim;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -21,11 +20,15 @@ class JadwalController extends Controller
         $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame']);
 
         if ($request->filled('search')) {
-            $query->where('tim_st', 'like', '%' . $request->search . '%')
-                ->orWhere('reklame_id', $request->search)
-                ->orWhereHas('reklame', function ($qr) use ($request) {
+            $query->where(function ($q) use ($request) {
+                $q->whereHas('tim.petugasSatu', function ($qt1) use ($request) {
+                    $qt1->where('name', 'like', '%' . $request->search . '%');
+                })->orWhereHas('tim.petugasDua', function ($qt2) use ($request) {
+                    $qt2->where('name', 'like', '%' . $request->search . '%');
+                })->orWhereHas('reklame', function ($qr) use ($request) {
                     $qr->where('id_pendaftaran', 'like', '%' . $request->search . '%');
                 });
+            });
         }
 
         if ($request->filled('sort') && $request->filled('direction')) {
@@ -59,23 +62,18 @@ class JadwalController extends Controller
     {
         Carbon::setLocale('id');
         $tanggal = $request->tanggal;
-        // $tanggal = "2025-08-15";
         $carbonDate = Carbon::parse($tanggal);
-
-        $timQuery = Tim::with(['petugasSatu', 'petugasDua'])->where('bulan', 'desember');
+        $bulan = (string) $carbonDate->translatedFormat('F');
+        $tahun = (string) $carbonDate->format('Y');
+        $timQuery = Tim::with(['petugasSatu', 'petugasDua']);
 
         if ($tanggal) {
-            $carbonDate = Carbon::parse($tanggal);
-            $timQuery->where('bulan', $carbonDate->translatedFormat('F'))
-            ->where('tahun', $carbonDate->format('Y'));
-            // dd($timQuery->toSql());
+            $timQuery->where('bulan', strtolower($bulan))
+                ->where('tahun', $tahun);
         }
         $reklame = Reklame::where('monitoring', 'iya')->get();
-        $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
-        $user = User::where('role', 'tim')->get();
         return Inertia::render('admin/jadwal/create', [
             'tim' => $timQuery->get(),
-            'user' => $user,
             'reklame' => $reklame
         ]);
     }
@@ -109,16 +107,25 @@ class JadwalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
+        Carbon::setLocale('id');
+        $tanggal = $request->tanggal;
+        $carbonDate = Carbon::parse($tanggal);
+        $bulan = (string) $carbonDate->translatedFormat('F');
+        $tahun = (string) $carbonDate->format('Y');
+        $timQuery = Tim::with(['petugasSatu', 'petugasDua']);
+
+        if ($tanggal) {
+            $timQuery->where('bulan', strtolower($bulan))
+                ->where('tahun', $tahun);
+        }
+
         $jadwal = Monitoring::findOrFail($id);
         $reklame = Reklame::where('monitoring', 'iya')->get();
-        $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
-        $user = User::where('role', 'tim')->get();
         return Inertia::render('admin/jadwal/edit', [
-            'user' => $user,
             'jadwal' => $jadwal,
-            'tim' => $tim,
+            'tim' => $timQuery->get(),
             'reklame' => $reklame,
         ]);
     }

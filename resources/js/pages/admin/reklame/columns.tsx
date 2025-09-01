@@ -120,9 +120,9 @@ export const columns: ColumnDef<Agama>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(reklame.id)}>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(reklame.id_pendaftaran)}>
                                 <Copy />
-                                Copy Reklame ID
+                                Copy ID Pendaftaran
                             </DropdownMenuItem>
                              <DropdownMenuItem onClick={() => router.visit(`/admin/reklame/${reklame.id}`)}>
                                 <FolderOpen />

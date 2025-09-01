@@ -8,7 +8,6 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
-import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,8 +22,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Create() {
     const { tim, reklame } = usePage().props;
-    const [tanggalFilter, setTanggalFilter] = useState('');
-    console.log('tim', tim);
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
             tim_id: '',
@@ -35,11 +32,7 @@ export default function Create() {
     );
     const handleTanggalChange = (e) => {
         const val = e.target.value;
-
-        // 1. Simpan ke form
-        handleChange(e); // ini update values.tanggal
-
-        // 2. Trigger reload data tim dari server berdasarkan tanggal
+        handleChange(e);
         router.get(
             route('admin.jadwal.create'),
             { tanggal: val },
@@ -49,9 +42,6 @@ export default function Create() {
                 replace: true,
             },
         );
-
-        // (opsional) kalau mau pakai state lokal juga:
-        setTanggalFilter(val);
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

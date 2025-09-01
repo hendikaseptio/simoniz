@@ -36,9 +36,9 @@ class DokumenController extends Controller
 
     public function requestApproval($id)
     {
-        $dokumen = Dokumen::findOrFail($id)->first();
+        $dokumen = Dokumen::findOrFail($id);
         $approval = Approval::where('dokumen_id', $id)->latest()->first();
-
+        
         return Inertia::render('admin/dokumen/request_approval', [
             'dokumen' => $dokumen,
             'approval' => $approval
@@ -60,9 +60,10 @@ class DokumenController extends Controller
 
     public function generateSuratTugasBatch(Request $request)
     {
-        $data = Monitoring::whereIn('id', $request->jadwal_id)->get();
-        $tahun = Carbon::parse($data->first()->tanggal)->year;
-        $bulan = Carbon::parse($data->first()->tanggal)->month;
+        $tahun = $request->tahun;
+        $bulan = $request->bulan;
+        $data = Monitoring::whereYear('tanggal', $tahun)->whereMonth('tanggal', $bulan)->get();
+
         $path = 'dokumen/surat_tugas_' . $bulan . '_' . $tahun . '.pdf';
         $dokumen = Dokumen::where('path', $path)->first();
         if ($dokumen) {
