@@ -34,7 +34,6 @@ export default function Create() {
     );
     const currentYear = new Date().getFullYear();
     const years = [];
-
     for (let y = currentYear - 10; y <= currentYear + 10; y++) {
         years.push({ label: y.toString(), value: y.toString() });
     }

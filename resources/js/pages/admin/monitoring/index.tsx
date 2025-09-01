@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { monitoring, tim, progresBulanIni, cekLapangan, sudahDicek, belumDicek, flash } = usePage().props;
-    const { data, handleChange, submit, reset } = useFilterForm(
+    const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             tim_id: '',
             tanggal: '',
@@ -54,20 +54,7 @@ export default function Index() {
                             <div className="text-lg font-semibold">{monitoring.total}</div>
                         </CardContent>
                     </Card>
-                    <Card className="col-span-2">
-                        <CardContent className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <div className="text-sm text-muted-foreground">Progress Monitoring</div>
-                                <div className="rounded-full bg-secondary p-2">
-                                    <Calendar1 className="size-4 text-primary" />
-                                </div>
-                            </div>
-                            <div className="text-lg font-semibold">
-                                Selesai {cekLapangan.sudah} dari {monitoring.total} Monitoring
-                                <Progress value={(cekLapangan.sudah * 100) / monitoring.total} className="" />
-                            </div>
-                        </CardContent>
-                    </Card>
+                    
                     <Card>
                         <CardContent className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -89,6 +76,20 @@ export default function Index() {
                                         </Badge>
                                     </Link>
                                 ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card className="col-span-2">
+                        <CardContent className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-muted-foreground">Progress Monitoring</div>
+                                <div className="rounded-full bg-secondary p-2">
+                                    <Calendar1 className="size-4 text-primary" />
+                                </div>
+                            </div>
+                            <div className="text-lg font-semibold">
+                                Selesai {cekLapangan.sudah} dari {monitoring.total} Monitoring
+                                <Progress value={(cekLapangan.sudah * 100) / monitoring.total} className="" />
                             </div>
                         </CardContent>
                     </Card>
@@ -115,7 +116,7 @@ export default function Index() {
                                         value: u.id,
                                     }))}
                                     value={data.tim_id}
-                                    onChange={handleChange}
+                                    onChange={handleFilterChange}
                                 ></InputSelect>
                                 <InputText
                                     label="Tanggal"
@@ -123,14 +124,10 @@ export default function Index() {
                                     name="tanggal"
                                     placeholder={'Masukkan Tanggal'}
                                     value={data.tanggal}
-                                    onChange={handleChange}
+                                    onChange={handleFilterChange}
                                 ></InputText>
                             </div>
                             <div className="space-x-3 text-end">
-                                <Button>
-                                    <File></File>
-                                    Cetak BAP
-                                </Button>
                                 <Button type="submit">
                                     <ListFilter />
                                     Filter

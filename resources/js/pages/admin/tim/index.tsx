@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { tim, jumlahPerBulanTahun, jumlahPerTahun, flash } = usePage().props
-    const { data, handleChange, submit, reset } = useFilterForm(
+    const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             bulan: '',
             tahun: '',
@@ -68,28 +68,6 @@ export default function Index() {
                             <div className="text-lg font-semibold">{tim.total}</div>
                         </CardContent>
                     </Card>
-                    <Card className='col-span-2'>
-                        <CardContent className='space-y-2'>
-                            <div className="flex justify-between items-center">
-                                <div className="text-muted-foreground text-sm">Kategori Tim Perbulan</div>
-                                <div className="bg-secondary rounded-full p-2">
-                                    <Calendar1 className='text-primary size-4' />
-                                </div>
-                            </div>
-                            <div className="text-lg font-semibold">
-                                {Object.entries(jumlahPerBulanTahun).map(([key, value]) => (
-                                    <Link
-                                        key={key}
-                                        className="m-1 inline-block"
-                                        href={route('admin.tim.index', { bulan: value.bulan, tahun: value.tahun })}
-                                        preserveScroll
-                                    >
-                                        <Badge>{value.bulan} {value.tahun}: {value.total}</Badge>
-                                    </Link>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
                     <Card>
                         <CardContent className='space-y-2'>
                             <div className="flex justify-between items-center">
@@ -112,6 +90,29 @@ export default function Index() {
                             </div>
                         </CardContent>
                     </Card>
+                    <Card className='col-span-2'>
+                        <CardContent className='space-y-2'>
+                            <div className="flex justify-between items-center">
+                                <div className="text-muted-foreground text-sm">Kategori Tim Perbulan</div>
+                                <div className="bg-secondary rounded-full p-2">
+                                    <Calendar1 className='text-primary size-4' />
+                                </div>
+                            </div>
+                            <div className="text-lg font-semibold">
+                                {Object.entries(jumlahPerBulanTahun).map(([key, value]) => (
+                                    <Link
+                                        key={key}
+                                        className="m-1 inline-block"
+                                        href={route('admin.tim.index', { bulan: value.bulan, tahun: value.tahun })}
+                                        preserveScroll
+                                    >
+                                        <Badge>{value.bulan} {value.tahun}: {value.total}</Badge>
+                                    </Link>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                    
                 </div>
                 <Card>
                     <CardContent className="">
@@ -133,7 +134,7 @@ export default function Index() {
                                                 name={'bulan'}
                                                 options={optionsBulan}
                                                 value={data.bulan}
-                                                onChange={handleChange}
+                                                onChange={handleFilterChange}
                                             ></InputSelect>
                                             <InputText
                                                 label="Tahun"
@@ -141,7 +142,7 @@ export default function Index() {
                                                 name="tahun"
                                                 placeholder={'Masukkan Periode Tahun'}
                                                 value={data.tahun}
-                                                onChange={handleChange}
+                                                onChange={handleFilterChange}
                                             ></InputText>
                                         </div>
                                         <div className="text-end space-x-3">

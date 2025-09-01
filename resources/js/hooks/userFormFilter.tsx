@@ -22,7 +22,7 @@ export function useFilterForm<T extends FilterParams>(
 
     const [data, setData] = useState<T>(getInitialFromURL());
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setData((prev) => ({
             ...prev,
@@ -55,7 +55,7 @@ export function useFilterForm<T extends FilterParams>(
     return {
         data,
         setData,
-        handleChange,
+        handleFilterChange,
         submit,
         reset,
     };

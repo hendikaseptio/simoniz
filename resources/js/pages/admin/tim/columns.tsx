@@ -93,10 +93,6 @@ export const columns: ColumnDef<Agama>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(tim.id)}>
-                                <Copy />
-                                Copy Tim ID
-                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => router.visit(`/admin/tim/${tim.id}/edit`)}>
                                 <Pencil />
                                 Edit

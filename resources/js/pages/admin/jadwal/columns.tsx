@@ -94,9 +94,9 @@ export const columns: ColumnDef<Jadwal>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(jadwal.id)}>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(jadwal.reklame.id_pendaftaran)}>
                                 <Copy />
-                                Copy Tim ID
+                                Copy ID Pendaftaran
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => router.visit(`/admin/jadwal/${jadwal.id}/edit`)}>
                                 <Pencil />

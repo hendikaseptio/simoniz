@@ -149,8 +149,8 @@ use Carbon\Carbon;
     </table>
     <table style="width: 100%;">
         <tr>
-            <td style="width: 50%;"></td>
-            <td style="width: 50%;">
+            <td style="width: 40%;"></td>
+            <td style="width: 60%;">
                 <div class="center" style="line-height: 1;">
                     <p>Pekalongan, {{ Carbon::now()->translatedFormat('d F Y') }}</p>
                     <p><strong>Plt. Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
@@ -224,8 +224,8 @@ use Carbon\Carbon;
     </table>
     <table style="width: 100%;">
         <tr>
-            <td style="width: 50%;"></td>
-            <td style="width: 50%;">
+            <td style="width: 40%;"></td>
+            <td style="width: 60%;">
                 <div class="center" style="line-height: 1;">
                     <p>Pekalongan, {{ Carbon::now()->translatedFormat('d F Y') }}</p>
                     <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>

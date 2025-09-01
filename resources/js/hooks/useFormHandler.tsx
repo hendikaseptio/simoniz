@@ -12,7 +12,6 @@ export default function useFormHandler<T extends Record<string, any>>(
     const [processing, setProcessing] = useState(false);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-        console.log('event:', e.target.name, e.target.value);
         const key = e.target.id || e.target.name;
         let value: any;
 
@@ -42,7 +41,6 @@ export default function useFormHandler<T extends Record<string, any>>(
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setProcessing(true);
-        // console.log('Form values:', values);
         router[method](postUrl, values, {
             onFinish: () => setProcessing(false),
             transform: (data) => {

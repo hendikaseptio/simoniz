@@ -2,14 +2,16 @@ import InputSelect from '@/components/custom/form/input-select';
 import InputText from '@/components/custom/form/input-text';
 import { DataTableServer } from '@/components/custom/table/datatable-server';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import useFormHandler from '@/hooks/useFormHandler';
 import { useFilterForm } from '@/hooks/userFormFilter';
 import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/jadwal/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { Calendar1, CalendarDays, CheckCircle2, ListFilter, Plus, Printer, RotateCcw } from 'lucide-react';
+import { Calendar1, CalendarDays, CheckCircle2, ListFilter, Plus, Printer, RotateCcw, Send, X } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,8 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { jadwal, tim, jumlahJadwalAktif, jumlahJadwalTidakAktif, flash } = usePage().props;
-    console.log('jadwal', jadwal);
-    const { data, handleChange, submit, reset } = useFilterForm(
+    const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             tim_id: '',
             tanggal: '',
@@ -30,8 +31,29 @@ export default function Index() {
             baseRoute: '/admin/jadwal',
         },
     );
-    const jadwal_id =  jadwal?.data?.map((j: any) => j.id) || [];
-    
+    const { values, errors, handleChange, handleSubmit } = useFormHandler(
+        {
+            bulan: '',
+            tahun: '',
+        },
+        '/admin/generate-surat-tugas-batch',
+    );
+    const jadwal_id = jadwal?.data?.map((j: any) => j.id) || [];
+    const optionsBulan = [
+        { label: "Januari", value: 1 },
+        { label: "Februari", value: 2 },
+        { label: "Maret", value: 3 },
+        { label: "April", value: 4 },
+        { label: "Mei", value: 5 },
+        { label: "Juni", value: 6 },
+        { label: "Juli", value: 7 },
+        { label: "Agustus", value: 8 },
+        { label: "September", value: 9 },
+        { label: "Oktober", value: 10 },
+        { label: "November", value: 11 },
+        { label: "Desember", value: 12 },
+    ];
+
     const handleGenerateBatch = () => {
         if (jadwal_id.length === 0) {
             alert('Tidak ada data jadwal untuk digenerate.');
@@ -70,17 +92,6 @@ export default function Index() {
                             <div className="text-lg font-semibold">{jadwal.total}</div>
                         </CardContent>
                     </Card>
-                    <Card className="col-span-2">
-                        <CardContent className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <div className="text-sm text-muted-foreground">Total Jadwal Aktif</div>
-                                <div className="rounded-full bg-secondary p-2">
-                                    <Calendar1 className="size-4 text-primary" />
-                                </div>
-                            </div>
-                            <div className="text-lg font-semibold">{jumlahJadwalAktif}</div>
-                        </CardContent>
-                    </Card>
                     <Card>
                         <CardContent className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -90,6 +101,17 @@ export default function Index() {
                                 </div>
                             </div>
                             <div className="text-lg font-semibold">{jumlahJadwalTidakAktif}</div>
+                        </CardContent>
+                    </Card>
+                    <Card className="col-span-2">
+                        <CardContent className="space-y-2">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-muted-foreground">Total Jadwal Aktif</div>
+                                <div className="rounded-full bg-secondary p-2">
+                                    <Calendar1 className="size-4 text-primary" />
+                                </div>
+                            </div>
+                            <div className="text-lg font-semibold">{jumlahJadwalAktif}</div>
                         </CardContent>
                     </Card>
                 </div>
@@ -115,7 +137,7 @@ export default function Index() {
                                         value: u.id,
                                     }))}
                                     value={data.tim_id}
-                                    onChange={handleChange}
+                                    onChange={handleFilterChange}
                                 ></InputSelect>
                                 <InputText
                                     label="Tanggal"
@@ -123,7 +145,7 @@ export default function Index() {
                                     name="tanggal"
                                     placeholder={'Masukkan Tanggal'}
                                     value={data.tanggal}
-                                    onChange={handleChange}
+                                    onChange={handleFilterChange}
                                 ></InputText>
                             </div>
                             <div className="space-x-3 text-end">
@@ -139,13 +161,42 @@ export default function Index() {
                     </CardContent>
                 </Card>
                 <div className="flex justify-end gap-3">
-                    <Button
-                        onClick={handleGenerateBatch}
-                        
-                    >
-                        <Printer size={16} />
-                        Generate Batch Surat Tugas
-                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="outline"><Printer />Generate Surat Tugas</Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Pilih Bulan dan Tahun</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <InputSelect
+                                            label={'Bulan'}
+                                            name={'bulan'}
+                                            options={optionsBulan}
+                                            value={values.bulan}
+                                            onChange={handleChange}
+                                            errors={errors}
+                                        ></InputSelect>
+
+                                        <InputText
+                                            label="Tahun"
+                                            type="number"
+                                            name="tahun"
+                                            placeholder={'Masukkan Periode Tahun'}
+                                            value={values.tahun}
+                                            onChange={handleChange}
+                                            errors={errors}
+                                        ></InputText>
+                                    </div>
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel><X/>Batal</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleSubmit}><Send/> Buat Surat</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                     <Link href="/admin/jadwal/create">
                         <Button>
                             <Plus />

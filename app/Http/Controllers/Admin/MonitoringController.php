@@ -18,10 +18,15 @@ class MonitoringController extends Controller
     {
         $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame']);
 
-        if ($request->filled('search')) {
-            $query->where('tim_st', 'like', '%' . $request->search . '%')
-                ->orWhere('reklame_id', $request->search);
-        }
+        $query->where(function ($q) use ($request) {
+            $q->whereHas('tim.petugasSatu', function ($qt1) use ($request) {
+                $qt1->where('name', 'like', '%' . $request->search . '%');
+            })->orWhereHas('tim.petugasDua', function ($qt2) use ($request) {
+                $qt2->where('name', 'like', '%' . $request->search . '%');
+            })->orWhereHas('reklame', function ($qr) use ($request) {
+                $qr->where('id_pendaftaran', 'like', '%' . $request->search . '%');
+            });
+        });
 
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);

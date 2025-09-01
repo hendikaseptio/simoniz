@@ -1,11 +1,13 @@
 'use client';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataTableColumnHeader } from '@/components/ui/column-header';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Pencil } from 'lucide-react';
+import { Copy, MoreHorizontal, Pencil } from 'lucide-react';
 import { useState } from 'react';
 
 export type Monitoring = {
@@ -29,7 +31,6 @@ export const columns: ColumnDef<Monitoring>[] = [
             const reklame = row.original.reklame;
             return reklame.id_pendaftaran
         },
-
     },
     {
         accessorKey: 'tanggal',
@@ -49,6 +50,15 @@ export const columns: ColumnDef<Monitoring>[] = [
     {
         accessorKey: 'cek_lapangan',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Cek Lapangan" />,
+        cell: ({ row }) => {
+            const val = row.getValue('cek_lapangan');
+            if (val === 'belum') {
+                return <Badge variant="destructive">Belum</Badge>;
+            }
+            if (val === 'sudah') {
+                return <Badge variant="default" className="bg-emerald-500 dark:bg-emerald-800">Sudah</Badge>;
+            }
+        },
     },
     {
         accessorKey: 'created_at',
@@ -63,20 +73,27 @@ export const columns: ColumnDef<Monitoring>[] = [
         header: () => "Kelola",
         cell: ({ row }) => {
             const monitoring = row.original;
-            const [open, setOpen] = useState(false);
-            const handleDelete = () => {
-                router.delete(`/admin/monitoring/${monitoring.id}`, {
-                    preserveScroll: true,
-                    replace: true,
-                    preserveState: false,
-                });
-            };
             return (
                 <>
-                    <Button onClick={() => router.visit(`/admin/monitoring/${monitoring.id}/edit`)}>
-                        <Pencil/>
-                        Edit
-                    </Button>                    
+                <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(monitoring.reklame?.id_pendaftaran)}>
+                                <Copy />
+                                Copy ID Pendaftaran
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => router.visit(`/admin/monitoring/${monitoring.id}/edit`)}>
+                                <Pencil />
+                                Edit
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>  
                 </>
             );
         },

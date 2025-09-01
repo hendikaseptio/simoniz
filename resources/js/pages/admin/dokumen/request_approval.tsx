@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function RequestApproval() {
     const { dokumen, approval, flash } = usePage().props;
-    console.log(approval);
+    console.log(dokumen);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />

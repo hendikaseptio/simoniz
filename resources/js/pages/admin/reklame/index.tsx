@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { reklame, monitoring, jenis_reklame, flash } = usePage().props;
-    const { data, handleChange, submit, reset } = useFilterForm(
+    const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             start_date: '',
             end_date: '',
@@ -186,7 +186,7 @@ export default function Index() {
                                             name={'jalan'}
                                             options={optionsJalan}
                                             value={data.jalan}
-                                            onChange={handleChange}
+                                            onChange={handleFilterChange}
                                         ></InputSelect>
                                         <InputText
                                             label="Tema Reklame"
@@ -194,7 +194,7 @@ export default function Index() {
                                             name="isi_konten"
                                             placeholder={'Masukkan tema reklame'}
                                             value={data.isi_konten}
-                                            onChange={handleChange}
+                                            onChange={handleFilterChange}
                                         ></InputText>
                                         <div className="grid grid-cols-2 gap-3">
                                             <InputText
@@ -202,14 +202,14 @@ export default function Index() {
                                                 type="date"
                                                 name="start_date"
                                                 value={data.start_date}
-                                                onChange={handleChange}
+                                                onChange={handleFilterChange}
                                             />
                                             <InputText
                                                 label="Tanggal Akhir Penetapan"
                                                 type="date"
                                                 name="end_date"
                                                 value={data.end_date}
-                                                onChange={handleChange}
+                                                onChange={handleFilterChange}
                                             />
                                         </div>
                                         <div className="text-end space-x-3">
