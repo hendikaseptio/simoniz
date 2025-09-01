@@ -8,6 +8,7 @@ use App\Models\Reklame;
 use App\Models\Tim;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -15,20 +16,21 @@ class MonitoringController extends Controller
 {
     public function index(Request $request)
     {
-        $currentTim = Tim::where('petugas1', auth()->user()->id)->orWhere('petugas2', auth()->user()->id)->first();
-        $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id',$currentTim->id);
-
+        $currentTim = Tim::where('petugas1', Auth::user()->id)->orWhere('petugas2', Auth::user()->id)->first();
+        if (!$currentTim) {
+            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', 0);
+        } else {
+            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', $currentTim->id);
+        }
         if ($request->filled('search')) {
             $query->where('tim_st', 'like', '%' . $request->search . '%')
                 ->orWhere('reklame_id', $request->search);
         }
-
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         } else {
             $query->orderBy('created_at', 'desc');
         }
-
         if ($request->filled('cek_lapangan')) {
             $query->where('cek_lapangan', $request->cek_lapangan);
         }
