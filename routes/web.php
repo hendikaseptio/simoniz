@@ -18,6 +18,7 @@ use Inertia\Inertia;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 use App\Http\Controllers\Kabid\ApprovalController as KabidApprovalController;
+use App\Http\Controllers\Kabid\JadwalController as KabidJadwalController;
 
 Route::get('/', function () {
     // return Inertia::render('welcome');
@@ -53,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('approval', [KabidApprovalController::class, 'index'])->name('approval.index');
         Route::get('approval/{id}/edit', [KabidApprovalController::class, 'edit'])->name('approval.edit');
         Route::put('approval/{id}', [KabidApprovalController::class, 'update'])->name('approval.update');
+        Route::get('jadwal', [KabidJadwalController::class, 'index'])->name('jadwal.index');
     });
 
     Route::middleware(RoleTim::class)->prefix('tim')->name('tim.')->group(function () {
