@@ -1,23 +1,12 @@
 'use client';
 
-import {
-    AlertDialog,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { DataTableColumnHeader } from '@/components/ui/column-header';
-import { Label } from '@/components/ui/label';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { FileInput, Images, Route, X } from 'lucide-react';
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import { FileInput, MoreHorizontal} from 'lucide-react';
 
 export type Monitoring = {
     id: string;
@@ -44,7 +33,7 @@ export const columns: ColumnDef<Monitoring>[] = [
     {
         accessorKey: 'tanggal',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Tanggal" />,
-        cell: ({ row }) => TanggalIndo(row.getValue('tanggal')), // format tanggal pakai helper
+        cell: ({ row }) => TanggalIndo(row.getValue('tanggal')),
     },
     {
         accessorKey: 'tim_id',
@@ -73,54 +62,24 @@ export const columns: ColumnDef<Monitoring>[] = [
         header: () => 'Kelola',
         cell: ({ row }) => {
             const monitoring = row.original;
-            const markerIcon = new L.Icon({
-                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-            });
             return (
-                <div className="flex space-x-2">
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant="secondary"><Images />Lokasi & Foto</Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Detail</AlertDialogTitle>
-                                <AlertDialogDescription className="space-y-4">
-                                    <Label className="mb-2 block">Lokasi di Peta</Label>
-                                    <MapContainer
-                                        center={[monitoring.reklame.latitude, monitoring.reklame.longitude]}
-                                        zoom={13}
-                                        scrollWheelZoom={true}
-                                        className="h-72 w-full rounded-md shadow"
-                                    >
-                                        <TileLayer
-                                            attribution="&copy; OpenStreetMap contributors"
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        />
-                                        <Marker position={[monitoring.reklame.latitude, monitoring.reklame.longitude]} icon={markerIcon} />
-                                    </MapContainer>
-                                    <a href={monitoring.reklame.lokasi} target="_blank" rel="noopener noreferrer">
-                                        <Button className="w-full">
-                                            <Route /> Buka Rute
-                                        </Button>
-                                    </a>
-                                    <img src={monitoring.reklame.foto} alt="foto reklame" />
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>
-                                    <X /> Tutup
-                                </AlertDialogCancel>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                    <Button onClick={() => router.visit(`/tim/monitoring/${monitoring.id}/edit`)}>
-                        <FileInput />
-                        Proses
-                    </Button>
-                </div>
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Open menu</span>
+                                <MoreHorizontal />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => router.visit(`/tim/monitoring/${monitoring.id}/edit`)}>
+                                <FileInput />
+                                Proses
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </>
             );
         },
     },

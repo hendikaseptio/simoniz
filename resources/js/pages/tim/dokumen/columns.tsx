@@ -10,6 +10,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataTableColumnHeader } from '@/components/ui/column-header';
 import {
@@ -22,51 +23,46 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
-import { AlertDialogTrigger } from '@radix-ui/react-alert-dialog';
 import { ColumnDef } from '@tanstack/react-table';
-import { Copy, MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { Archive, FolderOpen, MoreHorizontal, PencilLine, Trash } from 'lucide-react';
 import { useState } from 'react';
 
-export type Jadwal = {
+export type DOkumen = {
     id: string;
     id_pendaftaran: string;
-    tim_id: string;
+    tim_id: string,
     created_at: string;
 };
 
-export const columns: ColumnDef<Jadwal>[] = [
+export const columns: ColumnDef<DOkumen>[] = [
     {
         accessorKey: 'id',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Id" />,
     },
     {
-        accessorKey: 'reklame_id',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="ID Pendaftaran" />,
+        accessorKey: 'nama',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Nama Dokumen" />,
+    },
+    {
+        accessorKey: 'type',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Type Dokumen" />,
         cell: ({ row }) => {
-            const reklame = row.original.reklame;
-            return reklame.id_pendaftaran;
-        },
+            const formatted = row.getValue('type').replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+            return <b>{formatted}</b>;
+        }
     },
     {
-        accessorKey: 'tanggal',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tanggal" />,
-        cell: ({ row }) => TanggalIndo(row.getValue('tanggal')), // format tanggal pakai helper
-    },
-    {
-        accessorKey: 'tim_id',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tim Jalan" />,
+        accessorKey: 'status',
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
         cell: ({ row }) => {
-            const tim = row.original.tim;
-            const petugas1 = tim?.petugas_satu?.name || '-';
-            const petugas2 = tim?.petugas_dua?.name || '-';
-            return `${petugas1} - ${petugas2}`;
+            const val = row.getValue('status');
+            if (val === 'draft') {
+                return <Badge variant="outline"><PencilLine />Draft</Badge>;
+            }
+            if (val === 'arsip') {
+                return <Badge variant="secondary"><Archive />Arsip</Badge>;
+            }
         },
-    },
-    {
-        accessorKey: 'tim_st',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tim SK" />,
-        // karena ini gabungan string (misal "1,3,4"), tampilkan langsung
-        cell: ({ row }) => row.original.tim_st_names_string || '-',
     },
     {
         accessorKey: 'created_at',
@@ -78,12 +74,12 @@ export const columns: ColumnDef<Jadwal>[] = [
         enableSorting: false,
         enableColumnFilter: false,
         enableHiding: false,
-        header: () => 'Kelola',
+        header: () => "Kelola",
         cell: ({ row }) => {
-            const jadwal = row.original;
+            const dokumen = row.original;
             const [open, setOpen] = useState(false);
             const handleDelete = () => {
-                router.delete(`/admin/jadwal/${jadwal.id}`, {
+                router.delete(`/admin/dokumen/${dokumen.id}`, {
                     preserveScroll: true,
                     replace: true,
                     preserveState: false,
@@ -100,13 +96,9 @@ export const columns: ColumnDef<Jadwal>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(jadwal.id)}>
-                                <Copy />
-                                Copy Tim ID
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(`/admin/jadwal/${jadwal.id}/edit`)}>
-                                <Pencil />
-                                Edit
+                            <DropdownMenuItem onClick={() => router.visit(`/admin/dokumen/${dokumen.id}/show`)}>
+                                <FolderOpen />
+                                Detail
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => setOpen(true)}>
@@ -115,15 +107,12 @@ export const columns: ColumnDef<Jadwal>[] = [
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant="outline">Show Dialog</Button>
-                        </AlertDialogTrigger>
+                    <AlertDialog open={open} onOpenChange={setOpen}>
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Data jadwal <strong>""</strong> akan dihapus secara permanen.
+                                    Data dokumen <strong>{dokumen.nama}</strong> akan dihapus secara permanen.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

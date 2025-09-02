@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { monitoring, tim, progresBulanIni, cekLapangan, sudahDicek, belumDicek, flash } = usePage().props;
-    const { data, handleChange, submit, reset } = useFilterForm(
+    const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             tim_id: '',
             tanggal: '',
@@ -111,7 +111,7 @@ export default function Index() {
                                 name="tanggal"
                                 placeholder={'Masukkan Tanggal'}
                                 value={data.tanggal}
-                                onChange={handleChange}
+                                onChange={handleFilterChange}
                             ></InputText>
 
                             <div className="space-x-3 text-end">

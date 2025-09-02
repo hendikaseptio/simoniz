@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\TimController;
 
 use App\Http\Controllers\Tim\MonitoringController as TimMonitoringController;
 use App\Http\Controllers\Tim\PetaController as TimPetaController;
+use App\Http\Controllers\Tim\DokumenController as TimDokumenController;
+use App\Http\Controllers\Tim\JadwalController as TimJadwalController;
 
 use App\Http\Controllers\Kabid\ApprovalController as KabidApprovalController;
 use App\Http\Controllers\Kabid\PetaController as KabidPetaController;
@@ -68,7 +70,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('monitoring/{id}/edit', [TimMonitoringController::class, 'edit'])->name('monitoring.edit');
         Route::put('monitoring/{id}', [TimMonitoringController::class, 'update'])->name('monitoring.update');
         Route::get('peta', [TimPetaController::class, 'index'])->name('peta.index');
-
+        Route::get('jadwal', [TimJadwalController::class, 'index'])->name('jadwal.index');
+        Route::get('dokumen/{id}/show', [TimDokumenController::class, 'show'])->name('dokumen.show');
+        Route::get('dokumen', [TimDokumenController::class, 'index'])->name('dokumen.index');
     });
 });
 
