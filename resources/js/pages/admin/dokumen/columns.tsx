@@ -57,16 +57,10 @@ export const columns: ColumnDef<DOkumen>[] = [
         cell: ({ row }) => {
             const val = row.getValue('status');
             if (val === 'draft') {
-                return <Badge variant="default"><PencilLine />Draft</Badge>;
+                return <Badge variant="outline"><PencilLine />Draft</Badge>;
             }
-            if (val === 'archived') {
-                return <Badge variant="default"><Archive />Archived</Badge>;
-            }
-            if (val === 'approved') {
-                return <Badge variant="secondary" className='bg-emerald-500 dark:bg-emerald-700'><FileCheck2 />Approved</Badge>;
-            }
-            if (val === 'rejected') {
-                return <Badge variant="destructive"><FileX2 />Rejected</Badge>;
+            if (val === 'arsip') {
+                return <Badge variant="secondary"><Archive />Arsip</Badge>;
             }
         },
     },
@@ -102,10 +96,6 @@ export const columns: ColumnDef<DOkumen>[] = [
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(dokumen.id)}>
-                                <Copy />
-                                Copy Tim ID
-                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => router.visit(`/admin/dokumen/${dokumen.id}/show`)}>
                                 <FolderOpen />
                                 Detail

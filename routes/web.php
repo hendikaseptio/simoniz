@@ -38,7 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('jadwal', JadwalController::class);
         Route::resource('monitoring', MonitoringController::class);
         // import 
-        Route::get('dashboard', [dashboardController::class, 'index'])->name('index');
+        Route::get('dashboard', [dashboardController::class, 'index'])->name('dashboard');
         Route::get('import', [ImportController::class, 'index'])->name('import');
         Route::post('import/preview', [ImportController::class, 'preview'])->name('import.preview');
         Route::post('import/confirm', [ImportController::class, 'confirm'])->name('import.confirm');
@@ -53,7 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware(RoleKabid::class)->prefix('kabid')->name('kabid.')->group(function () {
-        Route::get('dashboard', [KabidDashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('dashboard', [KabidDashboardController::class, 'index'])->name('dashboard');
         Route::get('approval', [KabidApprovalController::class, 'index'])->name('approval.index');
         Route::get('approval/{id}/edit', [KabidApprovalController::class, 'edit'])->name('approval.edit');
         Route::put('approval/{id}', [KabidApprovalController::class, 'update'])->name('approval.update');
@@ -61,6 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware(RoleTim::class)->prefix('tim')->name('tim.')->group(function () {
+        Route::get('dashboard', [KabidDashboardController::class, 'index'])->name('dashboard');
         Route::get('monitoring', [TimMonitoringController::class, 'index'])->name('monitoring.index');
         Route::get('monitoring/{id}/edit', [TimMonitoringController::class, 'edit'])->name('monitoring.edit');
         Route::put('monitoring/{id}', [TimMonitoringController::class, 'update'])->name('monitoring.update');

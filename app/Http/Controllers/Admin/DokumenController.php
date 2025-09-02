@@ -15,12 +15,25 @@ use Inertia\Inertia;
 
 class DokumenController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $dokumen = Dokumen::latest()->paginate(10);
-
+        // $dokumen = Dokumen::latest()->paginate(10);
+        $query = Dokumen::query();
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                ->orWhere('email', 'like', '%' . $request->search . '%');
+        }
+        $typeCounts = (clone $query)->selectRaw('
+            SUM(CASE WHEN type = "surat_tugas" THEN 1 ELSE 0 END) as surat_tugas,
+            SUM(CASE WHEN type = "berita_acara" THEN 1 ELSE 0 END) as berita_acara
+        ')->first();
+        $dokumen = $query->paginate(10)->withQueryString();
         return Inertia::render('admin/dokumen/index', [
-            'dokumen' => $dokumen
+            'dokumen' => $dokumen,
+            'type' => [
+                'surat_tugas' => $typeCounts->surat_tugas,
+                'berita_acara' => $typeCounts->berita_acara,
+            ],
         ]);
     }
 

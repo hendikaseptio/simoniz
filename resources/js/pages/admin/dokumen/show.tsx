@@ -1,11 +1,12 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { TanggalIndo } from '@/utils/dateFormat';
-import { Head, usePage } from '@inertiajs/react';
-import { CheckCheck, CheckCircle2, Loader, TriangleAlert, X } from 'lucide-react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { CheckCheck, CheckCircle2, Loader, Send, TriangleAlert, X } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -78,15 +79,28 @@ export default function RequestApproval() {
                                                 <span className="mr-3">:</span> <b>{approval.catatan}</b>
                                             </div>
                                         </div>
-
+                                        {approval.status == 'tidak setuju' && (
+                                            <div className='mt-3'>
+                                                <Link href={`/admin/dokumen/${dokumen.id}/sendApproval`}>
+                                                    <Button className="w-full">
+                                                        <Send /> Kirim Permintaan Approval
+                                                    </Button>
+                                                </Link>
+                                            </div>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
                                         <Alert>
                                             <TriangleAlert />
                                             <AlertTitle>Dokumen Belum Diajukan Approval</AlertTitle>
-                                            <AlertDescription>Ajukan approval di menu jadwal monitoring ! </AlertDescription>
+                                            <AlertDescription>Klik tombol dibawah ini untuk mengajukan approval</AlertDescription>
                                         </Alert>
+                                        <Link href={`/admin/dokumen/${dokumen.id}/sendApproval`}>
+                                            <Button className="w-full">
+                                                <Send /> Kirim Permintaan Approval
+                                            </Button>
+                                        </Link>
                                     </div>
                                 )}
                             </CardContent>
