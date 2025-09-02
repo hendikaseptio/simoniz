@@ -11,7 +11,7 @@ import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/tim/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Calendar1, CalendarDays, CheckCircle2, CodeXml, ListFilter, Plus, RotateCcw, UserCheck, Users, UserX } from 'lucide-react';
+import { Calendar1, CalendarDays, CheckCircle2, ListFilter, Plus, RotateCcw, Users } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -112,7 +112,6 @@ export default function Index() {
                             </div>
                         </CardContent>
                     </Card>
-                    
                 </div>
                 <Card>
                     <CardContent className="">

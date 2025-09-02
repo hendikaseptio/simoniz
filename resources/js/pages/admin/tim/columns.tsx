@@ -23,7 +23,7 @@ import {
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Copy, MoreHorizontal, Pencil, Trash } from 'lucide-react';
+import { MoreHorizontal, Pencil, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 export type Agama = {

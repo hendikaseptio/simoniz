@@ -1,6 +1,5 @@
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent } from '@/components/ui/card';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
@@ -17,24 +16,17 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard() {
-    const { reklame, monitoring, tim, petugas, jenis_reklame, flash } = usePage().props;
-    const markerIcon = new L.Icon({
-        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-    });
+    const { reklame, monitoring, tim, petugas} = usePage().props;
     const markerIconHijau = new L.Icon({
         iconUrl: '/marker/marker1.png',
         iconSize: [24, 35],
         iconAnchor: [12, 10],
     });
-
     const markerIconMerah = new L.Icon({
         iconUrl: '/marker/marker3.png',
         iconSize: [24, 35],
         iconAnchor: [12, 10],
     });
-
     const markerIconBiru = new L.Icon({
         iconUrl: '/marker/marker2.png',
         iconSize: [24, 35],

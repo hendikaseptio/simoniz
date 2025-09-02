@@ -9,22 +9,24 @@ use App\Http\Controllers\Admin\PetaController;
 use App\Http\Controllers\Admin\ReklameController;
 use App\Http\Controllers\Admin\PetugasController;
 use App\Http\Controllers\Admin\TimController;
+
 use App\Http\Controllers\Tim\MonitoringController as TimMonitoringController;
 use App\Http\Controllers\Tim\PetaController as TimPetaController;
-use App\Http\Middleware\RoleAdmin;
-use App\Http\Middleware\RoleKabid;
-use App\Http\Middleware\RoleTim;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 use App\Http\Controllers\Kabid\ApprovalController as KabidApprovalController;
 use App\Http\Controllers\Kabid\PetaController as KabidPetaController;
 use App\Http\Controllers\Kabid\DashboardController as KabidDashboardController;
-
 use App\Http\Controllers\Kabid\JadwalController as KabidJadwalController;
 
+use App\Http\Middleware\RoleAdmin;
+use App\Http\Middleware\RoleKabid;
+use App\Http\Middleware\RoleTim;
+
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+
 Route::get('/', function () {
-    // return Inertia::render('welcome');
     return redirect()->route('login');
 })->name('home');
 
@@ -38,12 +40,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('tim', TimController::class);
         Route::resource('jadwal', JadwalController::class);
         Route::resource('monitoring', MonitoringController::class);
-        // import 
         Route::get('dashboard', [dashboardController::class, 'index'])->name('dashboard');
         Route::get('import', [ImportController::class, 'index'])->name('import');
         Route::post('import/preview', [ImportController::class, 'preview'])->name('import.preview');
         Route::post('import/confirm', [ImportController::class, 'confirm'])->name('import.confirm');
-
         Route::get('peta', [PetaController::class, 'index'])->name('peta');
         Route::post('generate-surat-tugas-batch', [DokumenController::class, 'generateSuratTugasBatch']);
         Route::post('generate-berita-acara-batch', [DokumenController::class, 'generateBeritaAcaraBatch']);
@@ -74,3 +74,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+    

@@ -18,7 +18,6 @@ class JadwalController extends Controller
     public function index(Request $request)
     {
         $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame']);
-
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->whereHas('tim.petugasSatu', function ($qt1) use ($request) {
@@ -30,7 +29,6 @@ class JadwalController extends Controller
                 });
             });
         }
-
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         } else {
@@ -66,7 +64,6 @@ class JadwalController extends Controller
         $bulan = (string) $carbonDate->translatedFormat('F');
         $tahun = (string) $carbonDate->format('Y');
         $timQuery = Tim::with(['petugasSatu', 'petugasDua']);
-
         if ($tanggal) {
             $timQuery->where('bulan', strtolower($bulan))
                 ->where('tahun', $tahun);
@@ -115,12 +112,10 @@ class JadwalController extends Controller
         $bulan = (string) $carbonDate->translatedFormat('F');
         $tahun = (string) $carbonDate->format('Y');
         $timQuery = Tim::with(['petugasSatu', 'petugasDua']);
-
         if ($tanggal) {
             $timQuery->where('bulan', strtolower($bulan))
                 ->where('tahun', $tahun);
         }
-
         $jadwal = Monitoring::findOrFail($id);
         $reklame = Reklame::where('monitoring', 'iya')->get();
         return Inertia::render('admin/jadwal/edit', [

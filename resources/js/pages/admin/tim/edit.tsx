@@ -1,14 +1,11 @@
 import InputSelect from '@/components/custom/form/input-select';
-import InputText from '@/components/custom/form/input-text';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useFormHandler from '@/hooks/useFormHandler';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-
 import { Head, Link, usePage } from '@inertiajs/react';
-import { log } from 'console';
 import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -23,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function EditTim() {
-    const { tim, user, old } = usePage().props;
+    const { tim, user } = usePage().props;
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
             petugas1: tim?.petugas1 || '',
@@ -37,7 +34,6 @@ export default function EditTim() {
     );
     const currentYear = new Date().getFullYear();
     const years = [];
-
     for (let y = currentYear - 10; y <= currentYear + 10; y++) {
         years.push({ label: y.toString(), value: y.toString() });
     }
@@ -55,7 +51,6 @@ export default function EditTim() {
         { label: "November", value: "november" },
         { label: "Desember", value: "desember" },
     ];
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />

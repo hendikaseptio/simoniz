@@ -7,7 +7,6 @@ use App\Imports\ReklamePreviewImport;
 use App\Models\Reklame;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -16,7 +15,6 @@ class ImportController extends Controller
     public function index()
     {
         $preview = session('reklame_preview', null);
-
         return Inertia::render('admin/import/index', [
             'preview' => $preview,
         ]);
@@ -26,15 +24,12 @@ class ImportController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv',
         ]);
-
         $import = new ReklamePreviewImport();
         Excel::import($import, $request->file('file'));
-
         $rows = $import->rows;
         $header = $rows->first()?->keys() ?? [];
         $totalRows = $rows->count();
         $kategori = $rows->pluck('jenis_reklame')->unique()->values();
-
         session([
             'reklame_preview' => [
                 'header' => $header,
@@ -43,19 +38,15 @@ class ImportController extends Controller
                 'kategori' => $kategori,
             ]
         ]);
-
         return redirect()->route('admin.import');
     }
     public function confirm()
     {
         $preview = session('reklame_preview');
-
         if (!$preview || !isset($preview['rows'])) {
             return redirect()->back()->with('error', 'Tidak ada data untuk diimpor.');
         }
-
         $rows = $preview['rows'];
-
         foreach ($rows as $row) {
             Reklame::create([
                 'id_pendaftaran' => $row['id_pendaftaran'],
@@ -80,10 +71,7 @@ class ImportController extends Controller
                 'keterangan_lokasi' => $row['keterangan_lokasi'],
             ]);
         }
-
-        // Hapus session preview setelah berhasil diimpor
         Session::forget('reklame_preview');
-
         return redirect()->route('admin.reklame.index')->with('success', 'Data berhasil diimpor.');
     }
 }

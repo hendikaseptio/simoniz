@@ -30,7 +30,6 @@ class PetaController extends Controller
             $query->orWhere('jenis_reklame', 'like', '%' . $request->jenis_reklame . '%');
         }
         $reklame = $query->whereNotNull('latitude')->whereNotNull('longitude')->get();
-
         return Inertia::render('admin/peta/index', [
             'reklame' => $reklame,
         ]);

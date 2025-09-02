@@ -17,23 +17,40 @@ class DokumenController extends Controller
 {
     public function index(Request $request)
     {
-        // $dokumen = Dokumen::latest()->paginate(10);
         $query = Dokumen::query();
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%')
                 ->orWhere('email', 'like', '%' . $request->search . '%');
         }
+        if ($request->filled('status')) {
+            $query->orWhere('status', 'like', '%' . $request->status . '%');
+        }
+        if ($request->filled('type')) {
+            $query->orWhere('type', 'like', '%' . $request->type . '%');
+        }
+        if ($request->filled('sort') && $request->filled('direction')) {
+            $query->orderBy($request->sort, $request->direction);
+        }
         $typeCounts = (clone $query)->selectRaw('
             SUM(CASE WHEN type = "surat_tugas" THEN 1 ELSE 0 END) as surat_tugas,
             SUM(CASE WHEN type = "berita_acara" THEN 1 ELSE 0 END) as berita_acara
         ')->first();
+        $statusCounts = (clone $query)->selectRaw('
+            SUM(CASE WHEN status = "draft" THEN 1 ELSE 0 END) as draft,
+            SUM(CASE WHEN status = "arsip" THEN 1 ELSE 0 END) as arsip
+        ')->first();
         $dokumen = $query->paginate(10)->withQueryString();
         return Inertia::render('admin/dokumen/index', [
             'dokumen' => $dokumen,
-            'type' => [
+            'typeCounts' => [
                 'surat_tugas' => $typeCounts->surat_tugas,
                 'berita_acara' => $typeCounts->berita_acara,
             ],
+            'statusCounts' => [
+                'draft' => $statusCounts->draft,
+                'arsip' => $statusCounts->arsip,
+            ],
+            'filter' => $request->only(['search', 'sort', 'direction', 'status', 'type']),
         ]);
     }
 
@@ -51,7 +68,6 @@ class DokumenController extends Controller
     {
         $dokumen = Dokumen::findOrFail($id);
         $approval = Approval::where('dokumen_id', $id)->latest()->first();
-        
         return Inertia::render('admin/dokumen/request_approval', [
             'dokumen' => $dokumen,
             'approval' => $approval
@@ -67,7 +83,6 @@ class DokumenController extends Controller
         Approval::create([
             'dokumen_id' => $id,
         ]);
-
         return redirect()->back()->with('success', 'Dokumen berhasil diajukan untuk approval.');
     }
 
@@ -76,7 +91,6 @@ class DokumenController extends Controller
         $tahun = $request->tahun;
         $bulan = $request->bulan;
         $data = Monitoring::whereYear('tanggal', $tahun)->whereMonth('tanggal', $bulan)->get();
-
         $path = 'dokumen/surat_tugas_' . $bulan . '_' . $tahun . '.pdf';
         $dokumen = Dokumen::where('path', $path)->first();
         if ($dokumen) {
@@ -121,23 +135,17 @@ class DokumenController extends Controller
             'month' => 'required|integer|min:1|max:12',
             'year' => 'required|integer|min:2000|max:2100',
         ]);
-
         $startDate = Carbon::createFromDate($request->year, $request->month, 1)->startOfMonth();
         $endDate = $startDate->copy()->endOfMonth();
-
         $hasils = Monitoring::where('cek_lokasi', 'sudah')->whereBetween('tanggal', [$startDate, $endDate])->get();
-
         if ($hasils->isEmpty()) {
             return redirect()->back()->with('error', 'Tidak ada hasil monitoring di bulan tersebut.');
         }
-
         foreach ($hasils as $hasil) {
             $pdf = PDF::loadView('pdf.berita_acara', compact('hasil'));
-
             $filename = 'berita_acara_' . $hasil->id . '_' . Str::random(5) . '.pdf';
             $path = 'dokumen/' . $filename;
             Storage::put('public/' . $path, $pdf->output());
-
             Dokumen::create([
                 'nama' => 'Berita Acara ' . $hasil->judul,
                 'type' => 'berita_acara',
@@ -145,7 +153,6 @@ class DokumenController extends Controller
                 'status' => 'draft',
             ]);
         }
-
         return redirect()->back()->with('success', 'Batch Berita Acara berhasil dibuat.');
     }
 }

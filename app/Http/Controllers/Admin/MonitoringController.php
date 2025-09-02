@@ -17,7 +17,6 @@ class MonitoringController extends Controller
     public function index(Request $request)
     {
         $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame']);
-
         $query->where(function ($q) use ($request) {
             $q->whereHas('tim.petugasSatu', function ($qt1) use ($request) {
                 $qt1->where('name', 'like', '%' . $request->search . '%');
@@ -27,7 +26,6 @@ class MonitoringController extends Controller
                 $qr->where('id_pendaftaran', 'like', '%' . $request->search . '%');
             });
         });
-
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         } else {
@@ -48,7 +46,6 @@ class MonitoringController extends Controller
             return $item;
         })->withQueryString();
         $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
-
         return Inertia::render('admin/monitoring/index', [
             'monitoring' => $monitoring,
             'tim' => $tim,
@@ -67,22 +64,6 @@ class MonitoringController extends Controller
     public function create()
     {
         return Inertia::render('admin/monitoring/create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -114,31 +95,14 @@ class MonitoringController extends Controller
             'longitude' => 'nullable|numeric|between:-180,180',
             'foto' => 'nullable|file|image|max:2048',
         ]);
-
-        // Jika ada foto baru di-upload
         if ($request->hasFile('foto')) {
-            // Hapus foto lama kalau ada
             if ($monitoring->foto && Storage::disk('public')->exists($monitoring->foto)) {
                 Storage::disk('public')->delete($monitoring->foto);
             }
-
-            // Simpan foto baru
             $path = $request->file('foto')->store('monitoring_foto', 'public');
             $validated['foto'] = $path;
         }
-
-        // Update data ke database
         $monitoring->update($validated);
-
-        // Redirect atau balikan response inertia
         return redirect()->route('admin.monitoring.index')->with('success', 'Data monitoring berhasil diperbarui.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

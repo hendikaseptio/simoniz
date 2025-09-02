@@ -7,8 +7,8 @@ import useFormHandler from '@/hooks/useFormHandler';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 
-import { Head, Link, usePage } from '@inertiajs/react';
-import { AlertCircleIcon, ArrowLeft, CircleOff, Send } from 'lucide-react';
+import { Head, Link } from '@inertiajs/react';
+import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -96,7 +96,6 @@ export default function Create() {
                                 label="Password Confirmation"
                                 value={values.password_confirmation}
                                 onChange={handleChange}
-                                // disabled={processing}
                                 placeholder="Confirm password"
                             />
                             <div className="flex justify-end mt-3 space-x-3">

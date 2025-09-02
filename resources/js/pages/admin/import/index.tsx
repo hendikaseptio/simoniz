@@ -22,13 +22,11 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { preview, flash } = usePage().props;
-    const [file, setFile] = useState(null);
 
     const handleDrop = async (acceptedFiles) => {
         const formData = new FormData();
         formData.append('file', acceptedFiles[0]);
 
-        // Kirim formData ke backend (Inertia style)
         router.post(route('admin.import.preview'), formData);
     };
 

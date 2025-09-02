@@ -16,7 +16,6 @@ class TimController extends Controller
     public function index(Request $request)
     {
         $query = Tim::query()->with(['petugasSatu', 'petugasDua']);
-
         if ($request->filled('search')) {
             $query->whereHas('petugasSatu', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%');
@@ -84,14 +83,6 @@ class TimController extends Controller
             'status'    => 'aktif',
         ]);
         return redirect()->route('admin.tim.index')->with('success', 'Tim berhasil dibuat');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**

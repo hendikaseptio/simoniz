@@ -132,7 +132,6 @@ class ReklameController extends Controller
             'jumlah_sisi' => 'required|integer|min:1',
             'keterangan_lokasi' => 'nullable|string',
         ]);
-
         Reklame::create([
             'id_pendaftaran' => $request->id_pendaftaran,
             'prev_id_pendaftaran' => $request->prev_id_pendaftaran,
@@ -155,7 +154,6 @@ class ReklameController extends Controller
             'jumlah_sisi' => $request->jumlah_sisi,
             'keterangan_lokasi' => $request->keterangan_lokasi,
         ]);
-
         return redirect()->route('admin.reklame.index')->with('success', 'Reklame Reklame berhasil dibuat');
     }
 
@@ -187,7 +185,6 @@ class ReklameController extends Controller
     public function update(Request $request, string $id)
     {
         $user = Reklame::findOrFail($id);
-
         $request->validate([
             'id_pendaftaran' => 'required|integer',
             'prev_id_pendaftaran' => 'nullable|integer',
@@ -232,7 +229,6 @@ class ReklameController extends Controller
             'jumlah_sisi' => $request->jumlah_sisi,
             'keterangan_lokasi' => $request->keterangan_lokasi,
         ]);
-
         return redirect()->route('admin.reklame.index')->with('success', 'Reklame berhasil diperbarui');
     }
 
@@ -243,14 +239,12 @@ class ReklameController extends Controller
     {
         $user = Reklame::findOrFail($id);
         $user->delete();
-
         return redirect()->route('admin.reklame.index')->with('success', 'Reklame Reklame berhasil dihapus');
     }
 
     public function import()
     {
         $preview = session('reklame_preview', null);
-
         return Inertia::render('admin/import/index', [
             'preview' => $preview,
         ]);
@@ -260,15 +254,12 @@ class ReklameController extends Controller
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls,csv',
         ]);
-
         $import = new ReklamePreviewImport();
         Excel::import($import, $request->file('file'));
-
         $rows = $import->rows;
         $header = $rows->first()?->keys() ?? [];
         $totalRows = $rows->count();
         $kategori = $rows->pluck('jenis_reklame')->unique()->values();
-
         session([
             'reklame_preview' => [
                 'header' => $header,
@@ -277,19 +268,15 @@ class ReklameController extends Controller
                 'kategori' => $kategori,
             ]
         ]);
-
         return redirect()->route('admin.import');
     }
     public function confirm()
     {
         $preview = session('reklame_preview');
-
         if (!$preview || !isset($preview['rows'])) {
             return redirect()->back()->with('error', 'Tidak ada data untuk diimpor.');
         }
-
         $rows = $preview['rows'];
-
         foreach ($rows as $row) {
             Reklame::create([
                 'id_pendaftaran' => $row['id_pendaftaran'],
@@ -314,10 +301,7 @@ class ReklameController extends Controller
                 'keterangan_lokasi' => $row['keterangan_lokasi'],
             ]);
         }
-
-        // Hapus session preview setelah berhasil diimpor
         Session::forget('reklame_preview');
-
         return redirect()->route('admin.reklame.index')->with('success', 'Data berhasil diimpor.');
     }
 }

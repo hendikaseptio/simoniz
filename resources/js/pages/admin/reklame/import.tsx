@@ -6,7 +6,6 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { CheckCircle2, Database } from 'lucide-react';
-import { useState } from 'react';
 import Dropzone from 'react-dropzone';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -22,19 +21,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Import() {
     const { preview, flash } = usePage().props;
-    const [file, setFile] = useState(null);
-
     const handleDrop = async (acceptedFiles) => {
         const formData = new FormData();
         formData.append('file', acceptedFiles[0]);
-
-        // Kirim formData ke backend (Inertia style)
         router.post(route('admin.import.preview'), formData);
     };
-
     const handleImport = () => {
         if (!preview?.rows) return;
-
         router.post(route('admin.import.confirm'), {
             data: preview.rows,
         });
@@ -58,8 +51,6 @@ export default function Import() {
                         </div>
                     )}
                 </Dropzone>
-
-
                 {preview && (
                     <Card>
                         <CardHeader>
@@ -95,7 +86,6 @@ export default function Import() {
                                         </tbody>
                                     </table>
                                 </div>
-
                                 <Button onClick={handleImport}>
                                     <Database/> Masukkan ke Database
                                 </Button>

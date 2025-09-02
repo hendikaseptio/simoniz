@@ -97,7 +97,6 @@ export default function Index() {
         { value: 'Jl. Otto Iskandardinata', label: 'Jl. Otto Iskandardinata' },
         { value: 'Jl. Comodore Adi Sucipto', label: 'Jl. Comodore Adi Sucipto' },
     ];
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Reklame" />
@@ -165,7 +164,6 @@ export default function Index() {
                             </div>
                         </CardContent>
                     </Card>
-
                 </div>
                 <Card>
                     <CardContent className="">

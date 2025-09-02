@@ -38,7 +38,6 @@ export default function Index() {
         },
         '/admin/generate-surat-tugas-batch',
     );
-    const jadwal_id = jadwal?.data?.map((j: any) => j.id) || [];
     const optionsBulan = [
         { label: "Januari", value: 1 },
         { label: "Februari", value: 2 },
@@ -53,22 +52,6 @@ export default function Index() {
         { label: "November", value: 11 },
         { label: "Desember", value: 12 },
     ];
-
-    const handleGenerateBatch = () => {
-        if (jadwal_id.length === 0) {
-            alert('Tidak ada data jadwal untuk digenerate.');
-            return;
-        }
-        router.post(
-            `/admin/generate-surat-tugas-batch/`,
-            { jadwal_id },
-            {
-                preserveScroll: true,
-                replace: true,
-                preserveState: false,
-            },
-        );
-    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Jadwal" />

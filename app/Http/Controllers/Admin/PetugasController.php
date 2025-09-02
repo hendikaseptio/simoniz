@@ -18,16 +18,13 @@ class PetugasController extends Controller
     public function index(Request $request)
     {
         $query = User::query();
-
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%')
                 ->orWhere('email', 'like', '%' . $request->search . '%');
         }
-
         if ($request->filled('sort') && $request->filled('direction')) {
             $query->orderBy($request->sort, $request->direction);
         }
-        // $query->where('role', 'petugas');
         $baseQuery = clone $query;
         $petugas = $query->paginate(10)->withQueryString();
         $jumlahPetugasAktif = (clone $baseQuery)->where('status', 'aktif')->count();
@@ -59,7 +56,6 @@ class PetugasController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'role' => 'required|in:admin,kabid,tim',
         ]);
-
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -67,16 +63,7 @@ class PetugasController extends Controller
             'role' =>  $request->role,
             'status' => 'aktif',
         ]);
-
         return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil dibuat');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
     }
 
     /**
@@ -96,14 +83,12 @@ class PetugasController extends Controller
     public function update(Request $request, string $id)
     {
         $user = User::findOrFail($id);
-
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'status' => 'required|in:aktif,nonaktif',
         ]);
-
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         if (!empty($validated['password'])) {
@@ -111,7 +96,6 @@ class PetugasController extends Controller
         }
         $user->status = $validated['status'];
         $user->save();
-
         return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil diperbarui');
     }
 
@@ -122,7 +106,6 @@ class PetugasController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-
         return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil dihapus');
     }
 }

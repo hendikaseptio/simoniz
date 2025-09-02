@@ -41,7 +41,6 @@ export default function ShowReklame() {
             ))}
         </div>
     );
-    // data
     const perizinan = [
         { label: 'ID Pendaftaran', value: reklame.id_pendaftaran },
         { label: 'ID Pendaftaran Sebelumnya', value: reklame.prev_id_pendaftaran },
@@ -64,7 +63,6 @@ export default function ShowReklame() {
         { label: 'Jumlah Sisi', value: reklame.jumlah_sisi },
         { label: 'Keterangan Lokasi', value: reklame.keterangan_lokasi },
     ];
-    // map
     const markerIcon = new L.Icon({
         iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
         iconSize: [25, 41],

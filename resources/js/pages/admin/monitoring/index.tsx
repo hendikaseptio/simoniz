@@ -11,7 +11,7 @@ import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/monitoring/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Calendar1, CalendarDays, CheckCircle2, File, ListFilter, RotateCcw, Users } from 'lucide-react';
+import { Calendar1, CalendarDays, CheckCircle2, ListFilter, RotateCcw, Users } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -21,7 +21,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Index() {
-    const { monitoring, tim, progresBulanIni, cekLapangan, sudahDicek, belumDicek, flash } = usePage().props;
+    const { monitoring, tim, cekLapangan, flash } = usePage().props;
     const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             tim_id: '',

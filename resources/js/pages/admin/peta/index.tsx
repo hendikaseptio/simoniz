@@ -3,16 +3,14 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ListFilter, MapPin, MapPinCheckInside, RotateCcw } from 'lucide-react';
+import { ListFilter, RotateCcw } from 'lucide-react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import ReactDOMServer from 'react-dom/server';
 import { Card, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import InputSelect from '@/components/custom/form/input-select';
 import InputText from '@/components/custom/form/input-text';
 import { useFilterForm } from '@/hooks/userFormFilter';
 import { Button } from '@/components/ui/button';
-import { id } from 'date-fns/locale';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -23,7 +21,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Index() {
     const { reklame } = usePage().props;
-   console.log(reklame)
     const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             cek_lapangan: '',
@@ -99,19 +96,16 @@ export default function Index() {
         { value: 'Jl. Otto Iskandardinata', label: 'Jl. Otto Iskandardinata' },
         { value: 'Jl. Comodore Adi Sucipto', label: 'Jl. Comodore Adi Sucipto' },
     ];
-
     const markerIconHijau = new L.Icon({
         iconUrl: '/marker/marker1.png',
         iconSize: [24, 35],
         iconAnchor: [12, 10],
     });
-
     const markerIconMerah = new L.Icon({
         iconUrl: '/marker/marker3.png',
         iconSize: [24, 35],
         iconAnchor: [12, 10],
     });
-
     const markerIconBiru = new L.Icon({
         iconUrl: '/marker/marker2.png',
         iconSize: [24, 35],
@@ -188,9 +182,7 @@ export default function Index() {
                 <MapContainer center={[-6.889836, 109.674591]} zoom={13} scrollWheelZoom={true} className="h-[500px] w-full rounded-md shadow z-0">
                     <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     {reklame.map((item) => {
-
                         const status = item.monitoring[0]?.cek_lapangan;
-                        console.log(item.monitoring[0]?.cek_lapangan)
                         let icon;
                         if (status === 'sudah') {
                             icon = markerIconHijau;

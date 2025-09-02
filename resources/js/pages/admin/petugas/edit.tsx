@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import useFormHandler from '@/hooks/useFormHandler';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-
 import { Head, Link, usePage } from '@inertiajs/react';
 import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
 
@@ -105,7 +104,6 @@ export default function EditPetugas() {
                                 label="Password Confirmation"
                                 value={values.password_confirmation}
                                 onChange={handleChange}
-                                // disabled={processing}
                                 placeholder="Confirm password"
                             />
                             <div className="flex justify-end mt-3 space-x-3">

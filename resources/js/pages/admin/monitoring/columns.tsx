@@ -8,7 +8,6 @@ import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Copy, MoreHorizontal, Pencil } from 'lucide-react';
-import { useState } from 'react';
 
 export type Monitoring = {
     id: string;
@@ -35,7 +34,7 @@ export const columns: ColumnDef<Monitoring>[] = [
     {
         accessorKey: 'tanggal',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Tanggal" />,
-        cell: ({ row }) => TanggalIndo(row.getValue('tanggal')), // format tanggal pakai helper
+        cell: ({ row }) => TanggalIndo(row.getValue('tanggal')),
     },
     {
         accessorKey: 'tim_id',

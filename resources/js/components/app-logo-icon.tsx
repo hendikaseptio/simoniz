@@ -3,7 +3,7 @@ import { SVGAttributes } from 'react';
 export default function AppLogoIcon(props: SVGAttributes<SVGElement>) {
     return (
         <>
-            <img src="/logosimoniz.png" className='size-10' alt="" />
+            <img src="/logosimoniz.png" alt="" />
         </>
         // <svg {...props} viewBox="0 0 40 42" xmlns="http://www.w3.org/2000/svg">
         //     <path

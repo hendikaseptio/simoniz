@@ -33,7 +33,7 @@ type EditTim = {
 };
 
 export default function EditTim() {
-    const { monitoring, tim, user } = usePage().props;
+    const { monitoring } = usePage().props;
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
             cek_lapangan: monitoring?.cek_lapangan || '',
@@ -58,7 +58,6 @@ export default function EditTim() {
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                // Update nilai latitude & longitude di form state
                 setValues({
                     ...values,
                     latitude: position.coords.latitude.toString(),

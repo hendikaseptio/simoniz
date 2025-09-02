@@ -24,7 +24,7 @@ import {
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Archive, Copy, FileCheck2, FileX2, FolderOpen, MoreHorizontal, Pencil, PencilLine, Signature, Trash } from 'lucide-react';
+import { Archive, FolderOpen, MoreHorizontal, PencilLine, Trash } from 'lucide-react';
 import { useState } from 'react';
 
 export type DOkumen = {
