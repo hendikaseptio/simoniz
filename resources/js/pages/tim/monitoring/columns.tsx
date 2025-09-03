@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { TanggalIndo } from '@/utils/dateFormat';
 import { router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { FileInput, MoreHorizontal} from 'lucide-react';
+import { FileInput, MoreHorizontal, Printer} from 'lucide-react';
 
 export type Monitoring = {
     id: string;
@@ -76,6 +76,10 @@ export const columns: ColumnDef<Monitoring>[] = [
                             <DropdownMenuItem onClick={() => router.visit(`/tim/monitoring/${monitoring.id}/edit`)}>
                                 <FileInput />
                                 Proses
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => router.visit(`/tim/dokumen/${monitoring.id}/cetakBeritaAcara`)}>
+                                <Printer />
+                                Print
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

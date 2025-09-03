@@ -34,6 +34,7 @@ type EditTim = {
 
 export default function EditTim() {
     const { monitoring, tim, user } = usePage().props;
+    console.log(monitoring);
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
             cek_lapangan: monitoring?.cek_lapangan || '',
@@ -74,7 +75,7 @@ export default function EditTim() {
                         <CardTitle>Form Edit Tim</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <form action="#" className="space-y-3">
+                        <form action="#" method='post' onSubmit={handleSubmit} encType='multipart/form-data' className="space-y-3">
                             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                                 <div className='space-y-3'>
                                     <InputSelect
@@ -173,7 +174,7 @@ export default function EditTim() {
                                         Batal
                                     </Button>
                                 </Link>
-                                <Button onClick={handleSubmit}>
+                                <Button type='submit'>
                                     <Send />
                                     Simpan
                                 </Button>

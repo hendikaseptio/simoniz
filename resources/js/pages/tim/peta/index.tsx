@@ -3,27 +3,24 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { ListFilter, MapPin, MapPinCheckInside, RotateCcw } from 'lucide-react';
+import { ListFilter, RotateCcw } from 'lucide-react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import ReactDOMServer from 'react-dom/server';
 import { Card, CardContent } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import InputSelect from '@/components/custom/form/input-select';
 import InputText from '@/components/custom/form/input-text';
 import { useFilterForm } from '@/hooks/userFormFilter';
 import { Button } from '@/components/ui/button';
-import { id } from 'date-fns/locale';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Peta Data Reklame',
-        href: '/admin/peta',
+        href: '/tim/peta',
     },
 ];
 
 export default function Index() {
     const { reklame } = usePage().props;
-   console.log(reklame)
     const { data, handleFilterChange, submit, reset } = useFilterForm(
         {
             cek_lapangan: '',
@@ -32,7 +29,7 @@ export default function Index() {
             isi_konten: '',
         },
         {
-            baseRoute: '/admin/peta',
+            baseRoute: '/tim/peta',
         },
     );
     const optionsJalan = [

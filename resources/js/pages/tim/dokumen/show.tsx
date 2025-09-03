@@ -11,17 +11,17 @@ import { CheckCheck, CheckCircle2, Loader, Send, TriangleAlert, X } from 'lucide
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Data Dokumen',
-        href: '/admin/dokumen',
+        href: '/tim/dokumen',
     },
     {
         title: 'Detail Dokumen',
-        href: '/admin/dokumen/show',
+        href: '/tim/dokumen/show',
     },
 ];
 
 export default function RequestApproval() {
-    const { dokumen, approval, flash } = usePage().props;
-    console.log(approval);
+    const { dokumen, flash } = usePage().props;
+    
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />
@@ -45,64 +45,7 @@ export default function RequestApproval() {
                         <Card>
                             <CardContent>
                                 <h2 className="mb-2 text-lg font-semibold">Status Approval</h2>
-                                {approval ? (
-                                    <div className="space-y-3">
-                                        <div className="grid grid-cols-2 gap-y-2 text-sm">
-                                            <div className="font-medium">Tanggal Permintaan</div>
-                                            <div>
-                                                <span className="mr-3">:</span> {TanggalIndo(approval.created_at)}
-                                            </div>
-                                            <div className="font-medium">Tanggal Approval</div>
-                                            <div>
-                                                <span className="mr-3">:</span> <b>{TanggalIndo(approval.tanggal_approval)}</b>
-                                            </div>
-                                            <div className="font-medium">Status</div>
-                                            <div>
-                                                {' '}
-                                                <span className="mr-3">:</span>{' '}
-                                                {approval.status == 'setuju' ? (
-                                                    <Badge>
-                                                        <CheckCheck /> Disetujui
-                                                    </Badge>
-                                                ) : approval.status == 'tidak setuju' ? (
-                                                    <Badge variant={'destructive'}>
-                                                        <X /> Tidak Disetujui
-                                                    </Badge>
-                                                ) : (
-                                                    <Badge variant={'secondary'}>
-                                                        <Loader /> Dalam Proses
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                            <div className="font-medium">Catatan</div>
-                                            <div>
-                                                <span className="mr-3">:</span> <b>{approval.catatan}</b>
-                                            </div>
-                                        </div>
-                                        {approval.status == 'tidak setuju' && (
-                                            <div className='mt-3'>
-                                                <Link href={`/admin/dokumen/${dokumen.id}/sendApproval`}>
-                                                    <Button className="w-full">
-                                                        <Send /> Kirim Permintaan Approval
-                                                    </Button>
-                                                </Link>
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <div className="space-y-4">
-                                        <Alert>
-                                            <TriangleAlert />
-                                            <AlertTitle>Dokumen Belum Diajukan Approval</AlertTitle>
-                                            <AlertDescription>Klik tombol dibawah ini untuk mengajukan approval</AlertDescription>
-                                        </Alert>
-                                        <Link href={`/admin/dokumen/${dokumen.id}/sendApproval`}>
-                                            <Button className="w-full">
-                                                <Send /> Kirim Permintaan Approval
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                )}
+                                
                             </CardContent>
                         </Card>
                     </div>

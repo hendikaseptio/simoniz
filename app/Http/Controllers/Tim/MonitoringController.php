@@ -67,6 +67,7 @@ class MonitoringController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        dd($request);
         $monitoring = Monitoring::findOrFail($id);
         $validated = $request->validate([
             'cek_lapangan' => 'required|in:sudah,belum',
