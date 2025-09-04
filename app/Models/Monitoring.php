@@ -18,6 +18,9 @@ class Monitoring extends Model
         'kesesuaian',
         'catatan',
         'tl',
+        'latitude',
+        'longitude',
+        'foto', 
     ];
     public function tim()
     {

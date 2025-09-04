@@ -49,7 +49,7 @@ export default function EditTim() {
             foto: monitoring?.foto || '',
         },
         `/tim/monitoring/${monitoring?.id}`,
-        'put',
+        'patch',
     );
 
     return (
@@ -75,7 +75,7 @@ export default function EditTim() {
                         <CardTitle>Form Edit Tim</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <form action="#" method='post' onSubmit={handleSubmit} encType='multipart/form-data' className="space-y-3">
+                        <form onSubmit={handleSubmit} encType='multipart/form-data' className="space-y-3">
                             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                                 <div className='space-y-3'>
                                     <InputSelect

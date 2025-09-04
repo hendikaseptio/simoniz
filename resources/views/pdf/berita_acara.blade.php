@@ -56,10 +56,12 @@
             padding-left: 15;
         }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 
 <body>
-    <img src="/public/kop.png" width="100%" alt="">
+    <img src="/kop.png" width="100%" alt="">
     <div class="center">
         <p class="underline">Surat Tugas</p>
         <p>Nomor : B/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/500.16.7.2/{{$tahun}}</p>
@@ -202,9 +204,45 @@
     </table>
     <p>Keterangan : * coret yang tidak sesuai</p>
     <div class="break"></div>
-    <img src="{{ $data->foto }}" width="90%" alt="">
+    <table>
+        <tr>
+            <th width="50%">Sebelum</th>
+            <th width="50%">Sesudah</th>
+        </tr>
+        <tr>
+            <td valign="top">
+                <img src="{{ $data->reklame->foto_reklame }}" alt="Foto Monitoring" width="100%">
+            </td>
+            <td valign="top">
+                @if($data->foto)
+                <div style="position: relative; width:100%">
+                    <img src="{{ asset('storage/' . $data->foto) }}" alt="Foto Monitoring" width="100%">
+                    <div style="position: absolute; bottom: 0; padding:10px; ">
+                        <div style="display: flex; justify-content: start; align-items: center; gap: 10px padding: 10px; background-color: #00000060; border-radius: 10px; color: white; width: 100%">
+                            <div id="map" style="height: 80px; width: 100%; border-rounded: 10px"></div>
+                            <p>{{ $alamat['display_name'] }} <br>
+                                Lat {{ $data->latitude }}, Long {{ $data->longitude }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                @else
+                <p>Tidak ada foto</p>
+                @endif
+            </td>
+        </tr>
+    </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var map = L.map('map',{zoomControl: false }).setView([<?=  $data->latitude ?>, <?= $data->longitude ?>], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+            L.marker([<?=  $data->latitude ?>, <?= $data->longitude ?>]).addTo(map)
+        });
+    </script>
+
     <hr>
-    <h2>Berita Acara</h2>
     <?php dd($data) ?>
 </body>
 

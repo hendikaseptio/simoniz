@@ -9,6 +9,7 @@ use App\Models\Tim;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -43,7 +44,6 @@ class MonitoringController extends Controller
             return $item;
         })->withQueryString();
         $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->get();
-
         return Inertia::render('tim/monitoring/index', [
             'monitoring' => $monitoring,
             'tim' => $tim,
@@ -67,7 +67,6 @@ class MonitoringController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        dd($request);
         $monitoring = Monitoring::findOrFail($id);
         $validated = $request->validate([
             'cek_lapangan' => 'required|in:sudah,belum',
@@ -81,23 +80,29 @@ class MonitoringController extends Controller
             'longitude' => 'nullable|numeric|between:-180,180',
             'foto' => 'nullable|file|image|max:2048',
         ]);
-
-        // Jika ada foto baru di-upload
         if ($request->hasFile('foto')) {
-            // Hapus foto lama kalau ada
             if ($monitoring->foto && Storage::disk('public')->exists($monitoring->foto)) {
                 Storage::disk('public')->delete($monitoring->foto);
             }
-
-            // Simpan foto baru
             $path = $request->file('foto')->store('monitoring_foto', 'public');
             $validated['foto'] = $path;
         }
-
-        // Update data ke database
         $monitoring->update($validated);
-
-        // Redirect atau balikan response inertia
         return redirect()->route('tim.monitoring.index')->with('success', 'Data monitoring berhasil diperbarui.');
+    }
+
+    public function reverseGeocode($lat, $lon)
+    {
+        $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&addressdetails=1";
+
+        $response = Http::withHeaders([
+            'User-Agent' => 'YourAppName (your@email.com)'
+        ])->get($url);
+
+        if ($response->ok()) {
+            return $response->json()['address'];
+        }
+
+        return null;
     }
 }

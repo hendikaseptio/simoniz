@@ -9,6 +9,7 @@ use App\Models\Monitoring;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -111,10 +112,10 @@ class DokumenController extends Controller
     //     return redirect()->route('tim.dokumen.requestApproval', $dokumen->id);
     // }
 
-    function generatePdf($path, $type, $data, $tahun)
+    function generatePdf($path, $type, $data, $tahun, $alamat)
     {
         try {
-            $pdf = Pdf::loadView('pdf.' . $type, compact('data', 'tahun'));
+            $pdf = Pdf::loadView('pdf.' . $type, compact('data', 'tahun', 'alamat'));
             if (!Storage::exists('public/dokumen')) {
                 Storage::disk('public')->makeDirectory('dokumen');
             }
@@ -132,10 +133,11 @@ class DokumenController extends Controller
     public function cetakBeritaAcara($id)
     {
         $data = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame', 'tim'])->find($id);
-        $filename = 'berita_acara_'.$data->reklame->id_pendaftaran.'.pdf';
+        $filename = 'berita_acara_' . $data->reklame->id_pendaftaran . '.pdf';
         $path = 'dokumen/' . $filename;
         $tahun = Carbon::parse($data->tanggal)->year;
-        $this->generatePdf($path, 'berita_acara', $data, $tahun);
+        $alamat = $this->reverseGeocode($data->latitude, $data->longitude);
+        $this->generatePdf($path, 'berita_acara', $data, $tahun, $alamat);
         $dokumen = Dokumen::create([
             'nama' => 'Berita Acara ' . $data->reklame->id_pendaftaran,
             'type' => 'berita_acara',
@@ -143,6 +145,25 @@ class DokumenController extends Controller
             'status' => 'draft',
         ]);
         return redirect()->route('tim.dokumen.show', $dokumen->id);
-        
+    }
+
+    public function reverseGeocode($lat, $lon)
+    {
+        $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&addressdetails=1";
+
+        $response = Http::withHeaders([
+            'User-Agent' => 'YourAppName (your@email.com)'
+        ])->get($url);
+
+        if ($response->ok()) {
+
+            $json = $response->json();
+
+            return [
+                'display_name' => $json['display_name'] ?? null,
+            ];
+        }
+
+        return null;
     }
 }

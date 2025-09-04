@@ -68,7 +68,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('dashboard', [TimDashboardController::class, 'index'])->name('dashboard');
         Route::get('monitoring', [TimMonitoringController::class, 'index'])->name('monitoring.index');
         Route::get('monitoring/{id}/edit', [TimMonitoringController::class, 'edit'])->name('monitoring.edit');
-        Route::put('monitoring/{id}', [TimMonitoringController::class, 'update'])->name('monitoring.update');
+        Route::patch('monitoring/{id}', [TimMonitoringController::class, 'update'])->name('monitoring.update');
         Route::get('peta', [TimPetaController::class, 'index'])->name('peta.index');
         Route::get('jadwal', [TimJadwalController::class, 'index'])->name('jadwal.index');
         Route::get('dokumen/{id}/show', [TimDokumenController::class, 'show'])->name('dokumen.show');

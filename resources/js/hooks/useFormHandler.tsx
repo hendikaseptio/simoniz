@@ -11,18 +11,25 @@ export default function useFormHandler<T extends Record<string, any>>(
     const [values, setValues] = useState<T>(initialValues);
     const [processing, setProcessing] = useState(false);
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-        const key = e.target.id || e.target.name;
+    function handleChange(
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | { target: { name: string; value: File | File[] } },
+    ) {
+        const key =
+            (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)?.target?.id ||
+            (e as { target: { name: string } })?.target?.name;
         let value: any;
 
-        if (e.target.type === 'file') {
-            value = e.target.files?.length === 1 ? e.target.files[0] : e.target.files;
-        } else if (e.target.type === 'checkbox') {
-            value = e.target.checked;
-        } else if (e.target.type === 'radio') {
-            value = e.target.value;
+        if ((e as React.ChangeEvent<HTMLInputElement>)?.target?.type === 'file') {
+            value =
+                (e as React.ChangeEvent<HTMLInputElement>)?.target?.files?.length === 1
+                    ? (e as React.ChangeEvent<HTMLInputElement>)?.target?.files[0]
+                    : (e as React.ChangeEvent<HTMLInputElement>)?.target?.files;
+        } else if ((e as React.ChangeEvent<HTMLInputElement>)?.target?.type === 'checkbox') {
+            value = (e as React.ChangeEvent<HTMLInputElement>)?.target?.checked;
+        } else if ((e as { target: { value: File | File[] } })?.target?.value !== undefined && key === 'gambar') {
+            value = (e as { target: { value: File | File[] } }).target.value;
         } else {
-            value = e.target.value;
+            value = (e as React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>)?.target?.value;
         }
 
         setValues((prev) => ({
@@ -41,8 +48,17 @@ export default function useFormHandler<T extends Record<string, any>>(
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         setProcessing(true);
-        router[method](postUrl, values, {
+
+        const dataToSend = { ...values };
+        if (!dataToSend.foto || dataToSend.foto.length === 0) {
+            delete dataToSend.foto;
+        }
+        if (method !== 'post') {
+            dataToSend._method = method;
+        }
+        router.post(postUrl, dataToSend, { 
             onFinish: () => setProcessing(false),
+            forceFormData: true,
             transform: (data) => {
                 const formData = new FormData();
                 Object.entries(data).forEach(([key, value]) => {
@@ -57,7 +73,7 @@ export default function useFormHandler<T extends Record<string, any>>(
                     }
                 });
                 return formData;
-            }
+            },
         });
     }
 
