@@ -77,7 +77,7 @@ export const columns: ColumnDef<Monitoring>[] = [
                                 <FileInput />
                                 Proses
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => router.visit(`/tim/dokumen/${monitoring.id}/cetakBeritaAcara`)}>
+                            <DropdownMenuItem onClick={() => window.open(`/tim/monitoring/${monitoring.id}/print`, '_blank')}>
                                 <Printer />
                                 Print
                             </DropdownMenuItem>

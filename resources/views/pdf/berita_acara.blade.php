@@ -4,11 +4,12 @@
 <head>
     <title>Berita Acara</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         @page {
             size: 210mm 330mm;
-            /* Ukuran F4 dalam mm */
             margin: 10mm;
-            /* Atur margin sesuai kebutuhan */
         }
 
         .break {
@@ -61,9 +62,9 @@
 </head>
 
 <body>
-    <img src="/kop.png" width="100%" alt="">
+    <img src="file://kop.png" width="100%" alt="">
     <div class="center">
-        <p class="underline">Surat Tugas</p>
+        <h3>BERITA ACARA MONITORING REKLAME</h3>
         <p>Nomor : B/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/500.16.7.2/{{$tahun}}</p>
     </div>
     <p>Pada hari ini Selasa Tanggal 22 Bulan Juli Tahun 2025 yang bertanda tangan dibawah ini Tim Teknis Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu Kota Pekalongan, telah melaksanakan monitoring perizinan pada objek Reklame sebagai berikut :</p>
@@ -211,18 +212,23 @@
         </tr>
         <tr>
             <td valign="top">
-                <img src="{{ $data->reklame->foto_reklame }}" alt="Foto Monitoring" width="100%">
+                <!-- <img src="{{ $data->reklame->foto_reklame }}" alt="Foto Monitoring" width="100%"> -->
             </td>
             <td valign="top">
                 @if($data->foto)
                 <div style="position: relative; width:100%">
-                    <img src="{{ asset('storage/' . $data->foto) }}" alt="Foto Monitoring" width="100%">
-                    <div style="position: absolute; bottom: 0; padding:10px; ">
-                        <div style="display: flex; justify-content: start; align-items: center; gap: 10px padding: 10px; background-color: #00000060; border-radius: 10px; color: white; width: 100%">
-                            <div id="map" style="height: 80px; width: 100%; border-rounded: 10px"></div>
-                            <p>{{ $alamat['display_name'] }} <br>
-                                Lat {{ $data->latitude }}, Long {{ $data->longitude }}
-                            </p>
+                    <!-- <img src="{{ asset('storage/'.$data->foto) }}" alt="Foto Monitoring" width="100%"> -->
+                    <img src="storage/{{ $data->foto }}" alt="Foto Monitoring" width="100%">
+                    <!-- {{ asset('storage/'.$data->foto) }} -->
+                    <div style="position: absolute; bottom: 10px; width: 100%;">
+                        <div style="display: flex; flex-direction: row; align-items: start; gap: 10px; width: 100%;">
+                            <div id="map" style="height: 150px; width: 200px; border-radius: 10px; margin-bottom: 10px; margin-left: 10px;"></div>
+                            <div style="padding:10px; background-color: #00000080; border-radius: 10px; color: white; width: 100%; height: 150px; margin-bottom: 10px; margin-right: 10px;">
+                                <h3>Lokasi Monitoring</h3>
+                                <p style="font-size: 12px">{{ $alamat['display_name'] }}</p>
+                                <p>Lat {{ $data->latitude }}, Long {{ $data->longitude }}</p>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -234,16 +240,15 @@
     </table>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var map = L.map('map',{zoomControl: false }).setView([<?=  $data->latitude ?>, <?= $data->longitude ?>], 10);
+            var map = L.map('map', {
+                zoomControl: false
+            }).setView([<?= $data->latitude ?>, <?= $data->longitude ?>], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors'
             }).addTo(map);
-            L.marker([<?=  $data->latitude ?>, <?= $data->longitude ?>]).addTo(map)
+            L.marker([<?= $data->latitude ?>, <?= $data->longitude ?>]).addTo(map)
         });
     </script>
-
-    <hr>
-    <?php dd($data) ?>
 </body>
 
 </html>

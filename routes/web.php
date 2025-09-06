@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\dashboardController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DokumenController;
 use App\Http\Controllers\Admin\ImportController;
 use App\Http\Controllers\Admin\JadwalController;
@@ -13,7 +13,6 @@ use App\Http\Controllers\Admin\TimController;
 use App\Http\Controllers\Tim\DashboardController as TimDashboardController;
 use App\Http\Controllers\Tim\MonitoringController as TimMonitoringController;
 use App\Http\Controllers\Tim\PetaController as TimPetaController;
-use App\Http\Controllers\Tim\DokumenController as TimDokumenController;
 use App\Http\Controllers\Tim\JadwalController as TimJadwalController;
 
 use App\Http\Controllers\Kabid\ApprovalController as KabidApprovalController;
@@ -43,7 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('tim', TimController::class);
         Route::resource('jadwal', JadwalController::class);
         Route::resource('monitoring', MonitoringController::class);
-        Route::get('dashboard', [dashboardController::class, 'index'])->name('dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('import', [ImportController::class, 'index'])->name('import');
         Route::post('import/preview', [ImportController::class, 'preview'])->name('import.preview');
         Route::post('import/confirm', [ImportController::class, 'confirm'])->name('import.confirm');
@@ -69,11 +68,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('monitoring', [TimMonitoringController::class, 'index'])->name('monitoring.index');
         Route::get('monitoring/{id}/edit', [TimMonitoringController::class, 'edit'])->name('monitoring.edit');
         Route::patch('monitoring/{id}', [TimMonitoringController::class, 'update'])->name('monitoring.update');
+        Route::get('monitoring/{id}/print', [TimMonitoringController::class, 'print'])->name('monitoring.print');
         Route::get('peta', [TimPetaController::class, 'index'])->name('peta.index');
         Route::get('jadwal', [TimJadwalController::class, 'index'])->name('jadwal.index');
-        Route::get('dokumen/{id}/show', [TimDokumenController::class, 'show'])->name('dokumen.show');
-        Route::get('dokumen/{id}/cetakBeritaAcara', [TimDokumenController::class, 'cetakBeritaAcara'])->name('dokumen.cetakBeritaAcara');
-        Route::get('dokumen', [TimDokumenController::class, 'index'])->name('dokumen.index');
     });
 });
 

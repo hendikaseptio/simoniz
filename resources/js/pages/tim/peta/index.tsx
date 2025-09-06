@@ -211,7 +211,7 @@ export default function Index() {
                                             <strong>Jalan:</strong> {item.jalan || '-'}
                                         </div>
                                         <div>
-                                            <strong>Status Monitoring:</strong> {item.monitoring[0]?.cek_lapangan || '-'}
+                                            <strong>Status Monitoring:</strong> {item.cek_lapangan || '-'}
                                         </div>
                                         <div>
                                             <img src={item.foto_reklame} alt="foto" />

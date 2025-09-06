@@ -3,9 +3,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
-import { Presentation, User, Users } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { Presentation, User, Users } from 'lucide-react';
+import { useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -16,7 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard() {
-    const { reklame, monitoring, tim, petugas} = usePage().props;
+    const { reklame, monitoring, tim, petugas, jadwal } = usePage().props;
     const markerIconHijau = new L.Icon({
         iconUrl: '/marker/marker1.png',
         iconSize: [24, 35],
@@ -32,10 +33,30 @@ export default function Dashboard() {
         iconSize: [24, 35],
         iconAnchor: [12, 10],
     });
+    
+    const selectedDates = jadwal.map((item) => item.tanggal);
+    
+        const [selectedDateInfo, setSelectedDateInfo] = useState(null);
+        function handleDateSelect(date) {
+            if (!date || isNaN(new Date(date).getTime())) {
+                setSelectedDateInfo({
+                    tanggal: null,
+                    items: [],
+                });
+                return;
+            }
+            const selected = new Date(date).toISOString().split('T')[0];
+            const matched = jadwal.filter((item) => item.tanggal === selected);
+            setSelectedDateInfo({
+                tanggal: selected,
+                items: matched,
+            });
+            console.log(selectedDates);
+        }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
+            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-4">
                     <Card>
                         <CardContent className="space-y-2">
@@ -82,17 +103,44 @@ export default function Dashboard() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                         <Calendar
-                            mode="single"
-                            selected={"19-05-2025"}
-                            onSelect={'19-05-2025'}
+                            mode="multiple"
+                            selected={selectedDates}
+                            onSelect={(date) => handleDateSelect(date)}
                             className="w-full rounded-md border shadow-sm"
                             captionLayout="dropdown"
                         />
+                        {selectedDateInfo && (
+                            <div className="mt-4 rounded-md border bg-white p-4 shadow-md">
+                                {selectedDateInfo.items.length > 0 ? (
+                                    selectedDateInfo.items.map((item) => (
+                                        <div key={item.id}>
+                                            <h3 className="mb-2 text-sm font-semibold text-gray-700">
+                                                Jadwal pada {TanggalIndo(selectedDateInfo.tanggal)}
+                                            </h3>
+                                            <div className="mb-2 text-sm text-gray-800">
+                                                <div>
+                                                    <span className="font-medium">Reklame:</span> {item.reklame.isi_konten}
+                                                </div>
+                                                <div>
+                                                    <span className="font-medium">Jalan:</span> {item.reklame.jalan}
+                                                </div>
+                                                <div>
+                                                    <span className="font-medium">Tim:</span> {item.tim.petugas_satu.name} &{' '}
+                                                    {item.tim.petugas_dua.name}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-sm text-gray-500">Tidak ada jadwal.</p>
+                                )}
+                            </div>
+                        )}
                     </div>
-                    <div className='col-span-2'>
+                    <div className="col-span-2">
                         <MapContainer
                             center={[-6.889836, 109.674591]}
                             zoom={13}
@@ -135,7 +183,7 @@ export default function Dashboard() {
                                             </div>
                                         </Popup>
                                     </Marker>
-                                )
+                                );
                             })}
                         </MapContainer>
                     </div>

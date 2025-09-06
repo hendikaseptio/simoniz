@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Tim;
 
 use App\Http\Controllers\Controller;
 use App\Models\Monitoring;
-use App\Models\Reklame;
 use App\Models\Tim;
-use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -54,6 +53,17 @@ class MonitoringController extends Controller
             'filters' => $request->only(['search', 'sort', 'direction', 'cek_lapangan']),
         ]);
     }
+    public function print($id)
+    {
+        $data = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame', 'tim'])->find($id);
+        $tahun = Carbon::parse($data->tanggal)->year;
+        $alamat = $this->reverseGeocode($data->latitude, $data->longitude);
+        return Inertia::render('tim/monitoring/print', [
+            'data' => $data,
+            'tahun' => $tahun,
+            'alamat' => $alamat,
+        ]);
+    }
     public function edit(string $id)
     {
         $monitoring = Monitoring::findOrFail($id);
@@ -94,15 +104,15 @@ class MonitoringController extends Controller
     public function reverseGeocode($lat, $lon)
     {
         $url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={$lat}&lon={$lon}&addressdetails=1";
-
         $response = Http::withHeaders([
             'User-Agent' => 'YourAppName (your@email.com)'
         ])->get($url);
-
         if ($response->ok()) {
-            return $response->json()['address'];
+            $json = $response->json();
+            return [
+                'display_name' => $json['display_name'] ?? null,
+            ];
         }
-
         return null;
     }
 }

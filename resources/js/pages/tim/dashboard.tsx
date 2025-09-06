@@ -18,7 +18,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Dashboard() {
-    const { reklame, monitoring, tim, petugas, jadwal, jenis_reklame, flash } = usePage().props;
+    const { reklame, monitoring, tim, petugas, jadwal} = usePage().props;
     const markerIconHijau = new L.Icon({
         iconUrl: '/marker/marker1.png',
         iconSize: [24, 35],
@@ -104,7 +104,7 @@ export default function Dashboard() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
                         <Calendar
                             mode="multiple"

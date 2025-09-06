@@ -37,7 +37,7 @@ class PetaController extends Controller
         if ($request->filled('jenis_reklame')) {
             $query->orWhere('jenis_reklame', 'like', '%' . $request->jenis_reklame . '%');
         }
-        $reklame = $query->whereNotNull('latitude')->whereNotNull('longitude')->get();
+        $reklame = $query->get();
 
         return Inertia::render('tim/peta/index', [
             'reklame' => $reklame,

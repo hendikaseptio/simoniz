@@ -156,3 +156,9 @@
         @apply bg-background text-foreground;
     }
 }
+
+@media print {
+  .page-break {
+    break-after: page;
+  }
+}
