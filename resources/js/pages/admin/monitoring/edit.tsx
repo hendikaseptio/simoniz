@@ -183,11 +183,6 @@ export default function EditTim() {
                                     errors={errors}
                                 ></InputSelect>
                                 <InputPeta values={values} onChange={handleChange} errors={errors} />
-                                <div className="mt-2">
-                                    <button type="button" onClick={handleAmbilLokasi} className="btn btn-primary">
-                                        Ambil Lokasi Saya
-                                    </button>
-                                </div>
                                 <InputFile
                                     name={'foto'}
                                     label={'Foto'}

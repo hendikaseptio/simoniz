@@ -114,7 +114,7 @@ export const columns: ColumnDef<Jadwal>[] = [
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Yakin ingin menghapus?</AlertDialogTitle>
                                 <AlertDialogDescription>
-                                    Data jadwal <strong>""</strong> akan dihapus secara permanen.
+                                    Data jadwal akan dihapus secara permanen.
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>

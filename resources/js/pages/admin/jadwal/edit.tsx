@@ -12,11 +12,11 @@ import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Data Tim',
-        href: '/admin/tim/',
+        href: '/admin/jadwal/',
     },
     {
         title: 'Edit Data Tim',
-        href: '/admin/tim/edit',
+        href: '/admin/jadwal/edit',
     },
 ];
 
@@ -97,7 +97,7 @@ export default function EditTim() {
                                 errors={errors}
                             />
                             <div className="flex justify-end mt-3 space-x-3">
-                                <Link href="/admin/tim">
+                                <Link href="/admin/jadwal">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />
                                         Batal

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('dokumen', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->enum('type', ['surat_tugas','berita_acara']);
+            $table->enum('type', ['surat_tugas']);
             $table->text('path');
             $table->enum('status',['draft','arsip'])->default('draft');
             $table->timestamps();

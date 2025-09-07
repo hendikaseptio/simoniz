@@ -10,7 +10,7 @@ import { useFilterForm } from '@/hooks/userFormFilter';
 import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/jadwal/columns';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link, router, usePage } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { Calendar1, CalendarDays, CheckCircle2, ListFilter, Plus, Printer, RotateCcw, Send, X } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [

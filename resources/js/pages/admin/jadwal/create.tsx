@@ -91,7 +91,7 @@ export default function Create() {
                             />
                             <InputText name="tanggal" label="Tanggal" type="date" onChange={handleTanggalChange} value={values.tanggal} errors={errors} />
                             <div className="mt-3 flex justify-end space-x-3">
-                                <Link href="/admin/tim">
+                                <Link href="/admin/jadwal">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />
                                         Batal
