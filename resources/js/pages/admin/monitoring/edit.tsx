@@ -195,7 +195,7 @@ export default function EditTim() {
                                 ></InputFile>
                             </div>
                             <div className="mt-3 flex justify-end space-x-3">
-                                <Link href="/admin/tim">
+                                <Link href="/admin/monitoring">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />
                                         Batal

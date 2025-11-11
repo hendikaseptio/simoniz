@@ -116,7 +116,7 @@ class MonitoringController extends Controller
             'tl' => 'required|in:ya,tidak',
             'latitude' => 'nullable|numeric|between:-90,90',
             'longitude' => 'nullable|numeric|between:-180,180',
-            // 'foto' => 'nullable|file|image|max:2048',
+            //'foto' => 'nullable|file|image|max:2048',
         ]);
         if ($request->hasFile('foto')) {
             if ($monitoring->foto && Storage::disk('public')->exists($monitoring->foto)) {

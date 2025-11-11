@@ -162,7 +162,7 @@ export default function EditTim() {
                                         onChange={handleChange}
                                         errors={errors}
                                         accept={'image/*'}
-                                        initialFile={monitoring?.foto || null}
+                                        initialFile={`/storage/${monitoring?.foto}` || null}
                                         multiple={false}
                                     ></InputFile>
                                 </div>

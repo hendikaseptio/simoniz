@@ -33,15 +33,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
     Route::middleware(RoleAdmin::class)->prefix('admin')->name('admin.')->group(function () {
-        Route::resource('petugas', PetugasController::class);
-        Route::resource('reklame', ReklameController::class);
-        Route::resource('tim', TimController::class);
-        Route::resource('jadwal', JadwalController::class);
-        Route::resource('monitoring', MonitoringController::class);
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('import', [ImportController::class, 'index'])->name('import');
         Route::post('import/preview', [ImportController::class, 'preview'])->name('import.preview');
@@ -52,6 +44,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('dokumen/{id}/sendApproval', [DokumenController::class, 'sendApproval'])->name('dokumen.sendApproval');
         Route::get('dokumen/{id}/show', [DokumenController::class, 'show'])->name('dokumen.show');
         Route::get('dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
+        Route::resource('petugas', PetugasController::class);
+        Route::resource('reklame', ReklameController::class);
+        Route::resource('tim', TimController::class);
+        Route::resource('jadwal', JadwalController::class);
+        Route::resource('monitoring', MonitoringController::class);
     });
 
     Route::middleware(RoleKabid::class)->prefix('kabid')->name('kabid.')->group(function () {
