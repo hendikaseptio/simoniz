@@ -17,16 +17,15 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function EditPetugas() {
-    const { petugas, old } = usePage().props;
-    console.log(petugas)
+    const { petugas } = usePage().props;
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
-            name: petugas?.name || old?.name || '',
-            email: petugas?.email || old?.email || '',
-            password: petugas?.password || old?.password || '',
-            password_confirmation: petugas?.password_confirmation || old?.password_confirmation || '',
-            status: petugas?.status || old?.status || '',
-            role: petugas?.role || old?.role || '',
+            name: petugas?.name || '',
+            email: petugas?.email || '',
+            password: petugas?.password || '',
+            password_confirmation: petugas?.password_confirmation || '',
+            status: petugas?.status || '',
+            role: petugas?.role || '',
         },
         `/admin/petugas/${petugas?.id}`,
         'put',

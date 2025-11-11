@@ -157,7 +157,7 @@ export default function Index() {
                                                     { value: 'sudah', label: 'Sudah' },
                                                     { value: 'belum', label: 'Belum' },
                                                 ]}
-                                                value={data.jalan}
+                                                value={data.cek_lapangan}
                                                 onChange={handleFilterChange}
                                             ></InputSelect>
                                             <InputText

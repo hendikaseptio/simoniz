@@ -29,7 +29,7 @@ class Monitoring extends Model
 
     public function reklame()
     {
-        return $this->belongsTo(Reklame::class, 'id');
+        return $this->belongsTo(Reklame::class, 'reklame_id');
     }
     public function getTimStIdsAttribute()
     {

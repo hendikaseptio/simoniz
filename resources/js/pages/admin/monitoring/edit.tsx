@@ -189,12 +189,12 @@ export default function EditTim() {
                                     onChange={handleChange}
                                     errors={errors}
                                     accept={'image/*'}
-                                    initialFile={monitoring?.foto || null}
+                                    initialFile={`/storage/${monitoring?.foto}` || null}
                                     multiple={false}
                                 ></InputFile>
                             </div>
                             <div className="mt-3 flex justify-end space-x-3">
-                                <Link href="/admin/tim">
+                                <Link href="/admin/monitoring">
                                     <Button variant={'ghost'}>
                                         <ArrowLeft />
                                         Batal

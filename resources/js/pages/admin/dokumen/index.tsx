@@ -90,12 +90,6 @@ export default function Index() {
                         </CardContent>
                     </Card>
                 </div>
-                <div className="flex justify-end">
-                    <Button>
-                        <Plus />
-                        Tambah Arsip Baru
-                    </Button>
-                </div>
                 <DataTableServer columns={columns} initialData={dokumen} />
             </div>
         </AppLayout>
