@@ -45,7 +45,6 @@ export const columns: ColumnDef<Jadwal>[] = [
             const reklame = row.original.reklame;
             return reklame.id_pendaftaran
         },
-
     },
     {
         accessorKey: 'tanggal',

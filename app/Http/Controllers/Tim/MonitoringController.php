@@ -26,11 +26,7 @@ class MonitoringController extends Controller
             $query->where('tim_st', 'like', '%' . $request->search . '%')
                 ->orWhere('reklame_id', $request->search);
         }
-        if ($request->filled('sort') && $request->filled('direction')) {
-            $query->orderBy($request->sort, $request->direction);
-        } else {
-            $query->orderBy('created_at', 'desc');
-        }
+        
         if ($request->filled('cek_lapangan')) {
             $query->where('cek_lapangan', $request->cek_lapangan);
         }
@@ -38,6 +34,13 @@ class MonitoringController extends Controller
             SUM(CASE WHEN cek_lapangan = "sudah" THEN 1 ELSE 0 END) as sudah,
             SUM(CASE WHEN cek_lapangan = "belum" THEN 1 ELSE 0 END) as belum
         ')->first();
+
+        if ($request->filled('sort') && $request->filled('direction')) {
+            $query->orderBy($request->sort, $request->direction);
+        } else {
+            $query->orderBy('created_at', 'desc');
+        }
+
         $monitoring = $query->paginate(10)->through(function ($item) {
             $item->tim_st_names_string = $item->tim_st_names_string;
             return $item;

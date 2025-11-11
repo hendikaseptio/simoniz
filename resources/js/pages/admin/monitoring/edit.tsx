@@ -50,6 +50,7 @@ export default function EditTim() {
         `/admin/monitoring/${monitoring?.id}`,
         'put',
     );
+    console.log(monitoring);
     function handleAmbilLokasi() {
         if (!navigator.geolocation) {
             alert('Geolocation tidak didukung di browser ini');
@@ -189,7 +190,7 @@ export default function EditTim() {
                                     onChange={handleChange}
                                     errors={errors}
                                     accept={'image/*'}
-                                    initialFile={monitoring?.foto || null}
+                                    initialFile={`/storage/${monitoring?.foto}` || null}
                                     multiple={false}
                                 ></InputFile>
                             </div>

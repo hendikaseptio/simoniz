@@ -59,7 +59,7 @@ export default function Index() {
                 
                     <div className='flex justify-between'>
                         <p>Unduh contoh format Excel untuk diisi:</p>
-                        <Link href="/docs/Contoh%20file%20import.xlsx" download><Button variant={'secondary'}><FileDown/> Download Contoh file excel</Button></Link>
+                        <a href="/docs/Contoh%20file%20import.xlsx" target="_blank" rel="noreferrer"><Button variant={'secondary'}><FileDown/> Download Contoh file excel</Button></a>
                     </div>
                 
                 

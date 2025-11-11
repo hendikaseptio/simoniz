@@ -88,6 +88,7 @@ class PetugasController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:6|confirmed',
             'status' => 'required|in:aktif,nonaktif',
+            'role' => 'required|in:admin,kabid,tim',
         ]);
         $user->name = $validated['name'];
         $user->email = $validated['email'];
@@ -95,6 +96,7 @@ class PetugasController extends Controller
             $user->password = Hash::make($validated['password']);
         }
         $user->status = $validated['status'];
+        $user->role = $validated['role'];
         $user->save();
         return redirect()->route('admin.petugas.index')->with('success', 'User Petugas berhasil diperbarui');
     }
