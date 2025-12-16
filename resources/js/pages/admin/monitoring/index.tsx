@@ -2,16 +2,18 @@ import InputSelect from '@/components/custom/form/input-select';
 import InputText from '@/components/custom/form/input-text';
 import { DataTableServer } from '@/components/custom/table/datatable-server';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import useFormHandler from '@/hooks/useFormHandler';
 import { useFilterForm } from '@/hooks/userFormFilter';
 import AppLayout from '@/layouts/app-layout';
 import { columns } from '@/pages/admin/monitoring/columns';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { Calendar1, CalendarDays, CheckCircle2, ListFilter, RotateCcw, Users } from 'lucide-react';
+import { Calendar1, CalendarDays, CheckCircle2, ListFilter, Printer, RotateCcw, Send, Users, X } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -31,6 +33,27 @@ export default function Index() {
             baseRoute: '/admin/monitoring',
         },
     );
+    const { values, errors, handleChange, handleSubmit } = useFormHandler(
+        {
+            bulan: '',
+            tahun: '',
+        },
+        '/admin/generate-laporan',
+    );
+    const optionsBulan = [
+        { label: "Januari", value: 1 },
+        { label: "Februari", value: 2 },
+        { label: "Maret", value: 3 },
+        { label: "April", value: 4 },
+        { label: "Mei", value: 5 },
+        { label: "Juni", value: 6 },
+        { label: "Juli", value: 7 },
+        { label: "Agustus", value: 8 },
+        { label: "September", value: 9 },
+        { label: "Oktober", value: 10 },
+        { label: "November", value: 11 },
+        { label: "Desember", value: 12 },
+    ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Monitoring" />
@@ -54,7 +77,7 @@ export default function Index() {
                             <div className="text-lg font-semibold">{monitoring.total}</div>
                         </CardContent>
                     </Card>
-                    
+
                     <Card>
                         <CardContent className="space-y-2">
                             <div className="flex items-center justify-between">
@@ -139,6 +162,46 @@ export default function Index() {
                         </form>
                     </CardContent>
                 </Card>
+                <div className="flex justify-end">
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="outline"><Printer />Generate Laporan Bulanan</Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Pilih Bulan dan Tahun</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <InputSelect
+                                            label={'Bulan'}
+                                            name={'bulan'}
+                                            options={optionsBulan}
+                                            value={values.bulan}
+                                            onChange={handleChange}
+                                            errors={errors}
+                                        ></InputSelect>
+
+                                        <InputText
+                                            label="Tahun"
+                                            type="number"
+                                            name="tahun"
+                                            placeholder={'Masukkan Periode Tahun'}
+                                            value={values.tahun}
+                                            onChange={handleChange}
+                                            errors={errors}
+                                        ></InputText>
+                                    </div>
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel><X />Batal</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleSubmit}><Send /> Buat Laporan</AlertDialogAction>
+                            </AlertDialogFooter>
+
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </div>
                 <DataTableServer columns={columns} initialData={monitoring} />
             </div>
         </AppLayout>

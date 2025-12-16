@@ -40,9 +40,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('import/confirm', [ImportController::class, 'confirm'])->name('import.confirm');
         Route::get('peta', [PetaController::class, 'index'])->name('peta');
         Route::post('generate-surat-tugas-batch', [DokumenController::class, 'generateSuratTugasBatch']);
+        Route::post('generate-laporan', [DokumenController::class, 'generateLaporan']);
         Route::get('dokumen/request-approval/{id}', [DokumenController::class, 'requestApproval'])->name('dokumen.requestApproval');
         Route::get('dokumen/{id}/sendApproval', [DokumenController::class, 'sendApproval'])->name('dokumen.sendApproval');
         Route::get('dokumen/{id}/show', [DokumenController::class, 'show'])->name('dokumen.show');
+        Route::delete('dokumen/{id}', [DokumenController::class, 'destroy'])->name('dokumen.destroy');
         Route::get('dokumen', [DokumenController::class, 'index'])->name('dokumen.index');
         Route::resource('petugas', PetugasController::class);
         Route::resource('reklame', ReklameController::class);

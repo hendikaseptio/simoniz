@@ -64,6 +64,18 @@ class DokumenController extends Controller
         ]);
     }
 
+    public function destroy(string $id)
+    {
+        $dokumen = Dokumen::findOrFail($id);
+        if ($dokumen->path && Storage::disk('public')->exists($dokumen->path)) {
+            Storage::disk('public')->delete($dokumen->path);
+        }
+        $dokumen->delete();
+        return redirect()
+            ->route('admin.dokumen.index')
+            ->with('success', 'Dokumen berhasil dihapus');
+    }
+
     public function requestApproval($id)
     {
         $dokumen = Dokumen::findOrFail($id);
@@ -115,7 +127,7 @@ class DokumenController extends Controller
     {
         try {
             $pdf = Pdf::loadView('pdf.' . $type, compact('data', 'tahun'));
-            if (!Storage::exists('public/dokumen')) {
+            if (!Storage::disk('public')->exists('dokumen')) {
                 Storage::disk('public')->makeDirectory('dokumen');
             }
             if (Storage::disk('public')->put($path, $pdf->output())) {
@@ -123,9 +135,10 @@ class DokumenController extends Controller
             } else {
                 Log::error("Gagal menyimpan PDF ke: " . $path);
             }
+            return true;
         } catch (\Throwable $e) {
             Log::error('Gagal generate PDF: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Gagal generate PDF: ' . $e->getMessage());
+            return false;
         }
     }
 
@@ -154,5 +167,36 @@ class DokumenController extends Controller
             ]);
         }
         return redirect()->back()->with('success', 'Batch Berita Acara berhasil dibuat.');
+    }
+
+    public function generateLaporan(Request $request)
+    {
+        $tahun = $request->tahun;
+        $bulan = $request->bulan;
+        $data = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->whereYear('tanggal', $tahun)->whereMonth('tanggal', $bulan)->get();
+        $path = 'dokumen/laporan_' . $bulan . '_' . $tahun . '.pdf';
+        $dokumen = Dokumen::where('path', $path)->first();
+        // dd($data);
+        if ($dokumen) {
+            $success = $this->generatePdf($path, 'laporan', $data, $tahun);
+            if (!$success) {
+                return back()->with('error', 'Gagal generate laporan PDF');
+            }
+            $dokumen->updated_at = now();
+            $dokumen->save();
+        } else {
+            // $this->generatePdf($path, 'laporan', $data, $tahun);
+            $success = $this->generatePdf($path, 'laporan', $data, $tahun);
+            if (!$success) {
+                return back()->with('error', 'Gagal generate laporan PDF');
+            }
+            $dokumen = Dokumen::create([
+                'nama' => 'Laporan ' . $bulan . ' ' . $tahun,
+                'type' => 'laporan',
+                'path' => $path,
+                'status' => 'arsip',
+            ]);
+        }
+        return redirect()->route('admin.dokumen.show', $dokumen->id);
     }
 }
