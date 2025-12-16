@@ -11,11 +11,11 @@ import { AlertCircleIcon, ArrowLeft, Send } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Data Tim',
+        title: 'Data Jadwal',
         href: '/admin/jadwal/',
     },
     {
-        title: 'Edit Data Tim',
+        title: 'Edit Data Jadwal',
         href: '/admin/jadwal/edit',
     },
 ];
@@ -46,7 +46,7 @@ export default function EditTim() {
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Data Tim" />
+            <Head title="Data Jadwal" />
             <div className="p-5 space-y-5">
                 {errors && Object.keys(errors).length > 0 && (
                     <Alert variant={'destructive'}>
@@ -63,7 +63,7 @@ export default function EditTim() {
                     </Alert>
                 )}
                 <Card>
-                    <CardHeader><CardTitle>Form Edit Tim</CardTitle></CardHeader>
+                    <CardHeader><CardTitle>Form Edit Jadwal</CardTitle></CardHeader>
                     <CardContent>
                         <form action="#" className='space-y-3'>
                             <InputSelect

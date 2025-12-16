@@ -45,7 +45,7 @@ export default function Create() {
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Data Tim" />
+            <Head title="Data Jadwal" />
             <div className="space-y-5 p-5">
                 {errors && Object.keys(errors).length > 0 && (
                     <Alert variant={'destructive'}>
