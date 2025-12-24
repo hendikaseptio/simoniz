@@ -39,7 +39,15 @@ export const columns: ColumnDef<Jadwal>[] = [
         header: ({ column }) => (
             <DataTableColumnHeader column={column} title="No" />
         ),
-        cell: ({ row }) => row.index + 1,
+        cell: ({ row, table }) => {
+            const meta = table.options.meta as {
+                currentPage: number;
+                perPage: number;
+            };
+
+            return (meta.currentPage - 1) * meta.perPage + row.index + 1;
+        },
+        enableSorting: false,
     },
     {
         accessorKey: 'reklame_id',

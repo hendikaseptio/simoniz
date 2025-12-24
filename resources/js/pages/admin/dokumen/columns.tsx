@@ -36,12 +36,20 @@ export type DOkumen = {
 
 export const columns: ColumnDef<DOkumen>[] = [
     {
-  id: 'no',
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="No" />
-  ),
-  cell: ({ row }) => row.index + 1,
-},
+        id: 'no',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="No" />
+        ),
+        cell: ({ row, table }) => {
+            const meta = table.options.meta as {
+                currentPage: number;
+                perPage: number;
+            };
+
+            return (meta.currentPage - 1) * meta.perPage + row.index + 1;
+        },
+        enableSorting: false,
+    },
     {
         accessorKey: 'nama',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Nama Dokumen" />,

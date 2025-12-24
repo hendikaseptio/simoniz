@@ -14,6 +14,9 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     initialData: {
         data: TData[];
+        current_page: number;
+        per_page: number;
+        from: number;
     };
 }
 
@@ -32,6 +35,11 @@ export function DataTableServer<TData, TValue>({ columns, initialData }: DataTab
     const table = useReactTable({
         columns,
         data,
+        meta: {
+            currentPage: initialData.current_page,
+            perPage: initialData.per_page,
+            from: initialData.from,
+        },
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
         manualSorting: true,
@@ -77,7 +85,7 @@ export function DataTableServer<TData, TValue>({ columns, initialData }: DataTab
 
     const handleSort = (columnId: string, direction: 'asc' | 'desc') => {
         const params = new URLSearchParams(window.location.search);
-        
+
         params.set('sort', columnId);
         params.set('direction', direction);
         params.set('page', '1');

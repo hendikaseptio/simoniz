@@ -18,18 +18,26 @@ export type DOkumen = {
 
 export const columns: ColumnDef<DOkumen>[] = [
     {
-  id: 'no',
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="No" />
-  ),
-  cell: ({ row }) => row.index + 1,
-},
+        id: 'no',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="No" />
+        ),
+        cell: ({ row, table }) => {
+            const meta = table.options.meta as {
+                currentPage: number;
+                perPage: number;
+            };
+
+            return (meta.currentPage - 1) * meta.perPage + row.index + 1;
+        },
+        enableSorting: false,
+    },
     {
         accessorKey: 'dokumen_id',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Nama Dokumen" />,
         cell: ({ row }) => row.original.dokumen?.nama || '-',
     },
-    
+
     {
         accessorKey: 'status',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
@@ -37,7 +45,7 @@ export const columns: ColumnDef<DOkumen>[] = [
             const val = row.getValue('status');
             if (val === 'setuju') {
                 return <Badge className='bg-green-600 dark:bg-green-700'><CheckCheck />Setuju</Badge>;
-            }else if (val === 'tidak setuju') {
+            } else if (val === 'tidak setuju') {
                 return <Badge variant="destructive"><X />Tidak Setuju</Badge>;
             } else {
                 return <Badge variant="default"><File />Baru</Badge>;

@@ -20,12 +20,20 @@ export type Monitoring = {
 
 export const columns: ColumnDef<Monitoring>[] = [
     {
-  id: 'no',
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="No" />
-  ),
-  cell: ({ row }) => row.index + 1,
-},
+        id: 'no',
+        header: ({ column }) => (
+            <DataTableColumnHeader column={column} title="No" />
+        ),
+        cell: ({ row, table }) => {
+            const meta = table.options.meta as {
+                currentPage: number;
+                perPage: number;
+            };
+
+            return (meta.currentPage - 1) * meta.perPage + row.index + 1;
+        },
+        enableSorting: false,
+    },
     {
         accessorKey: 'reklame_id',
         header: ({ column }) => <DataTableColumnHeader column={column} title="ID Pendaftaran" />,
@@ -77,7 +85,7 @@ export const columns: ColumnDef<Monitoring>[] = [
             const monitoring = row.original;
             return (
                 <>
-                <DropdownMenu>
+                    <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0">
                                 <span className="sr-only">Open menu</span>
@@ -95,7 +103,7 @@ export const columns: ColumnDef<Monitoring>[] = [
                                 Edit
                             </DropdownMenuItem>
                         </DropdownMenuContent>
-                    </DropdownMenu>  
+                    </DropdownMenu>
                 </>
             );
         },
