@@ -20,9 +20,12 @@ export type Monitoring = {
 
 export const columns: ColumnDef<Monitoring>[] = [
     {
-        accessorKey: 'id',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Id" />,
-    },
+  id: 'no',
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="No" />
+  ),
+  cell: ({ row }) => row.index + 1,
+},
     {
         accessorKey: 'reklame_id',
         header: ({ column }) => <DataTableColumnHeader column={column} title="ID Pendaftaran" />,

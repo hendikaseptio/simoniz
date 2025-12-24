@@ -34,9 +34,12 @@ export type Agama = {
 
 export const columns: ColumnDef<Agama>[] = [
     {
-        accessorKey: 'id',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Id" />,
-    },
+  id: 'no',
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="No" />
+  ),
+  cell: ({ row }) => row.index + 1,
+},
     {
         accessorKey: 'petugas1',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Petugas 1" />,
