@@ -97,102 +97,96 @@ export default function EditTim() {
                     <CardContent>
                         <form action="#" className="space-y-3">
                             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                                <InputSelect
-                                    name="cek_lapangan"
-                                    label="Cek Lapangan"
-                                    options={[
-                                        { label: 'Sudah', value: 'sudah' },
-                                        { label: 'Belum', value: 'belum' },
-                                    ]}
-                                    onChange={handleChange}
-                                    value={values.cek_lapangan}
-                                    errors={errors}
-                                ></InputSelect>
-                                <InputSelect
-                                    name="status"
-                                    label="Status Izin"
-                                    options={[
-                                        { label: 'Berlaku', value: 'berlaku' },
-                                        { label: 'Tidak Berlaku', value: 'tidak berlaku' },
-                                    ]}
-                                    onChange={handleChange}
-                                    value={values.status}
-                                    errors={errors}
-                                ></InputSelect>
-                                <InputSelect
-                                    name="status"
-                                    label="Status Izin"
-                                    options={[
-                                        { label: 'Berlaku', value: 'berlaku' },
-                                        { label: 'Tidak Berlaku', value: 'tidak berlaku' },
-                                    ]}
-                                    onChange={handleChange}
-                                    value={values.status}
-                                    errors={errors}
-                                ></InputSelect>
-                                <InputSelect
-                                    name="keberadaan_reklame"
-                                    label="Keberadaan Reklame"
-                                    options={[
-                                        { label: 'Ada', value: 'ada' },
-                                        { label: 'Tidak Ada', value: 'tidak ada' },
-                                    ]}
-                                    onChange={handleChange}
-                                    value={values.keberadaan_reklame}
-                                    errors={errors}
-                                ></InputSelect>
-                                <InputSelect
-                                    name="kelayakan_kontruksi"
-                                    label="Kelayakan Kontruksi"
-                                    options={[
-                                        { label: 'Layak', value: 'layak' },
-                                        { label: 'Tidak Layak', value: 'tidak layak' },
-                                        { label: '-', value: '-' },
-                                    ]}
-                                    onChange={handleChange}
-                                    value={values.kelayakan_kontruksi}
-                                    errors={errors}
-                                ></InputSelect>
-                                <InputSelect
-                                    name="kesesuaian"
-                                    label="Kesesuaian"
-                                    options={[
-                                        { label: 'Sesuai', value: 'sesuai' },
-                                        { label: 'Tidak Sesuai', value: 'tidak sesuai' },
-                                        { label: '-', value: '-' },
-                                    ]}
-                                    onChange={handleChange}
-                                    value={values.kesesuaian}
-                                    errors={errors}
-                                ></InputSelect>
-                                <InputTextarea
-                                    name="catatan"
-                                    label="Catatan"
-                                    onChange={handleChange}
-                                    value={values.catatan}
-                                    errors={errors}
-                                ></InputTextarea>
-                                <InputSelect
-                                    name="tl"
-                                    label="Tindak Lanjut"
-                                    options={[
-                                        { label: 'Ya', value: 'ya' },
-                                        { label: 'Tidak', value: 'tidak' },
-                                    ]}
-                                    onChange={handleChange}
-                                    value={values.tl}
-                                    errors={errors}
-                                ></InputSelect>
-                                <InputPeta values={values} onChange={handleChange} errors={errors} />
-                                <InputFile
-                                    name={'foto'}
-                                    label={'Foto'}
-                                    onChange={handleChange}
-                                    errors={errors}
-                                    accept={'image/*'}
-                                    initialFile={`/storage/${monitoring?.foto}` || null}
-                                    multiple={false}
-                                ></InputFile>
+                                <div className='space-y-3'>
+                                    <InputSelect
+                                        name="cek_lapangan"
+                                        label="Cek Lapangan"
+                                        options={[
+                                            { label: 'Sudah', value: 'sudah' },
+                                            { label: 'Belum', value: 'belum' },
+                                        ]}
+                                        onChange={handleChange}
+                                        value={values.cek_lapangan}
+                                        errors={errors}
+                                    ></InputSelect>
+                                    <InputSelect
+                                        name="keberadaan_reklame"
+                                        label="Keberadaan Reklame"
+                                        options={[
+                                            { label: 'Ada', value: 'ada' },
+                                            { label: 'Tidak Ada', value: 'tidak ada' },
+                                        ]}
+                                        onChange={handleChange}
+                                        value={values.keberadaan_reklame}
+                                        errors={errors}
+                                    ></InputSelect>
+                                    <InputSelect
+                                        name="status"
+                                        label="Status Izin"
+                                        options={[
+                                            { label: 'Berlaku', value: 'berlaku' },
+                                            { label: 'Tidak Berlaku', value: 'tidak berlaku' },
+                                        ]}
+                                        onChange={handleChange}
+                                        value={values.status}
+                                        errors={errors}
+                                    ></InputSelect>
+                                    <InputSelect
+                                        name="kelayakan_kontruksi"
+                                        label="Kelayakan Kontruksi"
+                                        options={[
+                                            { label: 'Layak', value: 'layak' },
+                                            { label: 'Tidak Layak', value: 'tidak layak' },
+                                            { label: '-', value: '-' },
+                                        ]}
+                                        onChange={handleChange}
+                                        value={values.kelayakan_kontruksi}
+                                        errors={errors}
+                                    ></InputSelect>
+                                    <InputSelect
+                                        name="kesesuaian"
+                                        label="Kesesuaian"
+                                        options={[
+                                            { label: 'Sesuai', value: 'sesuai' },
+                                            { label: 'Tidak Sesuai', value: 'tidak sesuai' },
+                                            { label: '-', value: '-' },
+                                        ]}
+                                        onChange={handleChange}
+                                        value={values.kesesuaian}
+                                        errors={errors}
+                                    ></InputSelect>
+                                    
+                                    <InputPeta values={values} onChange={handleChange} errors={errors} />
+                                </div>
+                                <div className='space-y-3'>
+                                    <InputTextarea
+                                        name="catatan"
+                                        label="Catatan"
+                                        onChange={handleChange}
+                                        value={values.catatan}
+                                        errors={errors}
+                                    ></InputTextarea>
+                                    <InputSelect
+                                        name="tl"
+                                        label="Tindak Lanjut"
+                                        options={[
+                                            { label: 'Ya', value: 'ya' },
+                                            { label: 'Tidak', value: 'tidak' },
+                                        ]}
+                                        onChange={handleChange}
+                                        value={values.tl}
+                                        errors={errors}
+                                    ></InputSelect>
+                                    <InputFile
+                                        name={'foto'}
+                                        label={'Foto'}
+                                        onChange={handleChange}
+                                        errors={errors}
+                                        accept={'image/*'}
+                                        initialFile={`/storage/${monitoring?.foto}` || null}
+                                        multiple={false}
+                                    ></InputFile>
+                                </div>
                             </div>
                             <div className="mt-3 flex justify-end space-x-3">
                                 <Link href="/admin/monitoring">

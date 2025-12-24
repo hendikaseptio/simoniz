@@ -1,5 +1,19 @@
 @php
 use Carbon\Carbon;
+$namaBulan = [
+    1 => 'Januari',
+    2 => 'Februari',
+    3 => 'Maret',
+    4 => 'April',
+    5 => 'Mei',
+    6 => 'Juni',
+    7 => 'Juli',
+    8 => 'Agustus',
+    9 => 'September',
+    10 => 'Oktober',
+    11 => 'November',
+    12 => 'Desember',
+];
 @endphp
 <!DOCTYPE html>
 <html>
@@ -76,13 +90,13 @@ use Carbon\Carbon;
             border-collapse: collapse;
             margin-top: 15px;
             margin-bottom: 15px;
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .table th,
         .table td {
             border: 1px solid #000;
-            padding: 4px 8px;
+            padding: 2px 4px;
             text-align: left;
             vertical-align: top;
         }
@@ -104,7 +118,7 @@ use Carbon\Carbon;
 
 <body>
     <p class="center">REKAPITULASI DATA PEMANTAUAN PERIZINAN</p>
-    <p class="center">TRIWULAN III TAHUN 2025</p>
+    <p class="center">BULAN {{ $namaBulan[$bulan] }} TAHUN {{ $tahun }}</p>
 
     <table class="table">
         <thead>
@@ -127,7 +141,7 @@ use Carbon\Carbon;
             <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $r->tim->petugasSatu->name }} <br> {{ $r->tim->petugasDua->name }} </td>
-                <td>{{ \Carbon\Carbon::parse($r->tanggal)->format('d-m-Y') }}</td>
+                <td>{{ Carbon::parse($r->tanggal)->format('d-m-Y') }}</td>
                 <td>{{ $r->reklame->id_pendaftaran}}</td>
                 <td class="uppercase">{{ $r->reklame->nama_perusahaan }}</td>
                 <td class="uppercase">{{ $r->reklame->isi_konten }}</td>
@@ -139,10 +153,12 @@ use Carbon\Carbon;
     </table>
     <table style="width: 100%;">
         <tr>
-            <td style="width: 40%;"></td>
-            <td style="width: 60%;">
+            <td style="width: 30%;"></td>
+            <td style="width: 70%;">
                 <div class="center" style="line-height: 1;">
-                    <p>Pekalongan, {{ Carbon::now()->translatedFormat('d F Y') }}</p>
+                    <p>
+                        Pekalongan, {{ \Carbon\Carbon::parse($tanggal_surat)->locale('id')->translatedFormat('d F Y') }}
+                    </p>
                     <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
@@ -155,5 +171,4 @@ use Carbon\Carbon;
         </tr>
     </table>
 </body>
-
 </html>

@@ -92,7 +92,7 @@ export default function Index() {
                         </CardContent>
                     </Card>
                 </div>
-                <Card>
+                {/* <Card>
                     <CardHeader>
                         <CardTitle>Filter lanjutan</CardTitle>
                     </CardHeader>
@@ -129,7 +129,7 @@ export default function Index() {
                             </div>
                         </form>
                     </CardContent>
-                </Card>
+                </Card> */}
                 <DataTableServer columns={columns} initialData={monitoring} />
             </div>
         </AppLayout>

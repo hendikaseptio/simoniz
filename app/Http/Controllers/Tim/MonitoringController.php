@@ -22,10 +22,19 @@ class MonitoringController extends Controller
         } else {
             $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', $currentTim->id);
         }
-        if ($request->filled('search')) {
-            $query->where('tim_st', 'like', '%' . $request->search . '%')
-                ->orWhere('reklame_id', $request->search);
-        }
+        $query->where(function ($q) use ($request) {
+            $q->whereHas('tim.petugasSatu', function ($qt1) use ($request) {
+                $qt1->where('name', 'like', '%' . $request->search . '%');
+            })->orWhereHas('tim.petugasDua', function ($qt2) use ($request) {
+                $qt2->where('name', 'like', '%' . $request->search . '%');
+            })->orWhereHas('reklame', function ($qr) use ($request) {
+                $qr->where('id_pendaftaran', 'like', '%' . $request->search . '%');
+            });
+        });
+        // if ($request->filled('search')) {
+        //     $query->where('tim_st', 'like', '%' . $request->search . '%')
+        //         ->orWhere('reklame_id', $request->search);
+        // }
         
         if ($request->filled('cek_lapangan')) {
             $query->where('cek_lapangan', $request->cek_lapangan);

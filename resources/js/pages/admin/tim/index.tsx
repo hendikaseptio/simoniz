@@ -31,6 +31,11 @@ export default function Index() {
             baseRoute: '/admin/tim',
         },
     );
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let y = currentYear - 5; y <= currentYear + 5; y++) {
+        years.push({ label: y.toString(), value: y.toString() });
+    }
     const optionsBulan = [
         { label: "Januari", value: "januari" },
         { label: "Februari", value: "februari" },
@@ -135,14 +140,13 @@ export default function Index() {
                                                 value={data.bulan}
                                                 onChange={handleFilterChange}
                                             ></InputSelect>
-                                            <InputText
-                                                label="Tahun"
-                                                type="number"
+                                            <InputSelect
                                                 name="tahun"
-                                                placeholder={'Masukkan Periode Tahun'}
-                                                value={data.tahun}
+                                                label="Tahun"
+                                                options={years}
                                                 onChange={handleFilterChange}
-                                            ></InputText>
+                                                value={data.tahun}
+                                            ></InputSelect>
                                         </div>
                                         <div className="text-end space-x-3">
                                             <Button type="submit"><ListFilter />Filter</Button>

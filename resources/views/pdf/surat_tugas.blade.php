@@ -8,16 +8,13 @@ use Carbon\Carbon;
     <title>Surat Tugas</title>
     <style>
         @page {
-            size: 210mm 330mm;
             /* Ukuran F4 dalam mm */
+            size: 210mm 330mm;
             margin: 10mm;
-            /* Atur margin sesuai kebutuhan */
         }
-
         .break {
             page-break-before: always;
         }
-
         @media print {
             body {
                 width: 210mm;
@@ -25,52 +22,29 @@ use Carbon\Carbon;
                 margin: 0;
             }
         }
-
         body {
             font-family: "Times New Roman", Times, serif;
             line-height: 1.5;
-            /* margin: 40px; */
         }
-
         .center {
             text-align: center;
             font-weight: bold;
             text-transform: uppercase;
         }
-
         .underline {
             text-decoration: underline;
         }
-
         .section-title {
             font-weight: bold;
             margin-top: 20px;
         }
-
         .indent {
             text-indent: 30px;
         }
-
         table {
             margin-top: 10px;
             margin-bottom: 10px;
         }
-
-        .signature {
-            display: flex;
-            justify-content: end;
-            line-height: 1;
-            text-align: left;
-            margin-top: 30px;
-        }
-
-        .right {
-            display: flex;
-            justify-content: end;
-            text-align: left;
-            margin-top: 30px;
-        }
-
         .table {
             width: 100%;
             border-collapse: collapse;
@@ -78,7 +52,6 @@ use Carbon\Carbon;
             margin-bottom: 15px;
             font-size: 12px;
         }
-
         .table th,
         .table td {
             border: 1px solid #000;
@@ -106,10 +79,8 @@ use Carbon\Carbon;
         <p>Nomor : B/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/500.16.7.2/{{$tahun}}</p>
 
     </div>
-
     <p class="center">KEPALA DINAS PENANAMAN MODAL DAN PELAYANAN TERPADU SATU PINTU<br>
         KOTA PEKALONGAN</p>
-
     <table>
         <tr>
             <td valign="top">Dasar</td>
@@ -139,7 +110,7 @@ use Carbon\Carbon;
             <td valign="top">:</td>
             <td valign="top">
                 <ol>
-                    <li>Melaksanakan Monitoring Data Perizinan Pelaku Usaha yang telah mengikuti Penyuluhan Keamanan Pangan Bulan Agustus 2025.</li>
+                    <li>Melaksanakan Monitoring Data Perizinan Izin Reklame Tetap.</li>
                     <li>Melaporkan Hasil Pelaksanaan Tugas kepada Pejabat Pemberi Tugas.</li>
                     <li>Perintah ini dilaksanakan dengan penuh tanggung jawab.</li>
                     <li>Apabila terdapat kekeliruan dalam Surat Perintah Tugas ini akan diadakan perbaikan kembali sebagaimana mestinya.</li>
@@ -152,7 +123,7 @@ use Carbon\Carbon;
             <td style="width: 40%;"></td>
             <td style="width: 60%;">
                 <div class="center" style="line-height: 1;">
-                    <p>Pekalongan, {{ Carbon::now()->translatedFormat('d F Y') }}</p>
+                    <p>Pekalongan, {{ Carbon::parse($tanggal_surat)->locale('id')->translatedFormat('d F Y') }}</p>
                     <p><strong>Plt. Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
@@ -186,14 +157,12 @@ use Carbon\Carbon;
                     <tr>
                         <td>Tanggal</td>
                         <td>:</td>
-                        <td>{{ Carbon::now()->translatedFormat('d F Y') }}</td>
+                        <td>{{ Carbon::parse($tanggal_surat)->locale('id')->translatedFormat('d F Y') }}</td>
                     </tr>
                 </table>
             </td>
         </tr>
     </table>
-
-
     <p class="center"><b>PETUGAS MONITORING DATA PERIZINAN IZIN REKLAME TETAP</b></p>
     <table class="table">
         <thead>
@@ -214,7 +183,7 @@ use Carbon\Carbon;
             <tr>
                 <td>{{ $no++ }}</td>
                 <td>{{ $r->tim->petugasSatu->name }} <br> {{ $r->tim->petugasDua->name }}</td>
-                <td>{{ \Carbon\Carbon::parse($r->tanggal)->format('d-m-Y') }}</td>
+                <td>{{ Carbon::parse($r->tanggal)->format('d-m-Y') }}</td>
                 <td>{{ $r->reklame->nama_perusahaan }}</td>
                 <td>{{ $r->reklame->isi_konten }}</td>
                 <td>{{ $r->reklame->jalan }}</td>
@@ -227,7 +196,7 @@ use Carbon\Carbon;
             <td style="width: 40%;"></td>
             <td style="width: 60%;">
                 <div class="center" style="line-height: 1;">
-                    <p>Pekalongan, {{ Carbon::now()->translatedFormat('d F Y') }}</p>
+                    <p>Pekalongan, {{ Carbon::parse($tanggal_surat)->locale('id')->translatedFormat('d F Y') }}</p>
                     <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
@@ -240,5 +209,4 @@ use Carbon\Carbon;
         </tr>
     </table>
 </body>
-
 </html>

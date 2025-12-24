@@ -35,9 +35,15 @@ export default function Index() {
         {
             bulan: '',
             tahun: '',
+            tanggal_surat: '',
         },
         '/admin/generate-surat-tugas-batch',
     );
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let y = currentYear - 5; y <= currentYear + 5; y++) {
+        years.push({ label: y.toString(), value: y.toString() });
+    }
     const optionsBulan = [
         { label: "Januari", value: 1 },
         { label: "Februari", value: 2 },
@@ -151,7 +157,7 @@ export default function Index() {
                         <AlertDialogContent>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Pilih Bulan dan Tahun</AlertDialogTitle>
-                                <AlertDialogDescription>
+                                <AlertDialogDescription className='space-y-3'>
                                     <div className="grid grid-cols-2 gap-3">
                                         <InputSelect
                                             label={'Bulan'}
@@ -161,22 +167,28 @@ export default function Index() {
                                             onChange={handleChange}
                                             errors={errors}
                                         ></InputSelect>
-
-                                        <InputText
-                                            label="Tahun"
-                                            type="number"
+                                        <InputSelect
                                             name="tahun"
-                                            placeholder={'Masukkan Periode Tahun'}
-                                            value={values.tahun}
+                                            label="Tahun"
+                                            options={years}
                                             onChange={handleChange}
+                                            value={values.tahun}
                                             errors={errors}
-                                        ></InputText>
+                                        ></InputSelect>
                                     </div>
+                                    <InputText
+                                        name='tanggal_surat'
+                                        label={'Tanggal Surat'}
+                                        type='date'
+                                        onChange={handleChange}
+                                        value={values.tangal_surat}
+                                        errors={errors}
+                                    ></InputText>
                                 </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                                <AlertDialogCancel><X/>Batal</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleSubmit}><Send/> Buat Surat</AlertDialogAction>
+                                <AlertDialogCancel><X />Batal</AlertDialogCancel>
+                                <AlertDialogAction onClick={handleSubmit}><Send /> Buat Surat</AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>

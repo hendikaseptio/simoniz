@@ -102,17 +102,18 @@ class DokumenController extends Controller
     {
         $tahun = $request->tahun;
         $bulan = $request->bulan;
+        $tanggal_surat = $request->tanggal_surat;
         $data = Monitoring::whereYear('tanggal', $tahun)->whereMonth('tanggal', $bulan)->get();
         $path = 'dokumen/surat_tugas_' . $bulan . '_' . $tahun . '.pdf';
         $dokumen = Dokumen::where('path', $path)->first();
         if ($dokumen) {
             if ($dokumen->status == "draft" || $dokumen->status == "rejected") {
-                $this->generatePdf($path, 'surat_tugas', $data, $tahun);
+                $this->generatePdf($path, 'surat_tugas', $data, $bulan, $tahun, $tanggal_surat);
             }
             $dokumen->updated_at = now();
             $dokumen->save();
         } else {
-            $this->generatePdf($path, 'surat_tugas', $data, $tahun);
+            $this->generatePdf($path, 'surat_tugas', $data, $bulan, $tahun, $tanggal_surat);
             $dokumen = Dokumen::create([
                 'nama' => 'Surat Tugas ' . $bulan . ' ' . $tahun,
                 'type' => 'surat_tugas',
@@ -123,10 +124,10 @@ class DokumenController extends Controller
         return redirect()->route('admin.dokumen.requestApproval', $dokumen->id);
     }
 
-    function generatePdf($path, $type, $data, $tahun)
+    function generatePdf($path, $type, $data, $bulan, $tahun, $tanggal_surat)
     {
         try {
-            $pdf = Pdf::loadView('pdf.' . $type, compact('data', 'tahun'));
+            $pdf = Pdf::loadView('pdf.' . $type, compact('data', 'tahun', 'bulan', 'tanggal_surat'));
             if (!Storage::disk('public')->exists('dokumen')) {
                 Storage::disk('public')->makeDirectory('dokumen');
             }
@@ -173,22 +174,23 @@ class DokumenController extends Controller
     {
         $tahun = $request->tahun;
         $bulan = $request->bulan;
+        $tanggal_surat = $request->tanggal_surat;
         $data = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->whereYear('tanggal', $tahun)->whereMonth('tanggal', $bulan)->get();
         $path = 'dokumen/laporan_' . $bulan . '_' . $tahun . '.pdf';
         $dokumen = Dokumen::where('path', $path)->first();
-        // dd($data);
         if ($dokumen) {
-            $success = $this->generatePdf($path, 'laporan', $data, $tahun);
-            if (!$success) {
-                return back()->with('error', 'Gagal generate laporan PDF');
+            try {
+                $this->generatePdf($path, 'laporan', $data, $bulan, $tahun, $tanggal_surat);
+            } catch (\Throwable $e) {
+                return back()->with('error', $e->getMessage());
             }
             $dokumen->updated_at = now();
             $dokumen->save();
         } else {
-            // $this->generatePdf($path, 'laporan', $data, $tahun);
-            $success = $this->generatePdf($path, 'laporan', $data, $tahun);
-            if (!$success) {
-                return back()->with('error', 'Gagal generate laporan PDF');
+            try {
+                $this->generatePdf($path, 'laporan', $data, $bulan, $tahun, $tanggal_surat);
+            } catch (\Throwable $e) {
+                return back()->with('error', $e->getMessage());
             }
             $dokumen = Dokumen::create([
                 'nama' => 'Laporan ' . $bulan . ' ' . $tahun,

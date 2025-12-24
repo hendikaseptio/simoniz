@@ -34,7 +34,7 @@ export default function EditTim() {
     );
     const currentYear = new Date().getFullYear();
     const years = [];
-    for (let y = currentYear - 10; y <= currentYear + 10; y++) {
+    for (let y = currentYear - 5; y <= currentYear + 5; y++) {
         years.push({ label: y.toString(), value: y.toString() });
     }
     const bulanOptions = [
