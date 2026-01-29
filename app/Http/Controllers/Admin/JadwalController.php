@@ -68,7 +68,10 @@ class JadwalController extends Controller
             $timQuery->where('bulan', strtolower($bulan))
                 ->where('tahun', $tahun);
         }
-        $reklame = Reklame::where('monitoring', 'iya')->get();
+        $reklame = Reklame::where('monitoring', 'iya')
+            ->whereDoesntHave('Monitoring', function ($query) {
+                $query->where('cek_lapangan', 'sudah');
+            })->get();
         return Inertia::render('admin/jadwal/create', [
             'tim' => $timQuery->get(),
             'reklame' => $reklame
@@ -117,7 +120,10 @@ class JadwalController extends Controller
                 ->where('tahun', $tahun);
         }
         $jadwal = Monitoring::findOrFail($id);
-        $reklame = Reklame::where('monitoring', 'iya')->get();
+        $reklame = Reklame::where('monitoring', 'iya')
+            ->whereDoesntHave('Monitoring', function ($query) {
+                $query->where('cek_lapangan', 'sudah');
+            })->get();
         return Inertia::render('admin/jadwal/edit', [
             'jadwal' => $jadwal,
             'tim' => $timQuery->get(),
