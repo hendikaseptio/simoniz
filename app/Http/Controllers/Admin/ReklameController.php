@@ -94,7 +94,7 @@ class ReklameController extends Controller
                 'LED' => $jenis_reklameCounts->LED,
                 'SHOP_SIGN' => $jenis_reklameCounts->SHOP_SIGN,
             ],
-            'filter' => $request->only(['search', 'sort', 'direction', 'start_date', 'end_date', 'monitoring', 'perpanjangan', 'jalan','jenis_reklame']),
+            'filter' => $request->only(['search', 'sort', 'direction', 'start_date', 'end_date', 'monitoring', 'perpanjangan', 'jalan', 'jenis_reklame']),
         ]);
     }
     /**
@@ -202,7 +202,7 @@ class ReklameController extends Controller
             'longitude' => 'nullable|numeric|between:-180,180',
             'lokasi' => 'nullable|string|max:255',
             'foto_reklame' => 'required|string|max:255',
-            'no_hp_pemohon' => 'required|string|max:20',
+            'no_hp_pemohon' => 'required|numeric|max:20',
             'jenis_reklame' => 'required|string|max:100',
             'jumlah_sisi' => 'required|integer|min:1',
             'keterangan_lokasi' => 'nullable|string',

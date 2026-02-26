@@ -1,18 +1,18 @@
 @php
 use Carbon\Carbon;
 $namaBulan = [
-    1 => 'Januari',
-    2 => 'Februari',
-    3 => 'Maret',
-    4 => 'April',
-    5 => 'Mei',
-    6 => 'Juni',
-    7 => 'Juli',
-    8 => 'Agustus',
-    9 => 'September',
-    10 => 'Oktober',
-    11 => 'November',
-    12 => 'Desember',
+1 => 'Januari',
+2 => 'Februari',
+3 => 'Maret',
+4 => 'April',
+5 => 'Mei',
+6 => 'Juni',
+7 => 'Juli',
+8 => 'Agustus',
+9 => 'September',
+10 => 'Oktober',
+11 => 'November',
+12 => 'Desember',
 ];
 @endphp
 <!DOCTYPE html>
@@ -93,6 +93,10 @@ $namaBulan = [
             font-size: 10px;
         }
 
+        .font-small {
+            font-size: 10px;
+        }
+
         .table th,
         .table td {
             border: 1px solid #000;
@@ -110,7 +114,8 @@ $namaBulan = [
             margin-top: 0;
             margin-bottom: 0;
         }
-        .uppercase  {
+
+        .uppercase {
             text-transform: uppercase;
         }
     </style>
@@ -134,8 +139,8 @@ $namaBulan = [
             </tr>
         </thead>
         <tbody>
-            @php 
-            $no = 1; 
+            @php
+            $no = 1;
             @endphp
             @foreach ($data as $r)
             <tr>
@@ -151,24 +156,32 @@ $namaBulan = [
             @endforeach
         </tbody>
     </table>
-    <table style="width: 100%;">
+    <table style="width: 100%;" class="font-small">
         <tr>
-            <td style="width: 30%;"></td>
-            <td style="width: 70%;">
+            <td style="width: 80%;"></td>
+            <td style="width: 20%;">
                 <div class="center" style="line-height: 1;">
                     <p>
                         Pekalongan, {{ \Carbon\Carbon::parse($tanggal_surat)->locale('id')->translatedFormat('d F Y') }}
                     </p>
-                    <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
+                    <p><strong>KEPALA DINAS PENANAMAN MODAL DAN<br>
+                            PELAYANAN TERPADU SATU PINTU</strong></p>
+                    <br><br><br>
+                    <p><u>ADE SUANGKAT, SE</u><br>
+                        <small>Pembina Tingkat I</small><br>
+                        NIP. 197006161989031001
+                    </p>
+                    <!-- <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
                     <p><u>ARIF KARYADI, S. Sos.</u><br>
                         <small>Pembina Utama Muda</small><br>
                         NIP. 197110171999031007
-                    </p>
+                    </p> -->
                 </div>
             </td>
         </tr>
     </table>
 </body>
+
 </html>

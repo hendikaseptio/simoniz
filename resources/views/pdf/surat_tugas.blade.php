@@ -87,10 +87,10 @@ use Carbon\Carbon;
             <td valign="top">:</td>
             <td valign="top">
                 <ol>
-                    <li>Peraturan Daerah Nomor 11 Tahun 2024 tentang Anggaran Pendapatan dan Belanja Daerah Kota Pekalongan Tahun Anggaran 2025 (Lembaran Daerah Tahun 2024 Nomor 11);</li>
+                    <li>Peraturan Daerah Kota Pekalongan Nomor 10 Tahun 2025 Tentang Anggaran  Pendapatan Dan Belanja Daerah Tahun Anggaran 2026 (Lembaran Daerah Kota Pekalongan Nomor 10 Tahun 2025 Tentang APBD 2026);</li>
                     <li>Peraturan Wali Kota Pekalongan Nomor 72 Tahun 2021 Tanggal 24 November 2021 tentang Kedudukan, Susunan Organisasi, Tugas dan Fungsi Serta Tata Kerja Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu (Berita Daerah Tahun 2021 Nomor 72);</li>
-                    <li>Peraturan Wali Kota Pekalongan Nomor 20 Tahun 2024 Tentang Standar Harga Satuan di Lingkungan Pemerintah Kota Pekalongan Tahun Anggaran 2025;</li>
-                    <li>Peraturan Wali Kota Nomor 47 Tahun 2024 tanggal 27 Desember 2024 tentang Penjabaran Anggaran Pendapatan dan Belanja Daerah Kota Pekalongan Tahun Anggaran 2025 (Berita Daerah Nomor 48 Tahun 2024);</li>
+                    <li>Peraturan Wali Kota Pekalongan Nomor 18 Tahun 2025 Tentang Standar Harga Satuan Anggaran Pendapatan dan Belanja Daerah Tahun Anggaran 2026;</li>
+                    <li>Peraturan Wali Kota Pekalongan Nomor 48 Tahun 2025 Tentang Penjabaran Anggaran Pendapatan Dan Belanja Daerah Tahun Anggaran 2026 (Berita Daerah Kota Pekalongan Nomor 48 Tahun 2025 Tentang Penjabaran APBD 2026).</li>
                 </ol>
             </td>
         </tr>
@@ -124,13 +124,20 @@ use Carbon\Carbon;
             <td style="width: 60%;">
                 <div class="center" style="line-height: 1;">
                     <p>Pekalongan, {{ Carbon::parse($tanggal_surat)->locale('id')->translatedFormat('d F Y') }}</p>
-                    <p><strong>Plt. Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
+                    <p><strong>KEPALA DINAS PENANAMAN MODAL DAN<br>
+                            PELAYANAN TERPADU SATU PINTU</strong></p>
+                    <br><br><br>
+                    <p><u>ADE SUANGKAT, SE</u><br>
+                        <small>Pembina Tingkat I</small><br>
+                        NIP. 197006161989031001
+                    </p>
+                    <!-- <p><strong>Plt. Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
                     <p><u>ARIF KARYADI, S. Sos.</u><br>
                         <small>Pembina Utama Muda</small><br>
                         NIP. 197110171999031007
-                    </p>
+                    </p> -->
                 </div>
             </td>
         </tr>
@@ -197,13 +204,20 @@ use Carbon\Carbon;
             <td style="width: 60%;">
                 <div class="center" style="line-height: 1;">
                     <p>Pekalongan, {{ Carbon::parse($tanggal_surat)->locale('id')->translatedFormat('d F Y') }}</p>
-                    <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
+                    <p><strong>KEPALA DINAS PENANAMAN MODAL DAN<br>
+                            PELAYANAN TERPADU SATU PINTU</strong></p>
+                    <br><br><br>
+                    <p><u>ADE SUANGKAT, SE</u><br>
+                        <small>Pembina Tingkat I</small><br>
+                        NIP. 197006161989031001
+                    </p>
+                    <!-- <p><strong>Plt.KEPALA DINAS PENANAMAN MODAL DAN<br>
                             PELAYANAN TERPADU SATU PINTU</strong></p>
                     <br><br><br>
                     <p><u>ARIF KARYADI, S. Sos.</u><br>
                         <small>Pembina Utama Muda</small><br>
                         NIP. 197110171999031007
-                    </p>
+                    </p> -->
                 </div>
             </td>
         </tr>

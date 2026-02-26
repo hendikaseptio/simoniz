@@ -43,8 +43,17 @@ const InputText = ({ label, name, type = 'text', value, onChange, placeholder, e
         }
         return null;
     };
+
+    // Validasi khusus untuk tipe number
+    const validateNumber = () => {
+        if (type === 'number' && value && !/^\d+$/.test(value)) {
+            return `Input harus berupa angka dan tidak boleh mengandung karakter lain`;
+        }
+        return null;
+    };
+
     // Gabungkan semua pesan error
-    const validationErrors = [validateRegex(), validateMinMax()].filter(Boolean);
+    const validationErrors = [validateRegex(), validateMinMax(), validateNumber()].filter(Boolean);
     // Cek valid status
     const isValid = wasInvalid && !error && touched;
 
@@ -57,6 +66,26 @@ const InputText = ({ label, name, type = 'text', value, onChange, placeholder, e
                 name={name}
                 value={value}
                 onChange={onChange}
+                onKeyDown={(e) => {
+                    if (type === 'number') {
+                        // Allow: Backspace, Tab, Enter, Escape, Arrow keys, Delete
+                        const allowedKeys = ['Backspace', 'Tab', 'Enter', 'Escape', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Delete'];
+                        if (allowedKeys.includes(e.key)) return;
+
+                        // Block non-numeric characters (only allow 0-9)
+                        if (!/^\d$/.test(e.key)) {
+                            e.preventDefault();
+                        }
+                    }
+                }}
+                onPaste={(e) => {
+                    if (type === 'number') {
+                        const pasteData = e.clipboardData.getData('text');
+                        if (!/^\d+$/.test(pasteData)) {
+                            e.preventDefault();
+                        }
+                    }
+                }}
                 placeholder={placeholder}
                 onBlur={() => setTouched(true)} // Menandakan bahwa input telah disentuh
                 aria-invalid={!!error || validationErrors.length > 0}

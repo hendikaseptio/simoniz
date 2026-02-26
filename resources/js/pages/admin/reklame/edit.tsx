@@ -52,16 +52,16 @@ export default function EditReklame() {
         'put',
     );
     const jenisReklameOptions = [
-        { label: 'BANDO', values: 'BANDO' },
-        { label: 'BILLBOARD TANAH NEGARA', values: 'BILLBOARD TANAH NEGARA' },
-        { label: 'BILLBOARD TANAH SENDIRI', values: 'BILLBOARD TANAH SENDIRI' },
-        { label: 'BILLBOARD TANAH SENDIRI BERSINAR', values: 'BILLBOARD TANAH SENDIRI BERSINAR' },
-        { label: 'BILLBOARD TANAH NEGARA BERSINAR / NBTN', values: 'BILLBOARD TANAH NEGARA BERSINAR / NBTN' },
-        { label: 'NEON BOX TANAH NEGARA', values: 'NEON BOX TANAH NEGARA' },
-        { label: 'NEON BOX TANAH SENDIRI', values: 'NEON BOX TANAH SENDIRI' },
-        { label: 'NON KONSTRUKSI ', values: 'NON KONSTRUKSI ' },
-        { label: 'Large Electronic Display (LED)', values: 'Large Electronic Display (LED)' },
-        { label: 'SS (SHOP SIGN)', values: 'SS (SHOP SIGN)' },
+        { label: 'BANDO', value: 'BANDO' },
+        { label: 'BILLBOARD TANAH NEGARA', value: 'BILLBOARD TANAH NEGARA' },
+        { label: 'BILLBOARD TANAH SENDIRI', value: 'BILLBOARD TANAH SENDIRI' },
+        { label: 'BILLBOARD TANAH SENDIRI BERSINAR', value: 'BILLBOARD TANAH SENDIRI BERSINAR' },
+        { label: 'BILLBOARD TANAH NEGARA BERSINAR / NBTN', value: 'BILLBOARD TANAH NEGARA BERSINAR / NBTN' },
+        { label: 'NEON BOX TANAH NEGARA', value: 'NEON BOX TANAH NEGARA' },
+        { label: 'NEON BOX TANAH SENDIRI', value: 'NEON BOX TANAH SENDIRI' },
+        { label: 'NON KONSTRUKSI ', value: 'NON KONSTRUKSI ' },
+        { label: 'Large Electronic Display (LED)', value: 'Large Electronic Display (LED)' },
+        { label: 'SS (SHOP SIGN)', value: 'SS (SHOP SIGN)' },
     ];
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
