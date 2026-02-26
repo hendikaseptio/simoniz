@@ -4,8 +4,8 @@ import { Calendar } from '@/components/ui/calendar';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { TanggalIndo } from '@/utils/dateFormat';
-import { Head, usePage } from '@inertiajs/react';
-import { Route } from 'lucide-react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { ClipboardPen, Route } from 'lucide-react';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -56,8 +56,11 @@ export default function Index() {
                                             <div className="text-sm text-gray-500">Tim</div>
                                             <div className="text-sm font-medium text-gray-900">{item.tim.petugas_satu.name} & {item.tim.petugas_dua.name}</div>
                                             <div className="text-sm text-gray-500 mb-3">Lokasi</div>
-                                            <div>
+                                            <div className='flex space-x-2'>
                                                 <a href={item.reklame.lokasi} target='_blank'><Button><Route />Dapatkan Rute</Button></a>
+                                                <Link href={`/tim/monitoring/${item.id}/edit`}>
+                                                    <Button variant='outline'><ClipboardPen />Proses</Button>
+                                                </Link>
                                             </div>
                                         </div>
                                         <div>

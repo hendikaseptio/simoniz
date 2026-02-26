@@ -111,8 +111,8 @@ class ReklameController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_pendaftaran' => 'required|integer',
-            'prev_id_pendaftaran' => 'nullable|integer',
+            'id_pendaftaran' => 'required',
+            'prev_id_pendaftaran' => 'nullable',
             'monitoring' => 'required|in:iya,tidak,kosong',
             'perpanjangan' => 'required|in:sudah,belum,kosong',
             'nama_pemohon' => 'required|string|max:255',
@@ -186,8 +186,8 @@ class ReklameController extends Controller
     {
         $user = Reklame::findOrFail($id);
         $request->validate([
-            'id_pendaftaran' => 'required|integer',
-            'prev_id_pendaftaran' => 'nullable|integer',
+            'id_pendaftaran' => 'required',
+            'prev_id_pendaftaran' => 'nullable',
             'monitoring' => 'required|in:iya,tidak,kosong',
             'perpanjangan' => 'required|in:sudah,belum,kosong',
             'nama_pemohon' => 'required|string|max:255',

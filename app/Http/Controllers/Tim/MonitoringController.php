@@ -16,11 +16,20 @@ class MonitoringController extends Controller
 {
     public function index(Request $request)
     {
-        $currentTim = Tim::where('petugas1', Auth::user()->id)->orWhere('petugas2', Auth::user()->id)->first();
-        if (!$currentTim) {
-            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', 0);
+       $currentTims = Tim::where('petugas1', Auth::user()->id)
+            ->orWhere('petugas2', Auth::user()->id)
+            ->get();
+
+        if ($currentTims->isEmpty()) {
+            $query = Monitoring::query()
+                ->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+                ->where('tim_id', 0);
         } else {
-            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', $currentTim->id);
+            $timIds = $currentTims->pluck('id');
+
+            $query = Monitoring::query()
+                ->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+                ->whereIn('tim_id', $timIds);
         }
         $query->where(function ($q) use ($request) {
             $q->whereHas('tim.petugasSatu', function ($qt1) use ($request) {

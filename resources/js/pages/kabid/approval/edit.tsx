@@ -22,7 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Edit() {
-    const { dokumen, approval } = usePage().props;
+    const { approval } = usePage().props;
     const { values, errors, handleChange, handleSubmit } = useFormHandler(
         {
             status: approval?.status || '',
@@ -31,12 +31,22 @@ export default function Edit() {
         `/kabid/approval/${approval?.id}`,
         'put',
     );
+    console.log(approval);
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Data Tim" />
             <div className="space-y-5 p-5">
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                    <iframe className="h-screen w-full rounded-lg border shadow md:col-span-2" src={dokumen.path} />
+                    {approval.dokumen.path ? (
+                        <iframe
+                            className="h-screen w-full rounded-lg border shadow md:col-span-2"
+                            src={approval.dokumen.path}
+                        />
+                    ) : (
+                        <div className="h-screen w-full flex items-center justify-center border rounded-lg text-gray-500">
+                            Dokumen belum tersedia
+                        </div>
+                    )}
                     <div className='space-y-4'>
                         {errors && Object.keys(errors).length > 0 && (
                             <Alert variant={'destructive'}>

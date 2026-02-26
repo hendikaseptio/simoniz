@@ -14,11 +14,20 @@ class PetaController extends Controller
 {
     public function index(Request $request)
     {
-        $currentTim = Tim::where('petugas1', Auth::user()->id)->orWhere('petugas2', Auth::user()->id)->first();
-        if (!$currentTim) {
-            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', 0);
+        $currentTims = Tim::where('petugas1', Auth::user()->id)
+            ->orWhere('petugas2', Auth::user()->id)
+            ->get();
+
+        if ($currentTims->isEmpty()) {
+            $query = Monitoring::query()
+                ->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+                ->where('tim_id', 0);
         } else {
-            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', $currentTim->id);
+            $timIds = $currentTims->pluck('id');
+
+            $query = Monitoring::query()
+                ->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+                ->whereIn('tim_id', $timIds);
         }
         if ($request->filled('cek_lapangan')) {
             $query->whereHas('monitoring', function ($q) use ($request) {

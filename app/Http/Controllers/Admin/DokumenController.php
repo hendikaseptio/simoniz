@@ -107,11 +107,16 @@ class DokumenController extends Controller
         $path = 'dokumen/surat_tugas_' . $bulan . '_' . $tahun . '.pdf';
         $dokumen = Dokumen::where('path', $path)->first();
         if ($dokumen) {
-            if ($dokumen->status == "draft" || $dokumen->status == "rejected") {
-                $this->generatePdf($path, 'surat_tugas', $data, $bulan, $tahun, $tanggal_surat);
-            }
+            // if ($dokumen->status == "draft" || $dokumen->status == "rejected") {
+            $this->generatePdf($path, 'surat_tugas', $data, $bulan, $tahun, $tanggal_surat);
+            $dokumen->status == "draft";
+            // }
             $dokumen->updated_at = now();
             $dokumen->save();
+            $approval = Approval::where('dokumen_id', $dokumen->id)->latest()->first();
+            if ($approval) {
+                $approval->delete();
+            }
         } else {
             $this->generatePdf($path, 'surat_tugas', $data, $bulan, $tahun, $tanggal_surat);
             $dokumen = Dokumen::create([

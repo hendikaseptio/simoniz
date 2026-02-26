@@ -27,10 +27,8 @@ class ApprovalController extends Controller
     }
     public function edit($id)
     {
-        $approval = Approval::find($id);
-        $dokumen = Dokumen::find($approval->id);
+        $approval = Approval::with('dokumen')->find($id);
          return Inertia::render('kabid/approval/edit', [
-            'dokumen' => $dokumen,
             'approval' => $approval
         ]);
     }

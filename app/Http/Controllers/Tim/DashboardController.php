@@ -15,21 +15,33 @@ class DashboardController extends Controller
 {
     public function index() {
 
-        $currentTim = Tim::where('petugas1', Auth::user()->id)->orWhere('petugas2', Auth::user()->id)->first();
-        if (!$currentTim) {
-            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', 0);
-        } else {
-            $query = Monitoring::query()->with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', $currentTim->id);
-        }
-        $reklame = $query->get();
+        $currentTims = Tim::where('petugas1', Auth::user()->id)
+        ->orWhere('petugas2', Auth::user()->id)
+        ->get();
 
-        $currentTim = Tim::where('petugas1', Auth::user()->id)->orWhere('petugas2', Auth::user()->id)->first();
-        if (!$currentTim) {
-            $jadwal = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', 0)->get();
-        } else {
-            $jadwal = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])->where('tim_id', $currentTim->id)->get();
-        }
-        $tim = Tim::with(['petugasSatu', 'petugasDua'])->where('status', 'aktif')->count();
+    if ($currentTims->isEmpty()) {
+        $reklame = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+            ->where('tim_id', 0)
+            ->get();
+
+        $jadwal = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+            ->where('tim_id', 0)
+            ->get();
+    } else {
+        $timIds = $currentTims->pluck('id');
+
+        $reklame = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+            ->whereIn('tim_id', $timIds)
+            ->get();
+
+        $jadwal = Monitoring::with(['tim.petugasSatu', 'tim.petugasDua', 'reklame'])
+            ->whereIn('tim_id', $timIds)
+            ->get();
+    }
+
+    $tim = Tim::with(['petugasSatu', 'petugasDua'])
+        ->where('status', 'aktif')
+        ->count();
         $petugas = User::all()->count();
         // $tim = Tim::all()->count();
         $monitoring = Monitoring::all()->count();
