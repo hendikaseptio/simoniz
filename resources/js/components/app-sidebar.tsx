@@ -79,7 +79,7 @@ export function AppSidebar() {
         .filter(item => item.roles ? item.roles.includes(userRole) : true)
         .map(item => ({
             ...item,
-            href: item.href.startsWith('http') 
+            href: item.href.startsWith('http')
                 ? item.href // external link, jangan prefix
                 : (prefixPerRole[userRole] ?? '') + item.href,
         }));
@@ -89,7 +89,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href={(prefixPerRole[userRole] ?? '') + '/dashboard'} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
